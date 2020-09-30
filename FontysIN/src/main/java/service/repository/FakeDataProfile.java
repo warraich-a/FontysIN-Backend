@@ -24,4 +24,29 @@ public class FakeDataProfile {
         experiences.add(e2);
     }
 
+    // to get all the experiences
+    public List<Experience> GetExperiences (){return experiences;}
+
+    //to get experience
+    public Experience GetExperienceById(int id){
+        for (Experience e: experiences){
+            if(e.getId() == id){
+                return e;
+            }
+        }
+        return null;
+    }
+
+    //to add experience
+    public boolean AddExperience(Experience e){
+        if (this.GetExperienceById(e.getId()) == null)
+        {
+            experiences.add(e);
+                return true;
+        }
+        return false;
+    }
+
+
+
 }
