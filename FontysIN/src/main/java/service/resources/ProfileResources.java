@@ -1,5 +1,6 @@
 package service.resources;
 
+import service.model.Education;
 import service.model.Experience;
 import service.repository.FakeDataProfile;
 
@@ -14,11 +15,11 @@ public class ProfileResources {
     @Context
     private UriInfo uriInfo;
 
-    //to get all the pharmacists
-    @GET //GET at http://localhost:XXXX/patients/
+    //to get all the experiences
+    @GET //GET at http://localhost:XXXX/profile/experiences
     @Path("experiences")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPharmacists() {
+    public Response GetExperiences() {
         List<Experience> experiences = fakeDataProfile.GetExperiences();
 
         GenericEntity<List<Experience>> entity = new GenericEntity<>(experiences) {
@@ -26,10 +27,10 @@ public class ProfileResources {
         return Response.ok(entity).build();
     }
     // to add a new experience
-    @POST //POST at http://localhost:XXXX/patient/
+    @POST //POST at http://localhost:XXXX/profile/experience
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("experience")
-    public Response createStudent(Experience e) {
+    public Response CreateExperience(Experience e) {
         if (!fakeDataProfile.AddExperience(e)) // In this addPatient it adds the new object in this if statement and return true or false since that method is boolean
         {
             String entity =  "Experience Exists";
@@ -42,4 +43,33 @@ public class ProfileResources {
         }
     }
 
+    //Education
+    //to get all the Educations
+    @GET //GET at http://localhost:XXXX/profile/educations
+    @Path("educations")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response GetEducation() {
+        List<Education> educations = fakeDataProfile.GetEducations();
+
+        GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
+        };
+        return Response.ok(entity).build();
+    }
+
+    // to add a new education
+    @POST //POST at http://localhost:XXXX/profile/education
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("education")
+    public Response CreateEducation(Education e) {
+        if (!fakeDataProfile.AddEducation(e)) // In this addPatient it adds the new object in this if statement and return true or false since that method is boolean
+        {
+            String entity =  "Experience Exists";
+            // throw new Exception(Response.Status.CONFLICT, "This topic already exists");
+            return Response.status(Response.Status.CONFLICT).entity(entity).build();
+        } else {
+            String url = uriInfo.getAbsolutePath() + "/" + e.getId(); // url of the created student
+            URI uri = URI.create(url);
+            return Response.created(uri).build();
+        }
+    }
 }
