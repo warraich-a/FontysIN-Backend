@@ -1,8 +1,6 @@
 package service.repository;
 
-import service.model.Education;
-import service.model.Experience;
-import service.model.User;
+import service.model.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,11 +8,14 @@ import java.util.List;
 
 public class FakeDataProfile {
 
-
     private final List<Experience> experiences = new ArrayList<>();
     private final List<Education> educations = new ArrayList<>();
     private final List<User> users = new ArrayList<>();
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
+
+    // Contacts
+    private final List<Contact> contacts = new ArrayList<>();
+
     public static FakeDataProfile getInstance() {
         return INSTANCE;
     }
@@ -31,6 +32,31 @@ public class FakeDataProfile {
 
         educations.add(edu1);
         educations.add(edu2);
+
+
+          //public User(int id, String firstName, String lastName, UserType type, String email, String password,
+              //  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber)
+        // Users
+        User user1 = new User(1, "Rawam", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 2, 2, "123748");
+        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 2, 2, "364957");
+        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947");
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 2, 2, "947392");
+        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
+
+        users.add(user1);
+        users.add(user2);
+        users.add(user3);
+        users.add(user4);
+        users.add(user5);
+
+        // Contacts
+        createContact(1, 2);
+        createContact(1, 4);
+        createContact(2, 5);
+
+        acceptContact(2, 1);
+        acceptContact(5, 2);
+
     }
 
     // to get all the experiences
@@ -131,6 +157,83 @@ public class FakeDataProfile {
         old.setUserDepartment(e.getUserDepartment());
 
         return true;
+    }
+
+
+                                                                                        /* Contacts */
+    public int createContact(int userId, int friendId) {
+        boolean areAlreadyFriends;
+        for (Contact contact: contacts) {
+            areAlreadyFriends = (contact.getUserId() == userId && contact.getFriendId() == friendId) || (contact.getFriendId() == userId && contact.getUserId() == friendId);
+            if(areAlreadyFriends) {
+                return -1;
+            }
+        }
+
+        // if users aren't friends
+        Contact contact = new Contact(userId, friendId);
+        contacts.add(contact);
+        return contact.getId();
+    }
+
+    // Delete or Reject
+    public boolean deleteContact(int userId, int friendId) {
+        for (Contact contact: contacts) {
+            if((contact.getUserId() == userId && contact.getFriendId() == friendId) || (contact.getFriendId() == userId && contact.getUserId() == friendId)) {
+                contacts.remove(contact);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public List<User> getContacts(int id) {
+        List<Contact> foundContacts = new ArrayList<>();
+        List<User> userContacts = new ArrayList<>();
+        for (Contact contact : contacts) {
+            if (contact.getUserId() == id || contact.getFriendId() == id) {
+                foundContacts.add(contact);
+            }
+        }
+        for (Contact contact : foundContacts) {
+            int userId = contact.getUserId();
+            int friendId = contact.getFriendId();
+            boolean isAccepted = contact.isAccepted();
+            User friend = null;
+            if(userId == id && isAccepted) {
+                friend = getUser(friendId);
+                userContacts.add(friend);
+            }
+            else if(friendId == id && isAccepted) {
+                friend = getUser(userId);
+                userContacts.add(friend);
+            }
+        }
+
+        return userContacts;
+    }
+
+    // userId is sender
+    // friendId is receiver
+    public void acceptContact(int friendId, int userId) {
+        for (Contact contact: contacts) {
+            if(contact.getUserId() == userId && contact.getFriendId() == friendId) {
+                contact.setAccepted(true);
+            }
+        }
+    }
+
+
+
+    public User getUser(int id) {
+        for (User user: users) {
+            if(user.getUserID() == id) {
+                return user;
+            }
+        }
+
+        return null;
     }
 
 

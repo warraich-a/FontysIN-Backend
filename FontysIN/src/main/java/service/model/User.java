@@ -22,7 +22,7 @@ public class User {
     private String img; // user's image /* I will add this to the constracture later*/
 
     //constructors
-    public User(int id, String firstName, String lastName, String dateOfBirth, UserType type, String email, String password,
+    public User(int id, String firstName, String lastName, UserType type, String email, String password,
                  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber) {
         this.id = id;
         this.firstName = firstName;
