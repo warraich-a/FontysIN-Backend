@@ -45,7 +45,7 @@ public class FakeDataProfile {
     }
     public User GetUserById(int id){
         for (User e: users){
-            if(e.getId() == id){
+            if(e.getUserID() == id){
                 return e;
             }
         }
@@ -117,16 +117,16 @@ public class FakeDataProfile {
         return true;
     }
     public boolean updateUser(User e) {
-        User old = this.GetUserById(e.getId());
+        User old = this.GetUserById(e.getUserID());
         if (old == null) {
             return false;
         }
-        old.setEmail(e.getEmail());
-        old.setPhoneNr(e.getPhoneNr());
-        old.setAddressId(e.getAddressId());
-        old.setImage(e.getImage());
-        old.setLocationId(e.getLocationId());
-        old.setDepartmentId(e.getDepartmentId());
+        old.setUserEmail(e.getUserEmail());
+        old.setUserPhoneNumber(e.getUserPhoneNumber());
+        old.setUserAddress(e.getUserAddress());
+        old.setUserImage(e.getUserImage());
+        old.setUserLocation(e.getUserLocation());
+        old.setUserDepartment(e.getUserDepartment());
 
         return true;
     }
