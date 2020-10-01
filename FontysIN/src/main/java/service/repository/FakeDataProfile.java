@@ -1,7 +1,7 @@
 package service.repository;
 import service.model.Education;
 import service.model.Experience;
-
+import service.model.User;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class FakeDataProfile {
 
     private final List<Experience> experiences = new ArrayList<>();
     private final List<Education> educations = new ArrayList<>();
-
+    private final List<User> users = new ArrayList<>();
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
     public static FakeDataProfile getInstance() {
         return INSTANCE;
@@ -37,6 +37,14 @@ public class FakeDataProfile {
     //to get experience
     public Experience GetExperienceById(int id){
         for (Experience e: experiences){
+            if(e.getId() == id){
+                return e;
+            }
+        }
+        return null;
+    }
+    public User GetUserById(int id){
+        for (User e: users){
             if(e.getId() == id){
                 return e;
             }
@@ -78,5 +86,50 @@ public class FakeDataProfile {
         }
         return false;
     }
+
+    public boolean updateExperience(Experience e) {
+        Experience old = this.GetExperienceById(e.getId());
+        if (old == null) {
+            return false;
+        }
+        old.setTitle(e.getTitle());
+        old.setEmploymentType(e.getEmploymentType());
+        old.setLocationId(e.getLocationId());
+        old.setCompany(e.getCompany());
+        old.setStartDate(e.getStartDate());
+        old.setEndDate(e.getEndDate());
+        old.setDescription(e.getDescription());
+
+        return true;
+    }
+    public boolean updateEducation(Education e) {
+        Education old = this.GetEducationById(e.getId());
+        if (old == null) {
+            return false;
+        }
+        old.setSchool(e.getSchool());
+        old.setStartYear(e.getStartYear());
+        old.setEndDate(e.getEndDate());
+        old.setDegree(e.getDegree());
+        old.setFieldStudy(e.getFieldStudy());
+        old.setDescription(e.getDescription());
+
+        return true;
+    }
+    public boolean updateUser(User e) {
+        User old = this.GetUserById(e.getId());
+        if (old == null) {
+            return false;
+        }
+        old.setEmail(e.getEmail());
+        old.setPhoneNr(e.getPhoneNr());
+        old.setAddressId(e.getAddressId());
+        old.setImage(e.getImage());
+        old.setLocationId(e.getLocationId());
+        old.setDepartmentId(e.getDepartmentId());
+
+        return true;
+    }
+
 
 }

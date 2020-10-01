@@ -2,6 +2,7 @@ package service.resources;
 
 import service.model.Education;
 import service.model.Experience;
+import service.model.User;
 import service.repository.FakeDataProfile;
 
 import javax.ws.rs.*;
@@ -70,6 +71,40 @@ public class ProfileResources {
             String url = uriInfo.getAbsolutePath() + "/" + e.getId(); // url of the created student
             URI uri = URI.create(url);
             return Response.created(uri).build();
+        }
+    }
+
+    @PUT //PUT at http://localhost:XXXX/profile/education
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("education")
+    public Response updateEducation(Education e) {
+        // Idempotent method. Always update (even if the resource has already been updated before).
+        if (fakeDataProfile.updateEducation(e)) {
+            return Response.noContent().build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid education.").build();
+        }
+    }
+    @PUT //PUT at http://localhost:XXXX/profile/experience
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("experience")
+    public Response updateExperience(Experience e) {
+        // Idempotent method. Always update (even if the resource has already been updated before).
+        if (fakeDataProfile.updateExperience(e)) {
+            return Response.noContent().build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
+        }
+    }
+    @PUT //PUT at http://localhost:XXXX/profile/information
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("information")
+    public Response updateUser(User user) {
+        // Idempotent method. Always update (even if the resource has already been updated before).
+        if (fakeDataProfile.updateUser(user)) {
+            return Response.noContent().build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
         }
     }
 }
