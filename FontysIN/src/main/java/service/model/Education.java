@@ -2,6 +2,7 @@ package service.model;
 
 import java.time.LocalDate;
 
+
 public class Education {
     private int id;
     private int profileId;

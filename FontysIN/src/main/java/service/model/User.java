@@ -1,12 +1,11 @@
 package service.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Objects;
+//import javax.xml.bind.annotation.XmlRootElement;
 
-@SuppressWarnings("WeakerAccess")
-@XmlRootElement
+import java.util.Objects;
+//
+//@SuppressWarnings("WeakerAccess")
+//@XmlRootElement
 public class User {
     //fields
     private int id;
@@ -22,7 +21,7 @@ public class User {
     private String userNumber; // user's number
     private String img; // user's image /* I will add this to the constracture later*/
 
-    //constractures
+    //constructors
     public User(int id, String firstName, String lastName, String dateOfBirth, UserType type, String email, String password,
                  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber) {
         this.id = id;
@@ -41,7 +40,7 @@ public class User {
     public User() {
     }
 
-    //geteers and setters
+    //getters and setters
     public int getUserID() {
         return id;
     }
