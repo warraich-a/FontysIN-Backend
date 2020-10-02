@@ -1,3 +1,4 @@
+/*
 package service.resources;
 
 import service.model.*;
@@ -16,7 +17,9 @@ public class UserResources {
     private UriInfo uriInfo;
 
 
-    //to get all the experiences
+    */
+/*//*
+/to get all the experiences
     @GET //GET at http://localhost:XXXX/profile/experiences
     @Path("{userId}/profile")
     @Produces(MediaType.APPLICATION_JSON)
@@ -96,7 +99,8 @@ public class UserResources {
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }
-    }
+    }*//*
+
 
     // to add a new skill
     @POST //POST at http://localhost:XXXX/profile/experience
@@ -117,3 +121,4 @@ public class UserResources {
     }
 
 }
+*/

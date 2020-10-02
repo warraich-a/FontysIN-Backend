@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 class Publisher {
 
-    private static final URI BASE_URI = URI.create("http://localhost:9095/");
+    private static final URI BASE_URI = URI.create("http://localhost:9096/");
 
     public static void main(String[] args) {
 
