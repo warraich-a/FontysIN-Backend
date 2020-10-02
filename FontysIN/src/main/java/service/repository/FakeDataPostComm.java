@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FakeDateBase {
+public class FakeDataPostComm{
 
 
     private final List<Comments> commentsList = new ArrayList<>();
     private final List<Posts> postsList = new ArrayList<>();
 
-    public FakeDateBase(){
+    public FakeDataPostComm(){
         postsList.add(new Posts(1,1,"First post!!", new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
         postsList.add(new Posts(2,1,"Wow!!Second post!", new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
 

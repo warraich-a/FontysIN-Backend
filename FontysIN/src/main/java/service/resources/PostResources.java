@@ -2,7 +2,7 @@ package service.resources;
 
 import service.model.Comments;
 import service.model.Posts;
-import service.repository.FakeDateBase;
+import service.repository.FakeDataPostComm;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -14,7 +14,7 @@ public class PostResources {
     @Context
     private UriInfo uriInfo;
 
-    private static final FakeDateBase fakeDataStore = new FakeDateBase();
+    private static final FakeDataPostComm fakeDataStore = new FakeDataPostComm();
 
     @GET
     @Path("")
