@@ -131,5 +131,47 @@ public class FakeDataProfile {
         return true;
     }
 
+    //get experience id
+    public Experience getExperienceID(int id) {
+        for (Experience e : experiences) {
+            if (e.getId() == id)
+                return e;
+        }
+        return null;
+    }
+
+    //get education id
+    public Education getEducationID(int id) {
+        for (Education e : educations) {
+            if (e.getId() == id)
+                return e;
+        }
+        return null;
+    }
+
+    //delete experience id for specific user ______________ it must be profile id instead of user id
+    public boolean deleteExperience(int userId, int experienceId) {
+        Experience e = getExperienceID(experienceId);
+        for (User u: users) {
+            if(u.getUserID() == userId) {
+                experiences.remove(e);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //delete experience id for specific user
+//    public boolean deleteEducation(int userId, int educationId) {
+//        Education e = getEducationID(educationId);
+//        for (User u: users) {
+//            if(u.getUserID() == userId) {
+//                educations.remove(e);
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
 
 }

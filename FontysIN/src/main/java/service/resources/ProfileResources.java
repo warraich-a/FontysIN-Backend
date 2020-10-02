@@ -107,4 +107,13 @@ public class ProfileResources {
             return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
         }
     }
+
+    //delete usee's experince with specific id
+    @DELETE //DELETE at http://localhost:9090/profile/users/2/experience/1
+    @Path("{userID}/{experinceID}")
+    public Response deleteUserExperience(@PathParam("userID") int userID, @PathParam("experinceID") int experinceID) {
+        fakeDataProfile.deleteExperience(userID, experinceID);
+
+        return Response.noContent().build();
+    }
 }
