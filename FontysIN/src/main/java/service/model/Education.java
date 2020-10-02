@@ -28,6 +28,20 @@ public class Education {
 
     }
 
+    @Override
+    public String toString() {
+        return "Education{" +
+                "id=" + id +
+                ", profileId=" + profileId +
+                ", school='" + school + '\'' +
+                ", startYear=" + startYear +
+                ", endDate=" + endDate +
+                ", degree='" + degree + '\'' +
+                ", fieldStudy='" + fieldStudy + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     public int getId() {
         return id;
     }
