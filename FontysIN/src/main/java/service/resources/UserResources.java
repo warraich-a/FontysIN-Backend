@@ -116,4 +116,34 @@ public class UserResources {
         }
     }
 
+    //delete user's experince with specific id
+    @DELETE //DELETE at http://localhost:9090/users/1/profile/1/experience/1
+    @Path("{userId}/{profileID}/{experinceID}")
+    public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID, @PathParam("experinceID") int experinceID) {
+        fakeDataProfile.deleteExperience(userId, profileID, experinceID);
+
+        return Response.noContent().build();
+    }
+
+    //delete user's education with specific id
+    @DELETE //DELETE at http://localhost:9090/users/1/profile/2/education/1
+    @Path("{userId}/{profileID}/{experinceID}")
+    public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+                                        @PathParam("experinceID") int experinceID) {
+        fakeDataProfile.deleteEducation(userId, profileID, experinceID);
+
+        return Response.noContent().build();
+    }
+
+    //delete user's skill with specific id
+    @DELETE //DELETE at http://localhost:9090/users/1/profile/1/skill/1
+    @Path("{userId}/{profileID}/{experinceID}")
+    public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+                                    @PathParam("experinceID") int experinceID) {
+        fakeDataProfile.deleteSkill(userId, profileID, experinceID);
+
+        return Response.noContent().build();
+    }
+
+
 }

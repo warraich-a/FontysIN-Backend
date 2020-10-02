@@ -9,13 +9,13 @@ public class Experience {
     private int profileId;
     private String title;
     private String company;
-    private String employmentType;
+    private EmplymentType employmentType;
     private int locationId;
     private LocalDate startDate;
     private LocalDate endDate;
     private String description;
 
-    public Experience(int id, int profileId, String title, String company, String employmentType, int locationId, LocalDate startDate, LocalDate endDate, String description) {
+    public Experience(int id, int profileId, String title, String company, EmplymentType employmentType, int locationId, LocalDate startDate, LocalDate endDate, String description) {
         this.id = id;
         this.profileId = profileId;
         this.title = title;
@@ -63,11 +63,11 @@ public class Experience {
         this.title = title;
     }
 
-    public String getEmploymentType() {
+    public EmplymentType getEmploymentType() {
         return employmentType;
     }
 
-    public void setEmploymentType(String employmentType) {
+    public void setEmploymentType(EmplymentType employmentType) {
         this.employmentType = employmentType;
     }
 
@@ -102,4 +102,20 @@ public class Experience {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Education{" +
+                "Id: " + id +
+                ", ProfileId: " + profileId +
+                ", Title: " + title + '\'' +
+                ", Company: " + company + '\'' +
+                ", Emplyment Type: " + employmentType + '\'' +
+                ", LocationId: " + locationId + '\'' +
+                ", Start Date: " + startDate + '\'' +
+                ", End Date: " + endDate + '\'' +
+                ", Description: " + description + '\'' +
+                '}';
+    }
+
 }

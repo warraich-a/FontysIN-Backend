@@ -42,9 +42,7 @@ public class User {
     }
 
     //getters and setters
-    public int getUserID() {
-        return id;
-    }
+    public int getUserID() { return id; }
 
     public void setUserID(int id) {
         this.id = id;
