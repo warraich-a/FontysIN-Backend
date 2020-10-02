@@ -25,12 +25,14 @@ public class FakeDataProfile {
     }
 
     private FakeDataProfile(){
-        Experience e1 = new Experience(1, 1, "Profile id 1", "Fontys", "Teacher", 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e2 = new Experience(2, 1, "profile id 1", "Fontys", "Employee", 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
-        Experience e3 = new Experience(3, 2, "Profile id 2", "Fontys", "Teacher", 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e4 = new Experience(4, 2, "profile id 2", "Fontys", "Employee", 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
-        Experience e5 = new Experience(5, 3, "Profile id 3", "Fontys", "Teacher", 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e6 = new Experience(6, 4, "profile id 4", "Fontys", "Employee", 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+
+        Experience e1 = new Experience(1, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
+        Experience e2 = new Experience(2, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+        Experience e3 = new Experience(3, 1, "Profile id 1", "Fontys", EmplymentType.PartTime, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
+        Experience e4 = new Experience(4, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+        Experience e5 = new Experience(5, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
+        Experience e6 = new Experience(6, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+
 
         experiences.add(e1);
         experiences.add(e2);
@@ -438,8 +440,6 @@ public class FakeDataProfile {
         }
     }
 
-
-
     public User getUser(int id) {
         for (User user: users) {
             if(user.getUserID() == id) {
@@ -450,5 +450,73 @@ public class FakeDataProfile {
         return null;
     }
 
+    //get experience id
+    public Experience getExperienceID(int id) {
+        for (Experience e : experiences) {
+            if (e.getId() == id)
+                return e;
+        }
+        return null;
+    }
+
+    //get education id
+    public Education getEducationID(int id) {
+        for (Education e : educations) {
+            if (e.getId() == id)
+                return e;
+        }
+        return null;
+    }
+
+    //get skill id
+    public Skill getSkillID(int id) {
+        for (Skill s : skills) {
+            if (s.getId() == id)
+                return s;
+        }
+        return null;
+    }
+
+    //delete experience id for specific user
+    public boolean deleteExperience(int userId, int profileId, int experienceId) {
+        Experience e = getExperienceID(experienceId);
+        for (User u :users){
+            for(Profile p: profiles){
+                if(u.getUserID()== userId && p.getId()== profileId){
+                    experiences.remove(e);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //delete experience id for specific user
+    public boolean deleteEducation(int userId, int profileId, int educationId) {
+        Education e = getEducationID(educationId);
+        for (User u :users){
+            for(Profile p: profiles){
+                if(u.getUserID()== userId && p.getId()== profileId){
+                    educations.remove(e);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //delete Skill id for specific user
+    public boolean deleteSkill(int userId, int profileId, int skillId) {
+        Skill s = getSkillID(skillId);
+        for (User u :users){
+            for(Profile p: profiles){
+                if(u.getUserID()== userId && p.getId()== profileId){
+                    skills.remove(s);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }
