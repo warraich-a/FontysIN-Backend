@@ -1,10 +1,7 @@
 package service.resources;
 
-import service.model.Education;
-import service.model.Experience;
-import service.model.Profile;
+import service.model.*;
 import service.repository.FakeDataProfile;
-import service.model.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -25,9 +22,11 @@ public class UserResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response GetProfile(@PathParam("userId") int userId) {
 
-        Profile p = fakeDataProfile.GetProfileByUserId(userId);//studentsRepository.get(stNr);
+        Profile p = fakeDataProfile.GetProfileByUserId(userId); // getting the profile by userid
         List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(p.getId());
         List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(p.getId());
+        List<About> aboutByProfileId = fakeDataProfile.GetAboutByProfileID(p.getId());
+        List<Skill> skillByProfileId = fakeDataProfile.GetSkillByProfileID(p.getId());
 
         if (p == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid student number.").build();
@@ -36,6 +35,8 @@ public class UserResources {
             List<Object> combined = new ArrayList<>();
             combined.addAll(educationByProfileId);
             combined.addAll(experienceByProfileId);
+            combined.addAll(aboutByProfileId);
+            combined.addAll(skillByProfileId);
 
             // to show a list correctly
             GenericEntity<List<Object>> entity = new GenericEntity<>(combined) {
@@ -49,7 +50,7 @@ public class UserResources {
     @POST //POST at http://localhost:XXXX/profile/experience
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{userId}/profile/experience/new")
-    public Response CreateExperience(@PathParam("userId") int userId, Experience e) {
+    public Response CreateExperience(@PathParam("userId") int userId, Experience e) { // the purpose of using user id in the params is to first get the find the profile id through user id
 
         if (!fakeDataProfile.AddExperience(e,  userId))
         {
@@ -57,7 +58,7 @@ public class UserResources {
             // throw new Exception(Response.Status.CONFLICT, "This topic already exists");
             return Response.status(Response.Status.CONFLICT).entity(entity).build();
         } else {
-            String url = uriInfo.getAbsolutePath() + "/" + e.getId(); // url of the created student
+            String url = uriInfo.getAbsolutePath() + "/" + e.getId(); //
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }
@@ -74,11 +75,45 @@ public class UserResources {
             // throw new Exception(Response.Status.CONFLICT, "This topic already exists");
             return Response.status(Response.Status.CONFLICT).entity(entity).build();
         } else {
-            String url = uriInfo.getAbsolutePath() + "/" + e.getId(); // url of the created student
+            String url = uriInfo.getAbsolutePath() + "/" + e.getId(); //
+            URI uri = URI.create(url);
+            return Response.created(uri).build();
+        }
+    }
+    // to add a new about
+    @POST //POST at http://localhost:XXXX/profile/experience
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("{userId}/profile/about/new")
+    public Response CreateAbout(@PathParam("userId") int userId, About a) {
+
+        if (!fakeDataProfile.AddAbout(a,  userId))
+        {
+            String entity =  "About Exists";
+            // throw new Exception(Response.Status.CONFLICT, "This topic already exists");
+            return Response.status(Response.Status.CONFLICT).entity(entity).build();
+        } else {
+            String url = uriInfo.getAbsolutePath() + "/" + a.getId(); //
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }
     }
 
+    // to add a new skill
+    @POST //POST at http://localhost:XXXX/profile/experience
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("{userId}/profile/skill/new")
+    public Response CreateSKill(@PathParam("userId") int userId, Skill s) {
+
+        if (!fakeDataProfile.AddSkill(s,  userId))
+        {
+            String entity =  "SKill Exists";
+            // throw new Exception(Response.Status.CONFLICT, "This topic already exists");
+            return Response.status(Response.Status.CONFLICT).entity(entity).build();
+        } else {
+            String url = uriInfo.getAbsolutePath() + "/" + s.getId(); // url of the created student
+            URI uri = URI.create(url);
+            return Response.created(uri).build();
+        }
+    }
 
 }

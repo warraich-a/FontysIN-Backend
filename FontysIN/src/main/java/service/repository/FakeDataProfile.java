@@ -13,6 +13,9 @@ public class FakeDataProfile {
     private final List<Education> educations = new ArrayList<>();
     private final List<User> users = new ArrayList<>();
     private final List<Profile> profiles = new ArrayList<>();
+    private final List<About> abouts = new ArrayList<>();
+    private final List<Skill> skills = new ArrayList<>();
+
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
     public static FakeDataProfile getInstance() {
         return INSTANCE;
@@ -47,6 +50,22 @@ public class FakeDataProfile {
 
         profiles.add(p1);
         profiles.add(p2);
+
+        About a1 = new About(1,2, "I am software engineer");
+        About a2 = new About(2,1, "I am businesman");
+
+        abouts.add(a1);
+        abouts.add(a2);
+
+        Skill s1 = new Skill(1,1, "HTML");
+        Skill s2 = new Skill(2,1, "PHP");
+        Skill s3 = new Skill(3,2, "C#");
+        Skill s4 = new Skill(4,2, "Java");
+
+        skills.add(s1);
+        skills.add(s2);
+        skills.add(s3);
+        skills.add(s4);
 
     }
 
@@ -163,6 +182,86 @@ public class FakeDataProfile {
             }
         }
         return null;
+    }
+
+    //About
+
+    // to get about
+    // Get list
+    public List<About> GetAbouts (){return abouts;}
+
+    //to get about
+    public About GetAboutById(int id){
+        for (About a: abouts){
+            if(a.getId() == id){
+                return a;
+            }
+        }
+        return null;
+    }
+
+    // get about by profile id
+    public List<About> GetAboutByProfileID(int id){
+        List<About> foundAbout = new ArrayList<>();
+        for (About a: abouts){
+            if(a.getProfileId() == id){
+                foundAbout.add(a);
+            }
+        }
+        return foundAbout;
+    }
+    //to add about
+    public boolean AddAbout(About a, int userId){
+
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId) {
+                if (this.GetAboutById(a.getId()) == null) {
+                    abouts.add(a);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //Skills
+
+    // to get skills
+    // Get list
+    public List<Skill> GetSkills (){return skills;}
+
+    //to get about
+    public Skill GetSkillById(int id){
+        for (Skill s: skills){
+            if(s.getId() == id){
+                return s;
+            }
+        }
+        return null;
+    }
+
+    // get skill by profile id
+    public List<Skill> GetSkillByProfileID(int id){
+        List<Skill> foundSkills = new ArrayList<>();
+        for (Skill s: skills){
+            if(s.getProfileId() == id){
+                foundSkills.add(s);
+            }
+        }
+        return foundSkills;
+    }
+    //to add about
+    public boolean AddSkill(Skill s, int userId){
+
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId) {
+                if (this.GetSkillById(s.getId()) == null) {
+                    skills.add(s);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
