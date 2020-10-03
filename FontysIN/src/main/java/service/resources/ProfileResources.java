@@ -74,37 +74,5 @@ public class ProfileResources {
         }
     }*/
 
-    @PUT //PUT at http://localhost:XXXX/profile/education
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("education/{id}")
-    public Response updateEducation(@PathParam("id") int id, Education e) {
-        // Idempotent method. Always update (even if the resource has already been updated before).
-        if (fakeDataProfile.updateEducation(id, e)) {
-            return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid education.").build();
-        }
-    }
-    @PUT //PUT at http://localhost:XXXX/profile/experience
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("experience/{id}")
-    public Response updateExperience(@PathParam("id") int id, Experience e) {
-        // Idempotent method. Always update (even if the resource has already been updated before).
-        if (fakeDataProfile.updateExperience(id, e)) {
-            return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
-        }
-    }
-    @PUT //PUT at http://localhost:XXXX/profile/information
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("information/{id}")
-    public Response updateUser(@PathParam("id") int id, User user) {
-        // Idempotent method. Always update (even if the resource has already been updated before).
-        if (fakeDataProfile.updateUser(id, user)) {
-            return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
-        }
-    }
+
 }
