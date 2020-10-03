@@ -330,7 +330,15 @@ public class FakeDataProfile {
         return false;
     }
 
+    public boolean updateAbout(int id, About a) {
+        About old = this.GetAboutById(id);
+        if (old == null) {
+            return false;
+        }
+        old.setContent(a.getContent());
 
+        return true;
+    }
     public boolean updateExperience(int id, Experience e) {
         Experience old = this.GetExperienceById(id);
         if (old == null) {

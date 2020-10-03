@@ -168,4 +168,49 @@ public class UsersResources {
 			return Response.created(uri).build();
 		}
 	}
+	@PUT //PUT at http://localhost:XXXX/users/profile/about/id
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/profile/about/{id}")
+	public Response updateAbout(@PathParam("id") int id, About a) {
+		// Idempotent method. Always update (even if the resource has already been updated before).
+		if (fakeDataProfile.updateAbout(id, a)) {
+			return Response.noContent().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid about.").build();
+		}
+	}
+
+	@PUT //PUT at http://localhost:XXXX/users/profile/education/id
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/profile/education/{id}")
+	public Response updateEducation(@PathParam("id") int id, Education e) {
+		// Idempotent method. Always update (even if the resource has already been updated before).
+		if (fakeDataProfile.updateEducation(id, e)) {
+			return Response.noContent().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid education.").build();
+		}
+	}
+	@PUT //PUT at http://localhost:XXXX/users/profile/experience/id
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/profile/experience/{id}")
+	public Response updateExperience(@PathParam("id") int id, Experience e) {
+		// Idempotent method. Always update (even if the resource has already been updated before).
+		if (fakeDataProfile.updateExperience(id, e)) {
+			return Response.noContent().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
+		}
+	}
+	@PUT //PUT at http://localhost:XXXX/profile/information
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{userId}")
+	public Response updateUser(@PathParam("userId") int id, User user) {
+		// Idempotent method. Always update (even if the resource has already been updated before).
+		if (fakeDataProfile.updateUser(id, user)) {
+			return Response.noContent().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
+		}
+	}
 }
