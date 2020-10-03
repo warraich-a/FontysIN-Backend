@@ -331,8 +331,8 @@ public class FakeDataProfile {
     }
 
 
-    public boolean updateExperience(Experience e) {
-        Experience old = this.GetExperienceById(e.getId());
+    public boolean updateExperience(int id, Experience e) {
+        Experience old = this.GetExperienceById(id);
         if (old == null) {
             return false;
         }
@@ -346,8 +346,8 @@ public class FakeDataProfile {
 
         return true;
     }
-    public boolean updateEducation(Education e) {
-        Education old = this.GetEducationById(e.getId());
+    public boolean updateEducation(int id, Education e) {
+        Education old = this.GetEducationById(id);
         if (old == null) {
             return false;
         }
@@ -360,12 +360,12 @@ public class FakeDataProfile {
 
         return true;
     }
-    public boolean updateUser(User e) {
-        User old = this.GetUserById(e.getUserID());
+    public boolean updateUser(int id, User e) {
+        User old = this.GetUserById(id);
         if (old == null) {
             return false;
         }
-        old.setUserEmail(e.getUserEmail());
+
         old.setUserPhoneNumber(e.getUserPhoneNumber());
         old.setUserAddress(e.getUserAddress());
         old.setUserImage(e.getUserImage());
