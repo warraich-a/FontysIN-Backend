@@ -14,6 +14,7 @@ public class UsersResources {
 	@Context
 	private UriInfo uriInfo;
 
+																	// CONTACTS
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
