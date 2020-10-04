@@ -11,6 +11,10 @@ public class FakeDataProfile {
     private final List<Experience> experiences = new ArrayList<>();
     private final List<Education> educations = new ArrayList<>();
     private final List<User> users = new ArrayList<>();
+    private final List<Profile> profiles = new ArrayList<>();
+    private final List<About> abouts = new ArrayList<>();
+    private final List<Skill> skills = new ArrayList<>();
+
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
 
     // Contacts
@@ -21,17 +25,36 @@ public class FakeDataProfile {
     }
 
     private FakeDataProfile(){
-        Experience e1 = new Experience(1, 1, "No title", "Fontys", "Teacher", 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e2 = new Experience(2, 1, "No title", "Fontys", "Employee", 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+
+        Experience e1 = new Experience(1, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
+        Experience e2 = new Experience(2, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+        Experience e3 = new Experience(3, 1, "Profile id 1", "Fontys", EmplymentType.PartTime, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
+        Experience e4 = new Experience(4, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+        Experience e5 = new Experience(5, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
+        Experience e6 = new Experience(6, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+
 
         experiences.add(e1);
         experiences.add(e2);
+        experiences.add(e3);
+        experiences.add(e4);
+        experiences.add(e5);
+        experiences.add(e6);
 
         Education edu1 = new Education(1, 1, "Fontys", LocalDate.of(2018,01,01), LocalDate.of(2020,01,01), "High School", "ICT", "Got good grades" );
-        Education edu2 = new Education(2, 1, "Fontys", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+        Education edu2 = new Education(2, 2, "NJC", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+        Education edu3 = new Education(3, 3, "jklafd ", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+        Education edu4 = new Education(4, 4, "FoId", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+        Education edu5 = new Education(5, 5, "AGA ", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+        Education edu6 = new Education(6, 6, "----- Id", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+
 
         educations.add(edu1);
         educations.add(edu2);
+        educations.add(edu3);
+        educations.add(edu4);
+        educations.add(edu5);
+        educations.add(edu6);
 
 
           //public User(int id, String firstName, String lastName, UserType type, String email, String password,
@@ -57,9 +80,55 @@ public class FakeDataProfile {
         acceptContact(2, 1);
         acceptContact(5, 2);
 
+        Profile p1 = new Profile(1, 1, "English");
+        Profile p2 = new Profile(2, 1, "Dutch");
+        Profile p3 = new Profile(3, 2, "English");
+        Profile p4 = new Profile(4, 2, "Dutch");
+        Profile p5 = new Profile(5, 3, "English");
+        Profile p6 = new Profile(6, 3, "Dutch");
+
+        profiles.add(p1);
+        profiles.add(p2);
+        profiles.add(p3);
+        profiles.add(p4);
+        profiles.add(p5);
+        profiles.add(p6);
+
+        About a1 = new About(1,1, "I am software engineer");
+        About a2 = new About(2,1, "I am businesman");
+        About a3 = new About(3,2, "I am software engineer");
+        About a4 = new About(4,3, "I am businesman");
+        About a5 = new About(5,4, "I am software engineer");
+        About a6 = new About(6,5, "I am businesman");
+
+        abouts.add(a1);
+        abouts.add(a2);
+        abouts.add(a3);
+        abouts.add(a4);
+        abouts.add(a5);
+        abouts.add(a6);
+
+        Skill s1 = new Skill(1,1, "HTML");
+        Skill s2 = new Skill(2,1, "PHP");
+        Skill s3 = new Skill(3,2, "C#");
+        Skill s4 = new Skill(4,3, "Java");
+        Skill s5 = new Skill(5,4, "C#");
+        Skill s6 = new Skill(6,5, "Java");
+
+
+        skills.add(s1);
+        skills.add(s2);
+        skills.add(s3);
+        skills.add(s4);
+        skills.add(s5);
+        skills.add(s6);
+
     }
 
-    // to get all the experiences
+
+    //Experience
+
+    // Get list
     public List<Experience> GetExperiences (){return experiences;}
 
     //to get experience
@@ -71,6 +140,19 @@ public class FakeDataProfile {
         }
         return null;
     }
+
+    // get experiences by profile id
+    public List<Experience> GetExperiencesByProfileID(int id){
+        List<Experience> foundExperiences = new ArrayList<>();
+        for (Experience e: experiences){
+            if(e.getProfileId() == id){
+                foundExperiences.add(e);
+            }
+        }
+        return foundExperiences;
+    }
+
+    //
     public User GetUserById(int id){
         for (User e: users){
             if(e.getUserID() == id){
@@ -81,14 +163,25 @@ public class FakeDataProfile {
     }
 
     //to add experience
-    public boolean AddExperience(Experience e){
-        if (this.GetExperienceById(e.getId()) == null)
-        {
-            experiences.add(e);
-                return true;
+    public boolean AddExperience(Experience e, int userId, int profileId){
+
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId) {
+                if(p.getId() == profileId) {
+                    if (this.GetExperienceById(e.getId()) == null) {
+                        experiences.add(e);
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
+
+    //update
+
+    //delete
+
 
 
     //Educations
@@ -96,27 +189,158 @@ public class FakeDataProfile {
     public List<Education> GetEducations (){return educations;}
 
     //to get experience
-    public Education GetEducationById(int id){
+    public  Education GetEducationById(int id){
+
         for (Education e: educations){
-            if(e.getId() == id){
-                return e;
+            if(e.getProfileId() == id){
+               return e;
             }
         }
         return null;
     }
 
-    //to add experience
-    public boolean AddEducation(Education e){
-        if (this.GetExperienceById(e.getId()) == null)
-        {
-            educations.add(e);
-            return true;
+    //get educations by profile id
+    public  List<Education>  GetEducationsByProfileId(int id){
+        List<Education> foundEducations = new ArrayList<>();
+        for (Education e: educations){
+            if(e.getProfileId() == id){
+                foundEducations.add(e);
+            }
+        }
+        return foundEducations;
+    }
+
+    //to add educations
+    public boolean AddEducation(Education e, int userId, int profileId){
+
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId) {
+                if(p.getId() == profileId) {
+                    if (this.GetEducationById(e.getId()) == null) {
+                        educations.add(e);
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
 
-    public boolean updateExperience(Experience e) {
-        Experience old = this.GetExperienceById(e.getId());
+    //update
+
+    //delete
+
+
+
+    //Profile
+
+    // to get profiles
+    public List<Profile> GetProfileByUserId(int id){
+        List<Profile> foundProfiles = new ArrayList<>();
+
+        for (Profile p: profiles){
+            if(p.getUserId() == id){
+                foundProfiles.add(p);
+            }
+        }
+        return foundProfiles;
+    }
+
+    //About
+
+    // to get about
+    // Get list
+    public List<About> GetAbouts (){return abouts;}
+
+    //to get about
+    public About GetAboutById(int id){
+        for (About a: abouts){
+            if(a.getId() == id){
+                return a;
+            }
+        }
+        return null;
+    }
+
+    // get about by profile id
+    public List<About> GetAboutByProfileID(int id){
+        List<About> foundAbout = new ArrayList<>();
+        for (About a: abouts){
+            if(a.getProfileId() == id){
+                foundAbout.add(a);
+            }
+        }
+        return foundAbout;
+    }
+    //to add about
+    public boolean AddAbout(About a, int userId, int profileId){
+
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId) {
+                if(p.getId() == profileId) {
+                    if (this.GetAboutById(a.getId()) == null) {
+                        abouts.add(a);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    //Skills
+
+    // to get skills
+    // Get list
+    public List<Skill> GetSkills (){return skills;}
+
+    //to get about
+    public Skill GetSkillById(int id){
+        for (Skill s: skills){
+            if(s.getId() == id){
+                return s;
+            }
+        }
+        return null;
+    }
+
+    // get skill by profile id
+    public List<Skill> GetSkillByProfileID(int id){
+        List<Skill> foundSkills = new ArrayList<>();
+        for (Skill s: skills){
+            if(s.getProfileId() == id){
+                foundSkills.add(s);
+            }
+        }
+        return foundSkills;
+    }
+    //to add about
+    public boolean AddSkill(Skill s, int userId, int profileId){
+
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId) {
+                if (p.getId() == profileId) {
+                    if (this.GetSkillById(s.getId()) == null) {
+                        skills.add(s);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean updateAbout(int id, About a) {
+        About old = this.GetAboutById(id);
+        if (old == null) {
+            return false;
+        }
+        old.setContent(a.getContent());
+
+        return true;
+    }
+    public boolean updateExperience(int id, Experience e) {
+        Experience old = this.GetExperienceById(id);
         if (old == null) {
             return false;
         }
@@ -130,8 +354,8 @@ public class FakeDataProfile {
 
         return true;
     }
-    public boolean updateEducation(Education e) {
-        Education old = this.GetEducationById(e.getId());
+    public boolean updateEducation(int id, Education e) {
+        Education old = this.GetEducationById(id);
         if (old == null) {
             return false;
         }
@@ -144,12 +368,12 @@ public class FakeDataProfile {
 
         return true;
     }
-    public boolean updateUser(User e) {
-        User old = this.GetUserById(e.getUserID());
+    public boolean updateUser(int id, User e) {
+        User old = this.GetUserById(id);
         if (old == null) {
             return false;
         }
-        old.setUserEmail(e.getUserEmail());
+
         old.setUserPhoneNumber(e.getUserPhoneNumber());
         old.setUserAddress(e.getUserAddress());
         old.setUserImage(e.getUserImage());
@@ -224,8 +448,6 @@ public class FakeDataProfile {
         }
     }
 
-
-
     public User getUser(int id) {
         for (User user: users) {
             if(user.getUserID() == id) {
@@ -236,5 +458,73 @@ public class FakeDataProfile {
         return null;
     }
 
+    //get experience id
+    public Experience getExperienceID(int id) {
+        for (Experience e : experiences) {
+            if (e.getId() == id)
+                return e;
+        }
+        return null;
+    }
+
+    //get education id
+    public Education getEducationID(int id) {
+        for (Education e : educations) {
+            if (e.getId() == id)
+                return e;
+        }
+        return null;
+    }
+
+    //get skill id
+    public Skill getSkillID(int id) {
+        for (Skill s : skills) {
+            if (s.getId() == id)
+                return s;
+        }
+        return null;
+    }
+
+    //delete experience id for specific user
+    public boolean deleteExperience(int userId, int profileId, int experienceId) {
+        Experience e = getExperienceID(experienceId);
+        for (User u :users){
+            for(Profile p: profiles){
+                if(u.getUserID()== userId && p.getId()== profileId){
+                    experiences.remove(e);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //delete experience id for specific user
+    public boolean deleteEducation(int userId, int profileId, int educationId) {
+        Education e = getEducationID(educationId);
+        for (User u :users){
+            for(Profile p: profiles){
+                if(u.getUserID()== userId && p.getId()== profileId){
+                    educations.remove(e);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //delete Skill id for specific user
+    public boolean deleteSkill(int userId, int profileId, int skillId) {
+        Skill s = getSkillID(skillId);
+        for (User u :users){
+            for(Profile p: profiles){
+                if(u.getUserID()== userId && p.getId()== profileId){
+                    skills.remove(s);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

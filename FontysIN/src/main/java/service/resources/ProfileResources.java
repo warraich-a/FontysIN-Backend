@@ -28,7 +28,7 @@ public class ProfileResources {
         return Response.ok(entity).build();
     }
     // to add a new experience
-    @POST //POST at http://localhost:XXXX/profile/experience
+    /*@POST //POST at http://localhost:XXXX/profile/experience
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("experience")
     public Response CreateExperience(Experience e) {
@@ -42,7 +42,7 @@ public class ProfileResources {
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }
-    }
+    }*/
 
     //Education
     //to get all the Educations
@@ -58,7 +58,7 @@ public class ProfileResources {
     }
 
     // to add a new education
-    @POST //POST at http://localhost:XXXX/profile/education
+ /*   @POST //POST at http://localhost:XXXX/profile/education
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("education")
     public Response CreateEducation(Education e) {
@@ -72,39 +72,7 @@ public class ProfileResources {
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }
-    }
+    }*/
 
-    @PUT //PUT at http://localhost:XXXX/profile/education
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("education")
-    public Response updateEducation(Education e) {
-        // Idempotent method. Always update (even if the resource has already been updated before).
-        if (fakeDataProfile.updateEducation(e)) {
-            return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid education.").build();
-        }
-    }
-    @PUT //PUT at http://localhost:XXXX/profile/experience
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("experience")
-    public Response updateExperience(Experience e) {
-        // Idempotent method. Always update (even if the resource has already been updated before).
-        if (fakeDataProfile.updateExperience(e)) {
-            return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
-        }
-    }
-    @PUT //PUT at http://localhost:XXXX/profile/information
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("information")
-    public Response updateUser(User user) {
-        // Idempotent method. Always update (even if the resource has already been updated before).
-        if (fakeDataProfile.updateUser(user)) {
-            return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
-        }
-    }
+
 }
