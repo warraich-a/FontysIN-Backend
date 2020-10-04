@@ -2,7 +2,6 @@ package service.resources;
 
 import service.model.User;
 import service.repository.FakeDataProfile;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
@@ -22,9 +21,7 @@ public class UsersResources {
 	@Path("{id}/contacts")
 	public Response getContacts(@PathParam("id") int id) {
 		List<User> contacts = fakeDataProfile.getContacts(id);
-		System.out.println("Contacts" + contacts.size());
-
-
+		
 		GenericEntity<List<User>> entity = new GenericEntity<>(contacts) { };
 
 		return Response.ok(entity).build();
