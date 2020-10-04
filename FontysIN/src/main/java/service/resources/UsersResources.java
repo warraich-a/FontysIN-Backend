@@ -14,13 +14,13 @@ public class UsersResources {
 	@Context
 	private UriInfo uriInfo;
 
-																	// CONTACTS
+	// CONTACTS
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
 	public Response getContacts(@PathParam("id") int id) {
 		List<User> contacts = fakeDataProfile.getContacts(id);
-		
+
 		GenericEntity<List<User>> entity = new GenericEntity<>(contacts) { };
 
 		return Response.ok(entity).build();
@@ -131,6 +131,36 @@ public class UsersResources {
 			return Response.created(uri).build();
 		}
 	}
+
+	//delete user's experince with specific id
+	@DELETE //DELETE at http://localhost:9090/users/1/profile/1/experience/1
+	@Path("{userId}/{profileID}/{experinceID}")
+	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID, @PathParam("experinceID") int experinceID) {
+		fakeDataProfile.deleteExperience(userId, profileID, experinceID);
+
+		return Response.noContent().build();
+	}
+
+	//delete user's education with specific id
+	@DELETE //DELETE at http://localhost:9090/users/1/profile/2/education/1
+	@Path("{userId}/{profileID}/{experinceID}")
+	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+										@PathParam("experinceID") int experinceID) {
+		fakeDataProfile.deleteEducation(userId, profileID, experinceID);
+
+		return Response.noContent().build();
+	}
+
+	//delete user's skill with specific id
+	@DELETE //DELETE at http://localhost:9090/users/1/profile/1/skill/1
+	@Path("{userId}/{profileID}/{experinceID}")
+	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+									@PathParam("experinceID") int experinceID) {
+		fakeDataProfile.deleteSkill(userId, profileID, experinceID);
+
+		return Response.noContent().build();
+	}
+
 	// to add a new about
 	@POST //POST at http://localhost:XXXX/profile/experience
 	@Consumes(MediaType.APPLICATION_JSON)
