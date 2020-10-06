@@ -340,9 +340,9 @@ public class FakeDataProfile {
         old.setEmploymentType(e.getEmploymentType());
         old.setLocationId(e.getLocationId());
         old.setCompany(e.getCompany());
-        old.setStartDate(e.getStartDate());
-        old.setEndDate(e.getEndDate());
-        old.setDescription(e.getDescription());
+        old.setStartDateExperience(e.getStartDateExperience());
+        old.setEndDateExperience(e.getEndDateExperience());
+        old.setDescriptionExperience(e.getDescriptionExperience());
 
         return true;
     }
@@ -352,11 +352,11 @@ public class FakeDataProfile {
             return false;
         }
         old.setSchool(e.getSchool());
-        old.setStartYear(e.getStartYear());
-        old.setEndDate(e.getEndDate());
-        old.setDegree(e.getDegree());
+        old.setStartYearEducation(e.getStartYearEducation());
+        old.setEndYearEducation(e.getEndYearEducation());
+        old.setDegreeEducation(e.getDegreeEducation());
         old.setFieldStudy(e.getFieldStudy());
-        old.setDescription(e.getDescription());
+        old.setDescriptionEducation(e.getDescriptionEducation());
 
         return true;
     }
