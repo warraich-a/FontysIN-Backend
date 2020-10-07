@@ -84,6 +84,19 @@ public class FakeDataPostComm{
         return null;
     }
 
+    public List<Posts> getPostsListByUser(int id) {
+        List<Posts> newPosts = new ArrayList<>();
+        for(Posts posts : postsList) {
+            if(posts.getUserId() == id){
+                newPosts.add(posts);
+            }
+        }
+        return newPosts;
+
+    }
+
+
+
     public boolean deletePost(int stNr) {
         Posts post = getPost(stNr);
         if(post == null){
