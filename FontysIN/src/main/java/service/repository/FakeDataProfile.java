@@ -141,6 +141,9 @@ public class FakeDataProfile {
         return null;
     }
 
+
+
+
     // get experiences by profile id
     public List<Experience> GetExperiencesByProfileID(int id){
         List<Experience> foundExperiences = new ArrayList<>();
@@ -199,6 +202,17 @@ public class FakeDataProfile {
         return null;
     }
 
+    // to get experience by profile id
+    public List<Experience> GetExperienceByProfileId(int id){
+        List<Experience> foundExperience = new ArrayList<>();
+        for (Experience p: experiences){
+            if(p.getProfileId() == id){
+                foundExperience.add(p);
+            }
+        }
+        return foundExperience;
+    }
+
     //get educations by profile id
     public  List<Education>  GetEducationsByProfileId(int id){
         List<Education> foundEducations = new ArrayList<>();
@@ -208,6 +222,17 @@ public class FakeDataProfile {
             }
         }
         return foundEducations;
+    }
+
+    //get skills by profile id
+    public  List<Skill>  GetSkillsByProfileId(int id){
+        List<Skill> foundSkills = new ArrayList<>();
+        for (Skill s: skills){
+            if(s.getProfileId() == id){
+                foundSkills.add(s);
+            }
+        }
+        return foundSkills;
     }
 
     //to add educations
@@ -245,6 +270,7 @@ public class FakeDataProfile {
         }
         return foundProfiles;
     }
+
 
     //About
 
@@ -487,26 +513,30 @@ public class FakeDataProfile {
 
     //delete experience id for specific user
     public boolean deleteExperience(int userId, int profileId, int experienceId) {
-        Experience e = getExperienceID(experienceId);
+        Experience eId = getExperienceID(experienceId);
         for (User u :users){
             for(Profile p: profiles){
-                if(u.getUserID()== userId && p.getId()== profileId){
-                    experiences.remove(e);
-                    return true;
+                for(Experience e :experiences){
+                    if(u.getUserID()== userId && p.getId()== profileId && experienceId == e.getId()){
+                        experiences.remove(eId);
+                        return true;
+                    }
                 }
             }
         }
         return false;
     }
 
-    //delete experience id for specific user
+    //delete education id for specific user
     public boolean deleteEducation(int userId, int profileId, int educationId) {
-        Education e = getEducationID(educationId);
+        Education eId = getEducationID(educationId);
         for (User u :users){
             for(Profile p: profiles){
-                if(u.getUserID()== userId && p.getId()== profileId){
-                    educations.remove(e);
-                    return true;
+                for(Education e :educations){
+                    if(u.getUserID()== userId && p.getId()== profileId && educationId == e.getId()){
+                        educations.remove(eId);
+                        return true;
+                    }
                 }
             }
         }
@@ -515,12 +545,14 @@ public class FakeDataProfile {
 
     //delete Skill id for specific user
     public boolean deleteSkill(int userId, int profileId, int skillId) {
-        Skill s = getSkillID(skillId);
+        Skill es = getSkillID(skillId);
         for (User u :users){
             for(Profile p: profiles){
-                if(u.getUserID()== userId && p.getId()== profileId){
-                    skills.remove(s);
-                    return true;
+                for(Skill s :skills){
+                    if(u.getUserID()== userId && p.getId()== profileId && skillId == s.getId()){
+                        skills.remove(es);
+                        return true;
+                    }
                 }
             }
         }
