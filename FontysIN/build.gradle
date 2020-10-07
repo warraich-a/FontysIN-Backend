@@ -11,9 +11,10 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
     /*  Jersey for the service
-        We use the latest 2.x release because 2.x releases implement JAX-RS 2.1 API.
-        We do NOT use a Jersey 3.x release because 3.x releases implement Jakarta RESTful WebServices 3.0 API.*/
+       We use the latest 2.x release because 2.x releases implement JAX-RS 2.1 API.
+       We do NOT use a Jersey 3.x release because 3.x releases implement Jakarta RESTful WebServices 3.0 API.*/
     implementation group: 'org.glassfish.jersey.bundles', name: 'jaxrs-ri', version: '2.+'
     implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.+'
 
@@ -22,7 +23,6 @@ dependencies {
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.+'
     // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
     implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.+'
-
 
 
     // Grizzly will host the service
