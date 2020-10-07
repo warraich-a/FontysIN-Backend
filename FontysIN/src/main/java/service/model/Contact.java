@@ -40,7 +40,7 @@ public class Contact {
 		this.friendId = friendId;
 	}
 
-	public boolean isAccepted() {
+	public boolean getIsAccepted() {
 		return isAccepted;
 	}
 

@@ -50,12 +50,16 @@ public class FakeDataProfile {
         users.add(user5);
 
         // Contacts
-        createContact(1, 2);
-        createContact(1, 4);
-        createContact(2, 5);
+        Contact contact1 = new Contact(1, 2);
+        Contact contact2 = new Contact(1, 4);
+        Contact contact3 = new Contact(2, 5);
 
-        acceptContact(2, 1);
-        acceptContact(5, 2);
+        createContact(contact1);
+        createContact(contact2);
+        createContact(contact3);
+
+        acceptContact(1);
+        acceptContact(2);
 
     }
 
@@ -160,26 +164,26 @@ public class FakeDataProfile {
     }
 
 
-                                                                                        /* Contacts */
-    public int createContact(int userId, int friendId) {
+    /*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+    public int createContact(Contact createdContact) {
         boolean areAlreadyFriends;
         for (Contact contact: contacts) {
-            areAlreadyFriends = (contact.getUserId() == userId && contact.getFriendId() == friendId) || (contact.getFriendId() == userId && contact.getUserId() == friendId);
+            areAlreadyFriends = (contact.getUserId() == createdContact.getUserId() && contact.getFriendId() == createdContact.getFriendId()) || (contact.getFriendId() == createdContact.getUserId() && contact.getUserId() == createdContact.getFriendId());
             if(areAlreadyFriends) {
                 return -1;
             }
         }
 
         // if users aren't friends
-        Contact contact = new Contact(userId, friendId);
+        Contact contact = createdContact;
         contacts.add(contact);
         return contact.getId();
     }
 
     // Delete or Reject
-    public boolean deleteContact(int userId, int friendId) {
+    public boolean deleteContact(int userId, int contactId) {
         for (Contact contact: contacts) {
-            if((contact.getUserId() == userId && contact.getFriendId() == friendId) || (contact.getFriendId() == userId && contact.getUserId() == friendId)) {
+            if((contact.getUserId() == userId || contact.getFriendId() == userId) && contact.getId() == contactId) {
                 contacts.remove(contact);
                 return true;
             }
@@ -188,7 +192,7 @@ public class FakeDataProfile {
         return false;
     }
 
-    public List<User> getContacts(int id) {
+    public List<Contact> getContacts(int id) {
         List<Contact> foundContacts = new ArrayList<>();
         List<User> userContacts = new ArrayList<>();
         for (Contact contact : contacts) {
@@ -196,33 +200,43 @@ public class FakeDataProfile {
                 foundContacts.add(contact);
             }
         }
-        for (Contact contact : foundContacts) {
-            int userId = contact.getUserId();
-            int friendId = contact.getFriendId();
-            boolean isAccepted = contact.isAccepted();
-            User friend = null;
-            if(userId == id && isAccepted) {
-                friend = getUser(friendId);
-                userContacts.add(friend);
-            }
-            else if(friendId == id && isAccepted) {
-                friend = getUser(userId);
-                userContacts.add(friend);
-            }
-        }
+//        for (Contact contact : foundContacts) {
+//            int userId = contact.getUserId();
+//            int friendId = contact.getFriendId();
+//            //boolean isAccepted = contact.isAccepted();
+//            User friend = null;
+//            if(userId == id) {
+//                friend = getUser(friendId);
+//                userContacts.add(friend);
+//            }
+//            else if(friendId == id) {
+//                friend = getUser(userId);
+//                userContacts.add(friend);
+//            }
+////            if(userId == id && isAccepted) {
+////                friend = getUser(friendId);
+////                userContacts.add(friend);
+////            }
+////            else if(friendId == id && isAccepted) {
+////                friend = getUser(userId);
+////                userContacts.add(friend);
+////            }
+//        }
 
-        return userContacts;
+        return foundContacts;
     }
 
     // userId is sender
     // friendId is receiver
-    public void acceptContact(int friendId, int userId) {
+    public void acceptContact(int contactId) {
         for (Contact contact: contacts) {
-            if(contact.getUserId() == userId && contact.getFriendId() == friendId) {
+            if(contact.getId() == contactId) {
                 contact.setAccepted(true);
             }
         }
     }
+    /*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+
 
 
 
