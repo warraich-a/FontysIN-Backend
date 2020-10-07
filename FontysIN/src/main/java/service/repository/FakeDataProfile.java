@@ -95,11 +95,11 @@ public class FakeDataProfile {
         profiles.add(p6);
 
         About a1 = new About(1,1, "I am software engineer");
-        About a2 = new About(2,1, "I am businesman");
-        About a3 = new About(3,2, "I am software engineer");
-        About a4 = new About(4,3, "I am businesman");
-        About a5 = new About(5,4, "I am software engineer");
-        About a6 = new About(6,5, "I am businesman");
+        About a2 = new About(2,2, "I am businesman");
+        About a3 = new About(3,3, "I am software engineer");
+        About a4 = new About(4,4, "I am businesman");
+        About a5 = new About(5,5, "I am software engineer");
+        About a6 = new About(6,6, "I am businesman");
 
         abouts.add(a1);
         abouts.add(a2);
