@@ -11,9 +11,9 @@ public class Experience {
     private String company;
     private EmplymentType employmentType;
     private int locationId;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String description;
+    private LocalDate startDateExperience;
+    private LocalDate endDateExperience;
+    private String descriptionExperience;
 
     public Experience(int id, int profileId, String title, String company, EmplymentType employmentType, int locationId, LocalDate startDate, LocalDate endDate, String description) {
         this.id = id;
@@ -22,21 +22,14 @@ public class Experience {
         this.company = company;
         this.employmentType = employmentType;
         this.locationId = locationId;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.description = description;
+        this.startDateExperience = startDate;
+        this.endDateExperience = endDate;
+        this.descriptionExperience = description;
     }
 
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
 
     public Experience() {
+
     }
 
     public int getId() {
@@ -63,6 +56,14 @@ public class Experience {
         this.title = title;
     }
 
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
     public EmplymentType getEmploymentType() {
         return employmentType;
     }
@@ -79,43 +80,42 @@ public class Experience {
         this.locationId = locationId;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getStartDateExperience() {
+        return startDateExperience;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setStartDateExperience(LocalDate startDateExperience) {
+        this.startDateExperience = startDateExperience;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getEndDateExperience() {
+        return endDateExperience;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setEndDateExperience(LocalDate endDateExperience) {
+        this.endDateExperience = endDateExperience;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionExperience() {
+        return descriptionExperience;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionExperience(String descriptionExperience) {
+        this.descriptionExperience = descriptionExperience;
     }
 
     @Override
     public String toString() {
-        return "Education{" +
-                "Id: " + id +
-                ", ProfileId: " + profileId +
-                ", Title: " + title + '\'' +
-                ", Company: " + company + '\'' +
-                ", Emplyment Type: " + employmentType + '\'' +
-                ", LocationId: " + locationId + '\'' +
-                ", Start Date: " + startDate + '\'' +
-                ", End Date: " + endDate + '\'' +
-                ", Description: " + description + '\'' +
+        return "Experience{" +
+                "id=" + id +
+                ", profileId=" + profileId +
+                ", title='" + title + '\'' +
+                ", company='" + company + '\'' +
+                ", employmentType=" + employmentType +
+                ", locationId=" + locationId +
+                ", startDateExperience=" + startDateExperience +
+                ", endDateExperience=" + endDateExperience +
+                ", descriptionExperience='" + descriptionExperience + '\'' +
                 '}';
     }
-
 }

@@ -79,10 +79,10 @@ public class UsersResources {
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
-					combined.addAll(educationByProfileId);
-					combined.addAll(experienceByProfileId);
-					combined.addAll(aboutByProfileId);
-					combined.addAll(skillByProfileId);
+					combined.add(educationByProfileId);
+					combined.add(experienceByProfileId);
+					combined.add(aboutByProfileId);
+					combined.add(skillByProfileId);
 
 					// to show a list correctly
 					GenericEntity<List<Object>> entity = new GenericEntity<>(combined) {
@@ -95,6 +95,47 @@ public class UsersResources {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Profile does not exist.").build();
 
 		}
+	}
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/experiences")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
+		List<Experience> experiences = fakeDataProfile.GetExperiencesByProfileID(profileId1);
+
+		GenericEntity<List<Experience>> entity = new GenericEntity<>(experiences) {
+		};
+		return Response.ok(entity).build();
+	}
+//
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/educations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
+		List<Education> educations = fakeDataProfile.GetEducationsByProfileId(profileId1);
+
+		GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
+		};
+		return Response.ok(entity).build();
+	}
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/abouts")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response  GetAbouts(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
+		List<About> abouts = fakeDataProfile.GetAboutByProfileID(profileId1);
+
+		GenericEntity<List<About>> entity = new GenericEntity<>(abouts) {
+		};
+		return Response.ok(entity).build();
+	}
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/skills")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
+		List<Skill> skills = fakeDataProfile.GetSkillByProfileID(profileId1);
+
+		GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
+		};
+		return Response.ok(entity).build();
 	}
 
 	// to add a new experience
