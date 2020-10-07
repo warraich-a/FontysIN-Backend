@@ -17,6 +17,10 @@
 //    @Context
 //    private UriInfo uriInfo;
 //
+
+
+
+
 //    //to get all the experiences
 //    @GET //GET at http://localhost:XXXX/profile/experiences
 //    @Path("experiences")
