@@ -1,18 +1,17 @@
 package service.model;
 
-public class About {
+public class Skill {
     private int id;
     private int profileId;
-    private String content;
+    private String name;
 
-    public About(int id, int profileId, String content) {
+    public Skill(int id, int profileId, String name) {
         this.id = id;
         this.profileId = profileId;
-        this.content = content;
+        this.name = name;
     }
+    public Skill(){
 
-
-    public About() {
     }
 
     public int getId() {
@@ -31,11 +30,12 @@ public class About {
         this.profileId = profileId;
     }
 
-    public String getContent() {
-        return content;
+    public String getName() {
+        return name;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setName(String name) {
+        this.name = name;
     }
 }
+

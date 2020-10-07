@@ -1,18 +1,16 @@
 package service.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Objects;
+//import javax.xml.bind.annotation.XmlRootElement;
 
-@SuppressWarnings("WeakerAccess")
-@XmlRootElement
+import java.util.Objects;
+//
+//@SuppressWarnings("WeakerAccess")
+//@XmlRootElement
 public class User {
     //fields
     private int id;
     private String firstName; // user's first name
     private String lastName; // user's last name
-    private UserType type; // type of the user
     private String email; // user's email
     private String password; // user's password
     private String phoneNumbar; // user's phone number
@@ -21,15 +19,17 @@ public class User {
     private int departmentId; // user's department
     private String userNumber; // user's number
     private String img; // user's image /* I will add this to the constracture later*/
+    private UserType userType;
 
-    //constractures
-    public User(int id, String firstName, String lastName, String dateOfBirth, UserType type, String email, String password,
+
+    public User(int id, String firstName, String lastName, UserType type, String email, String password,
                  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber) {
+
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.type = type;
         this.email = email;
+        this.userType = type;
         this.password = password;
         this.phoneNumbar = phoneNumbar;
         this.addressId = addressId;
@@ -41,10 +41,8 @@ public class User {
     public User() {
     }
 
-    //geteers and setters
-    public int getUserID() {
-        return id;
-    }
+    //getters and setters
+    public int getUserID() { return id; }
 
     public void setUserID(int id) {
         this.id = id;
@@ -67,11 +65,11 @@ public class User {
     }
 
     public UserType getUserType() {
-        return type;
+        return userType;
     }
 
     public void setUserType(UserType type) {
-        this.type = type;
+        this.userType = type;
     }
 
     public String getUserEmail() {
@@ -140,7 +138,6 @@ public class User {
                 ", Email: '" + email + '\'' +
                 ", Password: '" + password + '\'' +
                 ", Phone Number: " + phoneNumbar + '\'' +
-                ", User Type: " + type + '\'' +
                 ", Address: " + addressId + '\'' +
                 ", Location: " + locationId + '\'' +
                 ", Department: " + departmentId + '\'' +

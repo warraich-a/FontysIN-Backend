@@ -2,25 +2,26 @@ package service.model;
 
 import java.time.LocalDate;
 
+
 public class Education {
     private int id;
     private int profileId;
     private String school;
-    private LocalDate startYear;
-    private LocalDate endDate;
-    private String degree;
+    private LocalDate startYearEducation;
+    private LocalDate endYearEducation;
+    private String degreeEducation;
     private String fieldStudy;
-    private String description;
+    private String descriptionEducation;
 
-    public Education(int id, int profileId, String school, LocalDate startYear, LocalDate endDate, String degree, String fieldStudy, String description) {
+    public Education(int id, int profileId, String school, LocalDate startYear, LocalDate endYear, String degree, String fieldStudy, String description) {
         this.id = id;
         this.profileId = profileId;
         this.school = school;
-        this.startYear = startYear;
-        this.endDate = endDate;
-        this.degree = degree;
+        this.startYearEducation = startYear;
+        this.endYearEducation = endYear;
+        this.degreeEducation = degree;
         this.fieldStudy = fieldStudy;
-        this.description = description;
+        this.descriptionEducation = description;
     }
 
     public Education() {
@@ -51,28 +52,28 @@ public class Education {
         this.school = school;
     }
 
-    public LocalDate getStartYear() {
-        return startYear;
+    public LocalDate getStartYearEducation() {
+        return startYearEducation;
     }
 
-    public void setStartYear(LocalDate startYear) {
-        this.startYear = startYear;
+    public void setStartYearEducation(LocalDate startYearEducation) {
+        this.startYearEducation = startYearEducation;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getEndYearEducation() {
+        return endYearEducation;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setEndYearEducation(LocalDate endYearEducation) {
+        this.endYearEducation = endYearEducation;
     }
 
-    public String getDegree() {
-        return degree;
+    public String getDegreeEducation() {
+        return degreeEducation;
     }
 
-    public void setDegree(String degree) {
-        this.degree = degree;
+    public void setDegreeEducation(String degreeEducation) {
+        this.degreeEducation = degreeEducation;
     }
 
     public String getFieldStudy() {
@@ -83,11 +84,25 @@ public class Education {
         this.fieldStudy = fieldStudy;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionEducation() {
+        return descriptionEducation;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionEducation(String descriptionEducation) {
+        this.descriptionEducation = descriptionEducation;
+    }
+
+    @Override
+    public String toString() {
+        return "Education{" +
+                "id=" + id +
+                ", profileId=" + profileId +
+                ", school='" + school + '\'' +
+                ", startYearEducation=" + startYearEducation +
+                ", endYearEducation=" + endYearEducation +
+                ", degreeEducation='" + degreeEducation + '\'' +
+                ", fieldStudy='" + fieldStudy + '\'' +
+                ", descriptionEducation='" + descriptionEducation + '\'' +
+                '}';
     }
 }
