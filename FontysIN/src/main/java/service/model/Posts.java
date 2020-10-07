@@ -39,14 +39,14 @@ public class Posts {
     public int getId() {
         return id;
     }
-    private void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     public int getUserId() {
         return userId;
     }
-    private void setUserId(int userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -60,7 +60,7 @@ public class Posts {
     public LocalDate getDate() {
         return date;
     }
-    private void setDate(LocalDate date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
