@@ -15,7 +15,7 @@ public class UsersResources {
 	@Context
 	private UriInfo uriInfo;
 
-																	// CONTACTS
+	// CONTACTS
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
@@ -85,10 +85,10 @@ public class UsersResources {
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
-					combined.addAll(educationByProfileId);
-					combined.addAll(experienceByProfileId);
-					combined.addAll(aboutByProfileId);
-					combined.addAll(skillByProfileId);
+					combined.add(educationByProfileId);
+					combined.add(experienceByProfileId);
+					combined.add(aboutByProfileId);
+					combined.add(skillByProfileId);
 
 					// to show a list correctly
 					GenericEntity<List<Object>> entity = new GenericEntity<>(combined) {
@@ -101,6 +101,47 @@ public class UsersResources {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Profile does not exist.").build();
 
 		}
+	}
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/experiences")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
+		List<Experience> experiences = fakeDataProfile.GetExperiencesByProfileID(profileId1);
+
+		GenericEntity<List<Experience>> entity = new GenericEntity<>(experiences) {
+		};
+		return Response.ok(entity).build();
+	}
+//
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/educations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
+		List<Education> educations = fakeDataProfile.GetEducationsByProfileId(profileId1);
+
+		GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
+		};
+		return Response.ok(entity).build();
+	}
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/abouts")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response  GetAbouts(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
+		List<About> abouts = fakeDataProfile.GetAboutByProfileID(profileId1);
+
+		GenericEntity<List<About>> entity = new GenericEntity<>(abouts) {
+		};
+		return Response.ok(entity).build();
+	}
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/skills")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
+		List<Skill> skills = fakeDataProfile.GetSkillByProfileID(profileId1);
+
+		GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
+		};
+		return Response.ok(entity).build();
 	}
 
 	// to add a new experience
@@ -137,6 +178,38 @@ public class UsersResources {
 			return Response.created(uri).build();
 		}
 	}
+
+//	//delete user's experince with specific id
+//	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/experiences/1/
+	// DELETE 1//2/3/
+//	@Path("{userId}/{profileID}/{experinceID}") // userId'/profiles/profileId/experiences/experienceId
+//	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID, @PathParam("experinceID") int experinceID) {
+//		fakeDataProfile.deleteExperience(userId, profileID, experinceID);
+//
+//		return Response.noContent().build();
+//	}
+//
+	// DELETE 1//2/3///
+//	//delete user's education with specific id
+//	@DELETE //DELETE at http://localhost:9090/users/1/profiles/2/educations/1
+//	@Path("{userId}/{profileID}/{educationID}")
+//	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+//										@PathParam("educationID") int educationID) {
+//		fakeDataProfile.deleteEducation(userId, profileID, educationID);
+//
+//		return Response.noContent().build();
+//	}
+//
+//	//delete user's skill with specific id
+//	@DELETE //DELETE at http://localhost:9090/users/1/profile/1/skill/1
+//	@Path("{userId}/{profileID}/{skillID}")
+//	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+//									@PathParam("skillID") int skillID) {
+//		fakeDataProfile.deleteSkill(userId, profileID, skillID);
+//
+//		return Response.noContent().build();
+//	}
+
 	// to add a new about
 	@POST //POST at http://localhost:XXXX/profile/experience
 	@Consumes(MediaType.APPLICATION_JSON)
