@@ -343,6 +343,41 @@ public class UsersResources {
 			return Response.created(uri).build();
 		}
 	}
+
+	@GET
+	@Path("profile/education/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getEducationById(@PathParam("id") int id) {
+		Education e = fakeDataProfile.getEducationID(id);
+		if (e == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid education id.").build();
+		} else {
+			return Response.ok(e).build();
+		}
+	}
+	@GET
+	@Path("profile/experience/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getExperienceById(@PathParam("id") int id) {
+		Experience e = fakeDataProfile.getExperienceID(id);
+		if (e == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid experience id.").build();
+		} else {
+			return Response.ok(e).build();
+		}
+	}
+	@GET
+	@Path("profile/about/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAboutById(@PathParam("id") int id) {
+		About a = fakeDataProfile.GetAboutById(id);
+		if (a == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(a).build();
+		}
+	}
+
 	@PUT //PUT at http://localhost:XXXX/users/profile/about/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/about/{id}")

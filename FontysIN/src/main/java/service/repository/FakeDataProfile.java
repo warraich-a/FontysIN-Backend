@@ -26,12 +26,12 @@ public class FakeDataProfile {
 
     private FakeDataProfile(){
 
-        Experience e1 = new Experience(1, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e2 = new Experience(2, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
-        Experience e3 = new Experience(3, 1, "Profile id 1", "Fontys", EmplymentType.PartTime, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e4 = new Experience(4, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
-        Experience e5 = new Experience(5, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e6 = new Experience(6, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+        Experience e1 = new Experience(1, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, "2018", "2020", "I love it" );
+        Experience e2 = new Experience(2, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, "2018", "2020",  "was good" );
+        Experience e3 = new Experience(3, 1, "Profile id 1", "Fontys", EmplymentType.PartTime, 1, "2018", "2020", "I love it" );
+        Experience e4 = new Experience(4, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, "2018", "2020", "was good" );
+        Experience e5 = new Experience(5, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, "2018", "2020",  "I love it" );
+        Experience e6 = new Experience(6, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, "2018", "2020",  "was good" );
 
 
         experiences.add(e1);
@@ -41,12 +41,12 @@ public class FakeDataProfile {
         experiences.add(e5);
         experiences.add(e6);
 
-        Education edu1 = new Education(1, 1, "Fontys", LocalDate.of(2018,01,01), LocalDate.of(2020,01,01), "High School", "ICT", "Got good grades" );
-        Education edu2 = new Education(2, 2, "NJC", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu3 = new Education(3, 3, "jklafd ", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu4 = new Education(4, 4, "FoId", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu5 = new Education(5, 5, "AGA ", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu6 = new Education(6, 6, "----- Id", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+        Education edu1 = new Education(1, 1, "Fontys", "2018", "2020", "High School", "ICT", "Got good grades" );
+        Education edu2 = new Education(2, 2, "NJC", "2015", "2016", "Bechelors", "ICT", "Got good grades" );
+        Education edu3 = new Education(3, 3, "jklafd ", "2008", "2016", "Bechelors", "ICT", "Got good grades" );
+        Education edu4 = new Education(4, 4, "FoId", "2018", "2020", "Bechelors", "ICT", "Got good grades" );
+        Education edu5 = new Education(5, 5, "AGA ", "2001", "2002", "Bechelors", "ICT", "Got good grades" );
+        Education edu6 = new Education(6, 6, "----- Id", "2002", "2004", "Bechelors", "ICT", "Got good grades" );
 
 
         educations.add(edu1);
