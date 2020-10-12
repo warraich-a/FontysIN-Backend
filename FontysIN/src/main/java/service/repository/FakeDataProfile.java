@@ -14,6 +14,7 @@ public class FakeDataProfile {
     private final List<Profile> profiles = new ArrayList<>();
     private final List<About> abouts = new ArrayList<>();
     private final List<Skill> skills = new ArrayList<>();
+    private final List<Department> departments = new ArrayList<>();
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
 
@@ -55,6 +56,20 @@ public class FakeDataProfile {
         educations.add(edu4);
         educations.add(edu5);
         educations.add(edu6);
+
+
+
+        //adding department to alist
+        Department dep1 = new Department(1, "ICT", "Information....");
+        Department dep2 = new Department(2, "Pedagogy", "Information....");
+        Department dep3 = new Department(3, "Buisness", "Information....");
+        Department dep4 = new Department(4, "Economy", "Information....");
+
+
+        departments.add(dep1);
+        departments.add(dep2);
+        departments.add(dep3);
+        departments.add(dep4);
 
 
           //public User(int id, String firstName, String lastName, UserType type, String email, String password,
