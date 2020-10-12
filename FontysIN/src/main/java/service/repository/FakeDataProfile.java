@@ -2,6 +2,8 @@ package service.repository;
 
 import service.model.*;
 
+import javax.management.Descriptor;
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ public class FakeDataProfile {
     private final List<Profile> profiles = new ArrayList<>();
     private final List<About> abouts = new ArrayList<>();
     private final List<Skill> skills = new ArrayList<>();
+    private final List<Department> departments = new ArrayList<>();
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
 
@@ -57,20 +60,35 @@ public class FakeDataProfile {
         educations.add(edu6);
 
 
+        //adding department to alist
+        Department dep1 = new Department(1, "ICT", "Information....");
+        Department dep2 = new Department(2, "Pedagogy", "Information....");
+        Department dep3 = new Department(3, "Buisness", "Information....");
+        Department dep4 = new Department(4, "Economy", "Information....");
+
+
+        departments.add(dep1);
+        departments.add(dep2);
+        departments.add(dep3);
+        departments.add(dep4);
+
+
           //public User(int id, String firstName, String lastName, UserType type, String email, String password,
               //  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber)
         // Users
-        User user1 = new User(1, "Rawam", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 2, 2, "123748");
-        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 2, 2, "364957");
+        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 2, 1, "123748");
+        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 2, 1, "364957");
         User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947");
-        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 2, 2, "947392");
-        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 2, 3, "947392");
+        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 2, 4, "734695");
+        User user6 = new User(6, "Michiel", "Koehorst", UserType.Teacher, "michiel@fontys.com", "1294", "0638489029", 5, 2, 3, "734695");
 
         users.add(user1);
         users.add(user2);
         users.add(user3);
         users.add(user4);
         users.add(user5);
+        users.add(user6);
 
         // Contacts
         createContact(1, 2);
@@ -125,6 +143,35 @@ public class FakeDataProfile {
 
     }
 
+    //searching implementation by filtering
+
+    //first:
+    //get all users
+    public List<User> getUsers() {
+        return users;
+    }
+
+    //Second:
+    // get User type
+    public User getUserType(UserType type) {
+        for (User u : users) {
+            if (u.getUserType().equals(type)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    // filter users by type
+    public List<User> getUsersByUserType(UserType type) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getUserType().equals(type)) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
 
     //Experience
 
