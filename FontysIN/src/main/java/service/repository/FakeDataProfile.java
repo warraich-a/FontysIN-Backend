@@ -14,6 +14,7 @@ public class FakeDataProfile {
     private final List<Profile> profiles = new ArrayList<>();
     private final List<About> abouts = new ArrayList<>();
     private final List<Skill> skills = new ArrayList<>();
+    private final List<Address> addresses = new ArrayList<>();
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
 
@@ -56,6 +57,9 @@ public class FakeDataProfile {
         educations.add(edu5);
         educations.add(edu6);
 
+        Address adress1 = new Address(1, "Meijhorst", "3339", "Nijmegen", "6537JA");
+
+        addresses.add(adress1);
 
           //public User(int id, String firstName, String lastName, UserType type, String email, String password,
               //  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber)
@@ -401,16 +405,38 @@ public class FakeDataProfile {
         }
 
         old.setUserPhoneNumber(e.getUserPhoneNumber());
-        old.setUserAddress(e.getUserAddress());
-        old.setUserImage(e.getUserImage());
-        old.setUserLocation(e.getUserLocation());
-        old.setUserDepartment(e.getUserDepartment());
+
+       // old.setUserImage(e.getUserImage());
+        //old.setUserDepartment(e.getUserDepartment());
 
         return true;
     }
 
+    public Address GetAddressById(int id){
+        for (Address a: addresses){
+            if(a.getId() == id){
+                return a;
+            }
+        }
+        return null;
+    }
 
-                                                                                        /* Contacts */
+    public boolean updateAddress(int id, Address a) {
+        Address old = this.GetAddressById(id);
+        if (old == null) {
+            return false;
+        }
+
+        old.setCity(a.getCity());
+        old.setHouseNumber(a.getHouseNumber());
+        old.setStreetName(a.getStreetName());
+        old.setZipCode(a.getZipCode());
+        return true;
+    }
+
+
+
+    /* Contacts */
     public int createContact(int userId, int friendId) {
         boolean areAlreadyFriends;
         for (Contact contact: contacts) {

@@ -13,7 +13,7 @@ public class User {
     private String lastName; // user's last name
     private String email; // user's email
     private String password; // user's password
-    private String phoneNumbar; // user's phone number
+    private String phoneNumber; // user's phone number
     private int addressId; // user's address
     private int locationId; // user's location
     private int departmentId; // user's department
@@ -23,7 +23,7 @@ public class User {
 
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                 String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber) {
+                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber) {
 
         this.id = id;
         this.firstName = firstName;
@@ -31,7 +31,7 @@ public class User {
         this.email = email;
         this.userType = type;
         this.password = password;
-        this.phoneNumbar = phoneNumbar;
+        this.phoneNumber = phoneNumber;
         this.addressId = addressId;
         this.departmentId = departmentId;
         this.locationId = locationId;
@@ -89,11 +89,11 @@ public class User {
     }
 
     public String getUserPhoneNumber() {
-        return phoneNumbar;
+        return phoneNumber;
     }
 
     public void setUserPhoneNumber(String phone) {
-        this.phoneNumbar = phone;
+        this.phoneNumber = phone;
     }
 
     public int getUserAddress() {
@@ -137,7 +137,7 @@ public class User {
                 ", Last Name: '" + lastName + '\'' +
                 ", Email: '" + email + '\'' +
                 ", Password: '" + password + '\'' +
-                ", Phone Number: " + phoneNumbar + '\'' +
+                ", Phone Number: " + phoneNumber + '\'' +
                 ", Address: " + addressId + '\'' +
                 ", Location: " + locationId + '\'' +
                 ", Department: " + departmentId + '\'' +

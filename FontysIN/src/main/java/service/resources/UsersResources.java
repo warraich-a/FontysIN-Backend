@@ -378,6 +378,30 @@ public class UsersResources {
 		}
 	}
 
+	@GET
+	@Path("user/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserById(@PathParam("id") int id) {
+		User u = fakeDataProfile.GetUserById(id);
+		if (u == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(u).build();
+		}
+	}
+	@GET
+	@Path("address/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAddressById(@PathParam("id") int id) {
+		Address a = fakeDataProfile.GetAddressById(id);
+		if (a == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(a).build();
+		}
+	}
+
+
 	@PUT //PUT at http://localhost:XXXX/users/profile/about/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/about/{id}")
@@ -412,7 +436,7 @@ public class UsersResources {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
 		}
 	}
-	@PUT //PUT at http://localhost:XXXX/profile/information
+	@PUT //PUT at http://localhost:XXXX/profile/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}")
 	public Response updateUser(@PathParam("userId") int id, User user) {
@@ -423,4 +447,17 @@ public class UsersResources {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
 		}
 	}
+	@PUT //PUT at http://localhost:9099/users/address/id
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/address/{id}")
+	public Response updateAddress(@PathParam("id") int id, Address a) {
+		// Idempotent method. Always update (even if the resource has already been updated before).
+		if (fakeDataProfile.updateAddress(id, a)) {
+			return Response.noContent().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
+		}
+	}
+
+
 }
