@@ -1,4 +1,4 @@
-package service.resources;;
+package service.resources;
 
 import javax.ws.rs.container.*;
 import javax.ws.rs.core.Response;
@@ -66,4 +66,5 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         // need the previously added headers.
         response.getHeaders().add("Access-Control-Allow-Origin", "*");
     }
+
 }

@@ -38,15 +38,6 @@ public class PostResources {
     }
 
     @GET
-    @Path("user/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPostsByUser(@PathParam("id") int stNr) {
-
-        GenericEntity<List<Posts>> entity = new GenericEntity<>(fakeDataStore.getPostsListByUser(stNr)) {  };
-        return Response.ok(entity).build();
-    }
-
-    @GET
     @Path("{id}/content")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPostContent(@PathParam("id") int stNr) {

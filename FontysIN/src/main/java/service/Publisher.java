@@ -1,21 +1,17 @@
 package service;
 
-import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 
-import javax.ws.rs.core.UriBuilder;
-import java.awt.event.KeyEvent;
-import java.io.Console;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class Publisher {
 
 
-    private static final URI BASE_URI = URI.create("http://localhost:9090/");
+    private static final URI BASE_URI = URI.create("http://localhost:9099/");
 
 
     public static void main(String[] args) {

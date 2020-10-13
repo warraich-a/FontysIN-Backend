@@ -15,7 +15,6 @@ public class FakeDataPostComm{
 
     private final List<Comments> commentsList = new ArrayList<>();
     private final List<Posts> postsList = new ArrayList<>();
-    public static int lastPostId = 0;
 
     public FakeDataPostComm(){
         postsList.add(new Posts(1,1,"First post!!", new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
@@ -23,13 +22,6 @@ public class FakeDataPostComm{
 
         commentsList.add(new Comments(1,1,1,"Good post",new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
         commentsList.add(new Comments(2,1,2,"Bad post",new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
-
-        for(Posts post : postsList) {
-            if(post.getId() >= lastPostId){
-                lastPostId = post.getId();
-            }
-        }
-
     }
 
     public List<Comments> getCommentsList() {
@@ -84,19 +76,6 @@ public class FakeDataPostComm{
         return null;
     }
 
-    public List<Posts> getPostsListByUser(int id) {
-        List<Posts> newPosts = new ArrayList<>();
-        for(Posts posts : postsList) {
-            if(posts.getUserId() == id){
-                newPosts.add(posts);
-            }
-        }
-        return newPosts;
-
-    }
-
-
-
     public boolean deletePost(int stNr) {
         Posts post = getPost(stNr);
         if(post == null){
@@ -106,11 +85,8 @@ public class FakeDataPostComm{
     }
 
     public boolean addPost(Posts post) {
-        post.setId(lastPostId+1);
-        for(Posts p : postsList) {
-            if(p.getId() >= lastPostId){
-                lastPostId = p.getId();
-            }
+        if (this.getPost(post.getId()) != null){
+            return false;
         }
         postsList.add(post);
         return true;
