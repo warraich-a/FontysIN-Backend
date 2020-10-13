@@ -2,9 +2,12 @@ package service.resources;
 
 import service.model.*;
 import service.repository.FakeDataProfile;
+
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -406,10 +409,10 @@ public class UsersResources {
 	}
 
 	//filter users by user type , department(searching by filter)
-	@GET //GET at http://localhost:9099/users?type= Or ?department= Or ?location=
+	@GET //GET at http://localhost:9099/users?type= Or ?department= Or ?location= Or ?studyYear=
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
-									 @QueryParam("location") int locId) {
+									 @QueryParam("location") int locId, @JsonbDateFormat("studyYear") LocalDate year) {
 
 		List<User> users;
 		//If query parameter is missing return all users. Otherwise filter users by given user type
@@ -422,6 +425,10 @@ public class UsersResources {
 		}
 		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
 			users = fakeDataProfile.getUsersByLocation(locId);
+		}
+		else if(uriInfo.getQueryParameters().containsKey("studyYear")){
+			Education e = fakeDataProfile.getEducation(year);
+			users = fakeDataProfile.getUsersByStudyYear(e);
 		}
 		else {
 			users = fakeDataProfile.getUsers();

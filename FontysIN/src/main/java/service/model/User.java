@@ -19,11 +19,12 @@ public class User {
     private int departmentId; // user's department
     private String userNumber; // user's number
     private String img; // user's image /* I will add this to the constracture later*/
-    private UserType userType;
+    private UserType userType; // user's type
+    private Education education;
 
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                 String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber) {
+                 String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber, Education education) {
 
         this.id = id;
         this.firstName = firstName;
@@ -36,6 +37,7 @@ public class User {
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
+        this.education = education;
     }
 
     public User() {
@@ -115,6 +117,13 @@ public class User {
     public String getUserImage() { return img; }
     public void setUserImage(String img) { this.img = img; }
 
+    public Education getEducation() {
+        return education;
+    }
+    public void setEducation(Education education) {
+        this.education = education;
+    }
+
     //methods
     @Override
     public boolean equals(Object o) {
@@ -129,19 +138,19 @@ public class User {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "User ID: " + id +
-                ", First Name: '" + firstName + '\'' +
-                ", Last Name: '" + lastName + '\'' +
-                ", Email: '" + email + '\'' +
-                ", Password: '" + password + '\'' +
-                ", Phone Number: " + phoneNumbar + '\'' +
-                ", Address: " + addressId + '\'' +
-                ", Location: " + locationId + '\'' +
-                ", Department: " + departmentId + '\'' +
-                ", User Number: " + userNumber + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "User ID: " + id +
+//                ", First Name: '" + firstName + '\'' +
+//                ", Last Name: '" + lastName + '\'' +
+//                ", Email: '" + email + '\'' +
+//                ", Password: '" + password + '\'' +
+//                ", Phone Number: " + phoneNumbar + '\'' +
+//                ", Address: " + addressId + '\'' +
+//                ", Location: " + locationId + '\'' +
+//                ", Department: " + departmentId + '\'' +
+//                ", User Number: " + userNumber + '\'' +
+//                '}';
+//    }
 }
