@@ -28,9 +28,10 @@ public class UsersResources {
 	}
 
 	//filter users by user type (searching by filter)
-	@GET //GET at http://localhost:9099/users?type= Or ?department=
+	@GET //GET at http://localhost:9099/users?type= Or ?department= Or ?location=
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depNum) {
+	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
+									 @QueryParam("location") int locId) {
 
 		List<User> users;
 		//If query parameter is missing return all users. Otherwise filter users by given user type
@@ -40,7 +41,10 @@ public class UsersResources {
 		}
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
 			//Department department = fakeDataProfile.getDepartment(depName);
-			users = fakeDataProfile.getUsersByDepartment(depNum);
+			users = fakeDataProfile.getUsersByDepartment(depId);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
+			users = fakeDataProfile.getUsersByLocation(locId);
 		}
 		else {
 			users = fakeDataProfile.getUsers();

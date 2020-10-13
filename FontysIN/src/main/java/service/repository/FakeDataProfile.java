@@ -86,11 +86,11 @@ public class FakeDataProfile {
           //public User(int id, String firstName, String lastName, UserType type, String email, String password,
               //  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber)
         // Users
-        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 2, 1, "123748");
-        User user2 = new User(2, "Ranim", "Alayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 2, 1, "364957");
+        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748");
+        User user2 = new User(2, "Ranim", "Alayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 1, 1, "364957");
         User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947");
-        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 2, 3, "947392");
-        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 2, 3, "734695");
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392");
+        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 3, 3, "734695");
         User user6 = new User(6, "Michiel", "Koehorst", UserType.Teacher, "michiel@fontys.com", "password", "0638454329", 5, 2, 1, "198236");
 
         users.add(user1);
@@ -171,6 +171,16 @@ public class FakeDataProfile {
         return null;
     }
 
+    // get department by its name
+    public Department getDepartment(String depName) {
+        for (Department d : departments) {
+            if (d.getName().equals(depName)) {
+                return d;
+            }
+        }
+        return null;
+    }
+
     //Now Filter by:
     // 1. filter users by type
     public List<User> getUsersByUserType(UserType type) {
@@ -183,22 +193,22 @@ public class FakeDataProfile {
         return filetered;
     }
 
-    //2.filter users by department
-    // get department by its name
-    public Department getDepartment(String depName) {
-        for (Department d : departments) {
-            if (d.getName().equals(depName)) {
-                return d;
-            }
-        }
-        return null;
-    }
-
-    //get user by department
+    //2. filter users by department
     public List<User> getUsersByDepartment(int depId) {
         List<User> filetered = new ArrayList<>();
         for (User u : users) {
             if (u.getUserDepartment() == depId) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
+    //3. filter users by location
+    public List<User> getUsersByLocation(int locId) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getUserLocation() == locId) {
                 filetered.add(u);
             }
         }
