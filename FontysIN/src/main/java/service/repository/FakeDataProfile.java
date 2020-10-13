@@ -172,6 +172,29 @@ public class FakeDataProfile {
         return filetered;
     }
 
+    //2.filter users by department
+    // get department by its name
+    public Department getDepartment(String depName) {
+        for (Department d : departments) {
+            if (d.getName().equals(depName)) {
+                return d;
+            }
+        }
+        return null;
+    }
+
+    //get user by department
+    public List<User> getUsersByDepartment(int depId) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getUserDepartment() == depId) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
+
     //Experience
 
     // Get list
