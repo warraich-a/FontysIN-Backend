@@ -17,6 +17,8 @@ public class FakeDataProfile {
     private final List<About> abouts = new ArrayList<>();
     private final List<Skill> skills = new ArrayList<>();
     private final List<Department> departments = new ArrayList<>();
+    private final List<Location> locations = new ArrayList<>();
+
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
 
@@ -72,6 +74,15 @@ public class FakeDataProfile {
         departments.add(dep3);
         departments.add(dep4);
 
+        //adding location at a list
+        Location loc1 = new Location(1, "Rachelsmolen", "R10", "Eindhoven", "5612 MA");
+        Location loc2 = new Location(2, "Professor Goossenslaan", "R01", "Tilburg", "5022 DM ");
+        Location loc3 = new Location(3, "Tegelseweg", "T12", "Venlo", "5912 BG");
+
+
+        locations.add(loc1);
+        locations.add(loc2);
+        locations.add(loc3);
 
           //public User(int id, String firstName, String lastName, UserType type, String email, String password,
               //  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber)
@@ -162,19 +173,6 @@ public class FakeDataProfile {
         return null;
     }
 
-    // filter users by type
-    public List<User> getUsersByUserType(UserType type) {
-        List<User> filetered = new ArrayList<>();
-        for (User u : users) {
-            if (u.getUserType().equals(type)) {
-                filetered.add(u);
-            }
-        }
-        return filetered;
-    }
-
-    //filter users by department
-
     // get department by its name
     public Department getDepartment(String depName) {
         for (Department d : departments) {
@@ -185,7 +183,20 @@ public class FakeDataProfile {
         return null;
     }
 
-    //get user by department
+    //filters:
+
+    //1. filter users by type
+    public List<User> getUsersByUserType(UserType type) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getUserType().equals(type)) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
+    //2. filter users by department
     public List<User> getUsersByDepartment(int depId) {
         List<User> filetered = new ArrayList<>();
         for (User u : users) {
@@ -210,9 +221,6 @@ public class FakeDataProfile {
         }
         return null;
     }
-
-
-
 
     // get experiences by profile id
     public List<Experience> GetExperiencesByProfileID(int id){
