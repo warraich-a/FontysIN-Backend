@@ -406,7 +406,7 @@ public class UsersResources {
 	}
 
 	//filter users by user type , department(searching by filter)
-	@GET //GET at http://localhost:9099/users?type=
+	@GET //GET at http://localhost:9099/users?type= Or ?department=
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depNum) {
 
