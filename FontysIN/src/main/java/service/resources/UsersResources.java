@@ -14,6 +14,51 @@ public class UsersResources {
 	@Context
 	private UriInfo uriInfo;
 
+	//return Users with specific id
+	@GET //GET at http://localhost:9099/users/3
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUsersPath(@PathParam("id") int id) {
+		User u = fakeDataProfile.getUser(id);
+		if (u == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid user ID!.").build();
+		} else {
+			return Response.ok(u).build();
+		}
+	}
+
+	//filter users by user type (searching by filter)
+	@GET //GET at http://localhost:9099/users?type= Or ?department= Or ?location= Or ?studyYear=
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
+									 @QueryParam("location") int locId, @QueryParam("studyYear") int year) {
+
+		List<User> users;
+		//If query parameter is missing return all users. Otherwise filter users by given user type
+		if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
+			User u = fakeDataProfile.getUserType(type);
+			users = fakeDataProfile.getUsersByUserType(type);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
+			//Department department = fakeDataProfile.getDepartment(depName);
+			users = fakeDataProfile.getUsersByDepartment(depId);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
+			users = fakeDataProfile.getUsersByLocation(locId);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
+			Education e = fakeDataProfile.getEducation(year);
+			users = fakeDataProfile.getUsersByStudyYear(e);
+		}
+		else {
+			users = fakeDataProfile.getUsers();
+		}
+		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
+		};
+		return Response.ok(entity).build();
+	}
+
+
 	// CONTACTS
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
