@@ -43,12 +43,12 @@ public class FakeDataProfile {
         experiences.add(e5);
         experiences.add(e6);
 
-        Education edu1 = new Education(1, 1, "Fontys", LocalDate.of(2018,01,01), LocalDate.of(2020,01,01), "High School", "ICT", "Got good grades" );
-        Education edu2 = new Education(2, 2, "NJC", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu3 = new Education(3, 3, "jklafd ", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu4 = new Education(4, 4, "FoId", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu5 = new Education(5, 5, "AGA ", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu6 = new Education(6, 6, "----- Id", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+        Education edu1 = new Education(1, 1, "Fontys", 2019, 2023, "High School", "ICT", "Got good grades" );
+        Education edu2 = new Education(2, 2, "NJC", 2000, 2005, "Bechelors", "ICT", "Got good grades" );
+        Education edu3 = new Education(3, 3, "jklafd ", 2016, 2021, "Bechelors", "ICT", "Got good grades" );
+        Education edu4 = new Education(4, 4, "FoId", 2015, 2020, "Bechelors", "ICT", "Got good grades" );
+        Education edu5 = new Education(5, 5, "AGA ", 2017,2022, "Bechelors", "ICT", "Got good grades" );
+        Education edu6 = new Education(6, 6, "----- Id",1997, 2005, "Bechelors", "ICT", "Got good grades" );
 
 
         educations.add(edu1);
@@ -86,12 +86,12 @@ public class FakeDataProfile {
           //public User(int id, String firstName, String lastName, UserType type, String email, String password,
               //  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber)
         // Users
-        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748");
-        User user2 = new User(2, "Ranim", "Alayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 1, 1, "364957");
-        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947");
-        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392");
-        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 3, 3, "734695");
-        User user6 = new User(6, "Michiel", "Koehorst", UserType.Teacher, "michiel@fontys.com", "password", "0638454329", 5, 2, 1, "198236");
+        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1);
+        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 1, 1, "364957", edu2);
+        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3);
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1);
+        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3);
+        User user6 = new User(6, "Michiel", "Koehorst", UserType.Teacher, "michiel@fontys.com", "1294", "0638489029", 5, 2, 3, "734695", edu6);
 
         users.add(user1);
         users.add(user2);
@@ -171,6 +171,16 @@ public class FakeDataProfile {
         return null;
     }
 
+    // get education by its studyYear
+    public Education getEducation(int year) {
+        for (Education e : educations) {
+            if (e.getStartYearEducation() == year) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     // get department by its name
     public Department getDepartment(String depName) {
         for (Department d : departments) {
@@ -180,6 +190,7 @@ public class FakeDataProfile {
         }
         return null;
     }
+
 
     //Now Filter by:
     // 1. filter users by type
@@ -214,6 +225,18 @@ public class FakeDataProfile {
         }
         return filetered;
     }
+
+    //4. filter users by study year
+    public List<User> getUsersByStudyYear(Education education) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getEducation().equals(education)) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
 
 
     //Experience
