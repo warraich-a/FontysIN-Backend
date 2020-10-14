@@ -11,11 +11,11 @@ public class Experience {
     private String company;
     private EmplymentType employmentType;
     private int locationId;
-    private String startDateExperience;
-    private String endDateExperience;
+    private LocalDate startDateExperience;
+    private LocalDate endDateExperience;
     private String descriptionExperience;
 
-    public Experience(int id, int profileId, String title, String company, EmplymentType employmentType, int locationId, String startDate, String endDate, String description) {
+    public Experience(int id, int profileId, String title, String company, EmplymentType employmentType, int locationId, LocalDate startDate, LocalDate endDate, String description) {
         this.id = id;
         this.profileId = profileId;
         this.title = title;
@@ -80,19 +80,19 @@ public class Experience {
         this.locationId = locationId;
     }
 
-    public String getStartDateExperience() {
+    public LocalDate getStartDateExperience() {
         return startDateExperience;
     }
 
-    public void setStartDateExperience(String startDateExperience) {
+    public void setStartDateExperience(LocalDate startDateExperience) {
         this.startDateExperience = startDateExperience;
     }
 
-    public String getEndDateExperience() {
+    public LocalDate getEndDateExperience() {
         return endDateExperience;
     }
 
-    public void setEndDateExperience(String endDateExperience) {
+    public void setEndDateExperience(LocalDate endDateExperience) {
         this.endDateExperience = endDateExperience;
     }
 
