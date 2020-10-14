@@ -72,9 +72,9 @@ public class UsersResources {
 
 			for (Profile p: foundProfiles){
 				if(p.getId() == profileId){
-					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(profileId);
-					List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(profileId);
-					List<About> aboutByProfileId = fakeDataProfile.GetAboutByProfileID(profileId);
+					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(userId, profileId);
+					List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(userId,profileId);
+					List<About> aboutByProfileId = fakeDataProfile.GetAboutByProfileID(userId,profileId);
 					List<Skill> skillByProfileId = fakeDataProfile.GetSkillByProfileID(profileId);
 
 					// to combine different types of lists into 1
@@ -112,7 +112,7 @@ public class UsersResources {
 
 			for (Experience e: foundExperiences){
 				if(e.getId() == experienceId){
-					List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(profileId);
+					List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(userId, profileId);
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
@@ -137,7 +137,7 @@ public class UsersResources {
 	public Response GetEducation(@PathParam("userId") int userId, @PathParam("profileId") int profileId
 			, @PathParam("educationId") int educationId) {
 
-		List<Education> foundEducations = fakeDataProfile.GetEducationsByProfileId(profileId); // getting the education by profile id
+		List<Education> foundEducations = fakeDataProfile.GetEducationsByProfileId(userId, profileId); // getting the education by profile id
 
 		if(foundEducations == null){
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid profile id.").build();
@@ -146,7 +146,7 @@ public class UsersResources {
 
 			for (Education e: foundEducations){
 				if(e.getId() == educationId){
-					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(profileId);
+					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(userId, profileId);
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
@@ -171,7 +171,7 @@ public class UsersResources {
 	public Response GetSkill(@PathParam("userId") int userId, @PathParam("profileId") int profileId
 			, @PathParam("skillId") int skillId) {
 
-		List<Skill> foundSkills = fakeDataProfile.GetSkillsByProfileId(profileId); // getting the education by profile id
+		List<Skill> foundSkills = fakeDataProfile.GetSkillsByProfileId(userId, profileId); // getting the education by profile id
 
 		if(foundSkills == null){
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid profile id.").build();
@@ -201,10 +201,20 @@ public class UsersResources {
 
 
 	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GeUser(@PathParam("userId") int userId) {
+		User user = fakeDataProfile.getUser(userId);
+
+		return Response.ok(user).build();
+	}
+
+	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
-		List<Experience> experiences = fakeDataProfile.GetExperiencesByProfileID(profileId1);
+
+		List<Experience> experiences = fakeDataProfile.GetExperiencesByProfileID(userId, profileId1);
 
 		GenericEntity<List<Experience>> entity = new GenericEntity<>(experiences) {
 		};
@@ -215,7 +225,7 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/educations")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
-		List<Education> educations = fakeDataProfile.GetEducationsByProfileId(profileId1);
+		List<Education> educations = fakeDataProfile.GetEducationsByProfileId(userId, profileId1);
 
 		GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
 		};
@@ -225,7 +235,7 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/abouts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response  GetAbouts(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
-		List<About> abouts = fakeDataProfile.GetAboutByProfileID(profileId1);
+		List<About> abouts = fakeDataProfile.GetAboutByProfileID(userId, profileId1);
 
 		GenericEntity<List<About>> entity = new GenericEntity<>(abouts) {
 		};
@@ -235,7 +245,7 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/skills")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
-		List<Skill> skills = fakeDataProfile.GetSkillByProfileID(profileId1);
+		List<Skill> skills = fakeDataProfile.GetSkillsByProfileId(userId, profileId1);
 
 		GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
 		};

@@ -14,9 +14,11 @@ public class Experience {
     private LocalDate startDateExperience;
     private LocalDate endDateExperience;
     private String descriptionExperience;
+    private static int idSeeder = 0;
 
-    public Experience(int id, int profileId, String title, String company, EmplymentType employmentType, int locationId, LocalDate startDate, LocalDate endDate, String description) {
-        this.id = id;
+    public Experience(int profileId, String title, String company, EmplymentType employmentType, int locationId, LocalDate startDate, LocalDate endDate, String description) {
+        this.id = idSeeder;
+        idSeeder++;
         this.profileId = profileId;
         this.title = title;
         this.company = company;
@@ -29,7 +31,8 @@ public class Experience {
 
 
     public Experience() {
-
+        this.id = idSeeder;
+        idSeeder++;
     }
 
     public int getId() {
