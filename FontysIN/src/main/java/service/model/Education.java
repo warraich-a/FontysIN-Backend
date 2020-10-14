@@ -7,13 +7,13 @@ public class Education {
     private int id;
     private int profileId;
     private String school;
-    private LocalDate startYearEducation;
-    private LocalDate endYearEducation;
+    private int startYearEducation;
+    private int endYearEducation;
     private String degreeEducation;
     private String fieldStudy;
     private String descriptionEducation;
 
-    public Education(int id, int profileId, String school, LocalDate startYear, LocalDate endYear, String degree, String fieldStudy, String description) {
+    public Education(int id, int profileId, String school, int startYear, int endYear, String degree, String fieldStudy, String description) {
         this.id = id;
         this.profileId = profileId;
         this.school = school;
@@ -52,19 +52,19 @@ public class Education {
         this.school = school;
     }
 
-    public LocalDate getStartYearEducation() {
+    public int getStartYearEducation() {
         return startYearEducation;
     }
 
-    public void setStartYearEducation(LocalDate startYearEducation) {
+    public void setStartYearEducation(int startYearEducation) {
         this.startYearEducation = startYearEducation;
     }
 
-    public LocalDate getEndYearEducation() {
+    public int getEndYearEducation() {
         return endYearEducation;
     }
 
-    public void setEndYearEducation(LocalDate endYearEducation) {
+    public void setEndYearEducation(int endYearEducation) {
         this.endYearEducation = endYearEducation;
     }
 
