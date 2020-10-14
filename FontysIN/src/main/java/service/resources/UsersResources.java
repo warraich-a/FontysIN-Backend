@@ -15,15 +15,25 @@ public class UsersResources {
 	@Context
 	private UriInfo uriInfo;
 
-	// CONTACTS
+	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
 	public Response getContacts(@PathParam("id") int id) { // returns users list or contacts list?
 		List<Contact> contacts = fakeDataProfile.getContacts(id);
-		System.out.println("Contacts" + contacts.size());
 
 		GenericEntity<List<Contact>> entity = new GenericEntity<>(contacts) { };
+
+		return Response.ok(entity).build();
+	}
+
+	@GET //GET at http://localhost:XXXX/users/1/requests
+	@Path("{id}/requests")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getContactsRequests(@PathParam("id") int id) { // returns users list or contacts list?
+		List<Contact> requests = fakeDataProfile.getContactsRequests(id);
+
+		GenericEntity<List<Contact>> entity = new GenericEntity<>(requests) { };
 
 		return Response.ok(entity).build();
 	}
@@ -34,7 +44,9 @@ public class UsersResources {
 	public Response createContact(@PathParam("userId") int userId, Contact contact) {
 		int contactId = fakeDataProfile.createContact(contact);
 		if (contactId < 0){ // already friends
-			String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
+			//String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
+			String entity =  "You and user with id " + contact.getFriend().getId() + " are already connected.";
+
 			return Response.status(Response.Status.CONFLICT).entity(entity).build();
 		} else {
 			String url = uriInfo.getAbsolutePath() + "/" + contactId; // url of the created contact
@@ -51,17 +63,20 @@ public class UsersResources {
 		return Response.noContent().build();
 	}
 
-	// Accept contact
+	// Update contact (used to Accept contact)
 	@PATCH //PATCH at http://localhost:XXXX/users/1/contacts/2
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
-	public Response acceptContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId) {
+	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact) {
+//		System.out.println("Resources Contact " + contact.getIsAccepted());
+
 		// need to check if userId is a contact
-		fakeDataProfile.acceptContact(contactId);
-		//fakeDataProfile.acceptContact(contactId, contactStatus);
+		fakeDataProfile.updateContact(contactId, contact);
 
 		return Response.noContent().build();
 	}
+	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+
 
 
 	//to get all the experiences

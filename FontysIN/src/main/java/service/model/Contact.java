@@ -3,8 +3,8 @@ package service.model;
 public class Contact {
 	private int id;
 	private static int idSeeder = 0;
-	private int userId;
-	private int friendId;
+	private User user;
+	private User friend;
 	private boolean isAccepted;
 
 	public Contact() {
@@ -12,39 +12,47 @@ public class Contact {
 		idSeeder++;
 	}
 
-	public Contact(int userId, int friendId) {
+	public Contact(User user, User friend) {
 		this.id = idSeeder;
 		idSeeder++;
-		this.userId = userId;
-		this.friendId = friendId;
+		this.user = user;
+		this.friend = friend;
 		this.isAccepted = false;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	public int getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public int getFriendId() {
-		return friendId;
+	public User getFriend() {
+		return friend;
 	}
 
-	public void setFriendId(int friendId) {
-		this.friendId = friendId;
+	public void setFriend(User friend) {
+		this.friend = friend;
 	}
 
 	public boolean getIsAccepted() {
 		return isAccepted;
 	}
 
-	public void setAccepted(boolean accepted) {
+	public void setIsAccepted(boolean accepted) {
 		isAccepted = accepted;
+	}
+
+	public static void decreaseIdSeeder() {
+		idSeeder--;
 	}
 }
