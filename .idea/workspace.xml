@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="70c26843-b538-4afc-9bd1-65c4301bfe0b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/FontysIN/.vs/FontysIN/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/FontysIN/.vs/FontysIN/v16/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FontysIN/.vs/slnx.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/FontysIN/.vs/slnx.sqlite" afterDir="false" />
-    </list>
+    <list default="true" id="70c26843-b538-4afc-9bd1-65c4301bfe0b" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +30,10 @@
       <option name="presentableId" value="Default" />
       <updated>1602058252710</updated>
       <workItem from="1602058255077" duration="122000" />
+      <workItem from="1602505994160" duration="15000" />
+      <workItem from="1602506019764" duration="19000" />
+      <workItem from="1602695484369" duration="21000" />
+      <workItem from="1602769336486" duration="29000" />
     </task>
     <servers />
   </component>
@@ -40,9 +41,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1602058296234">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="686" y="211" key="FileChooserDialogImpl" timestamp="1602769344705">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1602058296234" />
+    <state x="686" y="211" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1602769344705" />
   </component>
 </project>

@@ -42,78 +42,101 @@ public class User {
     }
 
     //getters and setters
-    public int getUserID() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setUserID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getUserFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setUserFirstName(String name) {
-        this.firstName = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getUserLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setUserLastName(String name) {
-        this.lastName = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhoneNumbar() {
+        return phoneNumbar;
+    }
+
+    public void setPhoneNumbar(String phoneNumbar) {
+        this.phoneNumbar = phoneNumbar;
+    }
+
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(String userNumber) {
+        this.userNumber = userNumber;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(UserType type) {
-        this.userType = type;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
-
-    public String getUserEmail() {
-        return email;
-    }
-
-    public void setUserEmail(String mail) {
-        this.email = mail;
-    }
-
-    public String getUserPassword() {
-        return password;
-    }
-
-    public void setUserPassword(String pass) {
-        this.password = pass;
-    }
-
-    public String getUserPhoneNumber() {
-        return phoneNumbar;
-    }
-
-    public void setUserPhoneNumber(String phone) {
-        this.phoneNumbar = phone;
-    }
-
-    public int getUserAddress() {
-        return addressId;
-    }
-    public void setUserAddress(int addressId) { this.addressId = addressId; }
-
-    public int getUserLocation() {
-        return locationId;
-    }
-    public void setUserLocation(int locationId) { this.locationId = locationId; }
-
-    public int getUserDepartment() { return departmentId; }
-    public void setUserDepartment(int departmentId) { this.departmentId = departmentId; }
-
-    public String getUserNumber() { return userNumber; }
-    public void setUserNumber(String userNumber) { this.userNumber = userNumber; }
-
-    public String getUserImage() { return img; }
-    public void setUserImage(String img) { this.img = img; }
 
     //methods
     @Override
