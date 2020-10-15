@@ -26,12 +26,12 @@ public class FakeDataProfile {
 
     private FakeDataProfile(){
 
-        Experience e1 = new Experience(1, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e2 = new Experience(2, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
-        Experience e3 = new Experience(3, 1, "Profile id 1", "Fontys", EmplymentType.PartTime, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e4 = new Experience(4, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
-        Experience e5 = new Experience(5, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e6 = new Experience(6, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+        Experience e1 = new Experience( 1, "Content Writer", "Private", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I had a pretty good time there" );
+        Experience e2 = new Experience( 2, "Manager", "AKU", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "One of my best jobs" );
+        Experience e3 = new Experience( 3, "Staff", "Fontys", EmplymentType.PartTime, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "Loved to work there" );
+        Experience e4 = new Experience( 2, "Employee", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "Not bad" );
+        Experience e5 = new Experience( 4, "Clerk", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I was happy there" );
+        Experience e6 = new Experience( 2, "Boss", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "Good one" );
 
 
         experiences.add(e1);
@@ -96,10 +96,10 @@ public class FakeDataProfile {
 
         About a1 = new About(1,1, "I am software engineer");
         About a2 = new About(2,2, "I am businesman");
-        About a3 = new About(3,3, "I am software engineer");
-        About a4 = new About(4,4, "I am businesman");
-        About a5 = new About(5,5, "I am software engineer");
-        About a6 = new About(6,6, "I am businesman");
+        About a3 = new About(3,3, "I am architecture");
+        About a4 = new About(4,4, "I am chief");
+        About a5 = new About(5,5, "I am free engineer");
+        About a6 = new About(6,6, "I am nothing");
 
         abouts.add(a1);
         abouts.add(a2);
@@ -142,14 +142,24 @@ public class FakeDataProfile {
     }
 
     // get experiences by profile id
-    public List<Experience> GetExperiencesByProfileID(int id){
+    public List<Experience> GetExperiencesByProfileID(int userId, int profileId){
+
         List<Experience> foundExperiences = new ArrayList<>();
-        for (Experience e: experiences){
-            if(e.getProfileId() == id){
-                foundExperiences.add(e);
+        for (Profile p: profiles)
+        {
+            if(p.getUserId() == userId && p.getId() == profileId)
+            {
+                for (Experience e : experiences) {
+                    if (e.getProfileId() == profileId) {
+                        foundExperiences.add(e);
+                    }
+                }
+                return foundExperiences;
             }
+
         }
-        return foundExperiences;
+
+        return null;
     }
 
     //
@@ -192,7 +202,7 @@ public class FakeDataProfile {
     public  Education GetEducationById(int id){
 
         for (Education e: educations){
-            if(e.getProfileId() == id){
+            if(e.getId() == id){
                return e;
             }
         }
@@ -200,14 +210,24 @@ public class FakeDataProfile {
     }
 
     //get educations by profile id
-    public  List<Education>  GetEducationsByProfileId(int id){
+    public  List<Education>  GetEducationsByProfileId(int userId, int profileId){
+
         List<Education> foundEducations = new ArrayList<>();
-        for (Education e: educations){
-            if(e.getProfileId() == id){
-                foundEducations.add(e);
+        for (Profile p: profiles)
+        {
+            if(p.getUserId() == userId && p.getId() == profileId)
+            {
+                for (Education e : educations) {
+                    if (e.getProfileId() == profileId) {
+                        foundEducations.add(e);
+                    }
+                }
+                return foundEducations;
             }
+
         }
-        return foundEducations;
+
+        return null;
     }
 
     //to add educations
@@ -263,14 +283,22 @@ public class FakeDataProfile {
     }
 
     // get about by profile id
-    public List<About> GetAboutByProfileID(int id){
+    public List<About> GetAboutByProfileID(int userId, int profileId){
+
         List<About> foundAbout = new ArrayList<>();
-        for (About a: abouts){
-            if(a.getProfileId() == id){
-                foundAbout.add(a);
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId && p.getId() == profileId)
+            {
+                for (About a : abouts) {
+                    if (a.getProfileId() == profileId) {
+                        foundAbout.add(a);
+                    }
+                }
+                return foundAbout;
             }
         }
-        return foundAbout;
+
+        return null;
     }
     //to add about
     public boolean AddAbout(About a, int userId, int profileId){
@@ -305,14 +333,21 @@ public class FakeDataProfile {
     }
 
     // get skill by profile id
-    public List<Skill> GetSkillByProfileID(int id){
+    public  List<Skill>  GetSkillsByProfileId(int userId, int profileId){
+
         List<Skill> foundSkills = new ArrayList<>();
-        for (Skill s: skills){
-            if(s.getProfileId() == id){
-                foundSkills.add(s);
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId && p.getId() == profileId) {
+                for (Skill s : skills) {
+                    if (s.getProfileId() == profileId) {
+                        foundSkills.add(s);
+                    }
+                }
+                return foundSkills;
             }
         }
-        return foundSkills;
+
+        return null;
     }
     //to add about
     public boolean AddSkill(Skill s, int userId, int profileId){
