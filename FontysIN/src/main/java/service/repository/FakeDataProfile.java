@@ -1,6 +1,8 @@
 package service.repository;
 
 import service.model.*;
+import service.model.dto.ContactDTO;
+import service.model.dto.UserDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -63,28 +65,62 @@ public class FakeDataProfile {
 
         addresses.add(adress1);
 
-          //public User(int id, String firstName, String lastName, UserType type, String email, String password,
-              //  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber)
+          
         // Users
-        User user1 = new User(1, "Rawam", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 2, 2, "123748");
+        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 2, 2, "123748");
         User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 2, 2, "364957");
         User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947");
         User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 2, 2, "947392");
         User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
+        User user6 = new User(6, "Ahmad", "Ahmad", UserType.Student, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
+        User user7 = new User(7, "Robin", "Bomers", UserType.Student, "robin@fontys.com", "1234", "0638465283", 4, 2, 2, "947392");
+        User user8 = new User(8, "Kelvin", "Kanen", UserType.Student, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
+        User user9 = new User(9, "Ali", "Hweja", UserType.Student, "ali@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
 
         users.add(user1);
         users.add(user2);
         users.add(user3);
         users.add(user4);
         users.add(user5);
+        users.add(user6);
+        users.add(user7);
+        users.add(user8);
+        users.add(user9);
+
 
         // Contacts
-        createContact(1, 2);
-        createContact(1, 4);
-        createContact(2, 5);
+        Contact contact1 = new Contact(user1, user2); // Ranim
+        Contact contact2 = new Contact(user1, user4); // Denys
+        Contact contact3 = new Contact(user1, user5); // Beatrice
+        Contact contact4 = new Contact(user1, user3); // Anas
+        Contact contact5 = new Contact(user2, user3);
+        Contact contact6 = new Contact(user2, user4);
+        Contact contact7 = new Contact(user7, user8); // Robin
+        Contact contact8 = new Contact(user8, user1); // Kelvin
+        Contact contact9 = new Contact(user9, user1); // Ali
+        Contact contact10 = new Contact(user2, user5);
 
-        acceptContact(2, 1);
-        acceptContact(5, 2);
+        contacts.add(contact1);
+        contacts.add(contact2);
+        contacts.add(contact3);
+        contacts.add(contact4);
+        contacts.add(contact5);
+        contacts.add(contact6);
+        contacts.add(contact7);
+        contacts.add(contact8);
+        contacts.add(contact9);
+        contacts.add(contact10);
+
+        // Accept contact
+        contact1.setIsAccepted(true);
+        contact2.setIsAccepted(true);
+        contact3.setIsAccepted(true);
+
+        updateContact(0, contact1);
+        updateContact(1, contact2);
+        updateContact(2, contact3);
+
+
 
         Profile p1 = new Profile(1, 1, "English");
         Profile p2 = new Profile(2, 1, "Dutch");
@@ -92,6 +128,19 @@ public class FakeDataProfile {
         Profile p4 = new Profile(4, 2, "Dutch");
         Profile p5 = new Profile(5, 3, "English");
         Profile p6 = new Profile(6, 3, "Dutch");
+        Profile p7 = new Profile(7, 4, "English");
+        Profile p8 = new Profile(8, 4, "Dutch");
+        Profile p9 = new Profile(9, 5, "English");
+        Profile p10 = new Profile(10, 5, "Dutch");
+        Profile p11 = new Profile(11, 6, "English");
+        Profile p12 = new Profile(12, 6, "Dutch");
+        Profile p13 = new Profile(13, 7, "English");
+        Profile p14 = new Profile(14, 7, "Dutch");
+        Profile p15 = new Profile(15, 8, "English");
+        Profile p16 = new Profile(16, 8, "Dutch");
+        Profile p17 = new Profile(17, 9, "English");
+        Profile p18 = new Profile(18, 9, "Dutch");
+
 
         profiles.add(p1);
         profiles.add(p2);
@@ -99,6 +148,19 @@ public class FakeDataProfile {
         profiles.add(p4);
         profiles.add(p5);
         profiles.add(p6);
+        profiles.add(p7);
+        profiles.add(p8);
+        profiles.add(p9);
+        profiles.add(p10);
+        profiles.add(p11);
+        profiles.add(p12);
+        profiles.add(p13);
+        profiles.add(p14);
+        profiles.add(p15);
+        profiles.add(p16);
+        profiles.add(p17);
+        profiles.add(p18);
+
 
         About a1 = new About(1,1, "I am software engineer");
         About a2 = new About(2,2, "I am businesman");
@@ -164,7 +226,7 @@ public class FakeDataProfile {
     //
     public User GetUserById(int id){
         for (User e: users){
-            if(e.getUserID() == id){
+            if(e.getId() == id){
                 return e;
             }
         }
@@ -437,27 +499,44 @@ public class FakeDataProfile {
     }
 
 
+    /*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+    // Convert ContactDTO to Contact
+    public Contact constructContact(ContactDTO contactDTO) {
+        User user = getUser(contactDTO.getUser().getId()); //  null
+        User friend = getUser(contactDTO.getFriend().getId()); // null
 
-    /* Contacts */
-    public int createContact(int userId, int friendId) {
+        return new Contact(user, friend);
+    }
+
+    // Convert Contact to ContactDTO
+    public ContactDTO constructContactDTO(Contact contact) {
+        UserDTO user = getUserDTO(contact.getUser().getId());
+        UserDTO friend = getUserDTO(contact.getFriend().getId());
+
+        return new ContactDTO(contact.getId(), user, friend, contact.getIsAccepted());
+    }
+
+    public int createContact(ContactDTO createdContactDTO) {
+        Contact createdContact = constructContact(createdContactDTO);
+
         boolean areAlreadyFriends;
         for (Contact contact: contacts) {
-            areAlreadyFriends = (contact.getUserId() == userId && contact.getFriendId() == friendId) || (contact.getFriendId() == userId && contact.getUserId() == friendId);
+            areAlreadyFriends = (contact.getUser().getId() == createdContact.getUser().getId() && contact.getFriend().getId() == createdContact.getFriend().getId()) || (contact.getFriend().getId() == createdContact.getUser().getId() && contact.getUser().getId() == createdContact.getFriend().getId());
+
             if(areAlreadyFriends) {
                 return -1;
             }
         }
 
         // if users aren't friends
-        Contact contact = new Contact(userId, friendId);
-        contacts.add(contact);
-        return contact.getId();
+        contacts.add(createdContact);
+        return createdContact.getId();
     }
 
     // Delete or Reject
-    public boolean deleteContact(int userId, int friendId) {
+    public boolean deleteContact(int userId, int contactId) {
         for (Contact contact: contacts) {
-            if((contact.getUserId() == userId && contact.getFriendId() == friendId) || (contact.getFriendId() == userId && contact.getUserId() == friendId)) {
+            if((contact.getUser().getId() == userId || contact.getFriend().getId() == userId) && contact.getId() == contactId) {
                 contacts.remove(contact);
                 return true;
             }
@@ -466,51 +545,148 @@ public class FakeDataProfile {
         return false;
     }
 
-    public List<User> getContacts(int id) {
-        List<Contact> foundContacts = new ArrayList<>();
-        List<User> userContacts = new ArrayList<>();
+    public List<Contact> getAllContacts(int id) {
+        List<Contact> allContacts = new ArrayList<>();
         for (Contact contact : contacts) {
-            if (contact.getUserId() == id || contact.getFriendId() == id) {
-                foundContacts.add(contact);
-            }
-        }
-        for (Contact contact : foundContacts) {
-            int userId = contact.getUserId();
-            int friendId = contact.getFriendId();
-            boolean isAccepted = contact.isAccepted();
-            User friend = null;
-            if(userId == id && isAccepted) {
-                friend = getUser(friendId);
-                userContacts.add(friend);
-            }
-            else if(friendId == id && isAccepted) {
-                friend = getUser(userId);
-                userContacts.add(friend);
+            if ((contact.getUser().getId() == id || contact.getFriend().getId() == id)) {
+                allContacts.add(contact);
             }
         }
 
-        return userContacts;
+        return allContacts;
     }
 
-    // userId is sender
-    // friendId is receiver
-    public void acceptContact(int friendId, int userId) {
-        for (Contact contact: contacts) {
-            if(contact.getUserId() == userId && contact.getFriendId() == friendId) {
-                contact.setAccepted(true);
+    public List<ContactDTO> getAllContactsDTO(int id) {
+        // All contacts of current user
+        List<Contact> allContacts = getAllContacts(id);
+
+        List<ContactDTO> allContactsDTO = new ArrayList<>();
+
+        for (Contact contact : allContacts) {
+
+            // USER
+            User foundUser = contact.getUser();
+            // Get first profile
+            int userProfileId = GetProfileByUserId(foundUser.getId()).get(0).getId();
+            // Create User data transfer object
+            UserDTO user = new UserDTO(foundUser.getId(), userProfileId, foundUser.getFirstName(), foundUser.getLastName(), foundUser.getImg());
+
+
+            // Friend
+            User foundFriend = contact.getFriend();
+            // Get first profile
+            int friendProfileId = GetProfileByUserId(foundFriend.getId()).get(0).getId();
+            // Create Friend data transfer object
+            UserDTO friend = new UserDTO(foundFriend.getId(), friendProfileId, foundFriend.getFirstName(), foundFriend.getLastName(), foundFriend.getImg());
+
+
+            // Create contact data transfer object
+            ContactDTO contactDTO = new ContactDTO(contact.getId(), user, friend, contact.getIsAccepted());
+
+            allContactsDTO.add(contactDTO);
+
+        }
+
+        return allContactsDTO;
+    }
+
+    // Accepted contacts
+    public List<Contact> getContacts(int id) {
+        List<Contact> allContacts = getAllContacts(id);
+        List<Contact> acceptedContacts = new ArrayList<>();
+
+        for (Contact contact : allContacts) {
+            if (contact.getIsAccepted()) {
+                acceptedContacts.add(contact);
             }
         }
+
+        return acceptedContacts;
+    }
+
+    public List<ContactDTO> getContactsDTO(int id) {
+        List<ContactDTO> allContacts = getAllContactsDTO(id);
+        List<ContactDTO> acceptedContacts = new ArrayList<>();
+
+        for (ContactDTO contact : allContacts) {
+            if (contact.getIsAccepted()) {
+                acceptedContacts.add(contact);
+            }
+        }
+
+        return acceptedContacts;
+    }
+
+
+    // Get requests
+    public List<Contact> getContactsRequests(int id) {
+        List<Contact> allContacts = getAllContacts(id);
+
+        List<Contact> requests = new ArrayList<>();
+
+        for (Contact contact : allContacts) {
+            if(!contact.getIsAccepted() && contact.getFriend().getId() == id) {
+                requests.add(contact);
+            }
+        }
+
+        return requests;
+    }
+
+    public List<ContactDTO> getContactsRequestsDTO(int id) {
+        List<ContactDTO> allContacts = getAllContactsDTO(id);
+
+        List<ContactDTO> requests = new ArrayList<>();
+
+        for (ContactDTO contact : allContacts) {
+            if(!contact.getIsAccepted() && contact.getFriend().getId() == id) {
+                requests.add(contact);
+            }
+        }
+
+        return requests;
+    }
+
+
+    public void updateContact(int contactId, Contact updatedContact) {
+        updatedContact.setId(contactId);
+        Contact.decreaseIdSeeder();
+
+        for (int i = 0; i < contacts.size(); i++) {
+            if(contacts.get(i).getId() == contactId) {
+                contacts.remove(i);
+                contacts.add(i, updatedContact);
+            }
+        }
+    }
+
+    public UserDTO getUserDTO(int id) {
+        for (User user: users) {
+            if(user.getId() == id) {
+                // Get first profile
+                int userProfileId = GetProfileByUserId(user.getId()).get(0).getId();
+
+                return new UserDTO(user.getId(), userProfileId, user.getFirstName(), user.getLastName(), user.getImg());
+            }
+        }
+
+        return null;
     }
 
     public User getUser(int id) {
         for (User user: users) {
-            if(user.getUserID() == id) {
+            if(user.getId() == id) {
                 return user;
             }
         }
 
         return null;
     }
+
+    /*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+
+
+
 
     //get experience id
     public Experience getExperienceID(int id) {
@@ -545,7 +721,7 @@ public class FakeDataProfile {
         for (User u :users){
             for(Profile p: profiles){
                 for(Experience e :experiences){
-                    if(u.getUserID()== userId && p.getId()== profileId && experienceId == e.getId()){
+                    if(u.getId()== userId && p.getId()== profileId && experienceId == e.getId()){
                         experiences.remove(eId);
                         return true;
                     }
@@ -561,7 +737,7 @@ public class FakeDataProfile {
         for (User u :users){
             for(Profile p: profiles){
                 for(Education e :educations){
-                    if(u.getUserID()== userId && p.getId()== profileId && educationId == e.getId()){
+                    if(u.getId()== userId && p.getId()== profileId && educationId == e.getId()){
                         educations.remove(eId);
                         return true;
                     }
@@ -577,7 +753,7 @@ public class FakeDataProfile {
         for (User u :users){
             for(Profile p: profiles){
                 for(Skill s :skills){
-                    if(u.getUserID()== userId && p.getId()== profileId && skillId == s.getId()){
+                    if(u.getId()== userId && p.getId()== profileId && skillId == s.getId()){
                         skills.remove(es);
                         return true;
                     }

@@ -1,7 +1,10 @@
 package service.resources;
 
 import service.model.*;
+import service.model.dto.ContactDTO;
+import service.model.dto.UserDTO;
 import service.repository.FakeDataProfile;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -14,24 +17,51 @@ public class UsersResources {
 	@Context
 	private UriInfo uriInfo;
 
-	// CONTACTS
+	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
-	public Response getContacts(@PathParam("id") int id) {
-		List<User> contacts = fakeDataProfile.getContacts(id);
+	public Response getContacts(@PathParam("id") int id) { // returns users list or contacts list?
 
-		GenericEntity<List<User>> entity = new GenericEntity<>(contacts) { };
+		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
+
+		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
 		return Response.ok(entity).build();
 	}
 
-	@POST //POST at http://localhost:XXXX/users/1/2
-	@Path("{userId}/{friendId}")
-	public Response createContact(@PathParam("userId") int userId, @PathParam("friendId") int friendId) {
-		int contactId = fakeDataProfile.createContact(userId, friendId);
+	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
+	@Path("{id}/acceptedContacts")
+	public Response getAcceptedContacts(@PathParam("id") int id) { // returns users list or contacts list?
+
+		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
+
+		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
+
+		return Response.ok(entity).build();
+	}
+
+	@GET //GET at http://localhost:XXXX/users/1/requests
+	@Path("{id}/requests")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getContactsRequests(@PathParam("id") int id) { // returns users list or contacts list?
+		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
+
+		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(requests) { };
+
+		return Response.ok(entity).build();
+	}
+
+	@POST //POST at http://localhost:XXXX/users/1
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{userId}/contacts")
+	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
+
+		int contactId = fakeDataProfile.createContact(contact);
 		if (contactId < 0){ // already friends
-			String entity =  "You and user with id " + friendId + " are already connected.";
+			//String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
+			String entity =  "You and user with id " + contact.getFriend().getId() + " are already connected.";
+
 			return Response.status(Response.Status.CONFLICT).entity(entity).build();
 		} else {
 			String url = uriInfo.getAbsolutePath() + "/" + contactId; // url of the created contact
@@ -40,22 +70,38 @@ public class UsersResources {
 		}
 	}
 
-	@DELETE //DELETE at http://localhost:XXXX/users/1/2
-	@Path("{userId}/{friendId}")
-	public Response deleteContact(@PathParam("userId") int userId, @PathParam("friendId") int friendId) {
-		fakeDataProfile.deleteContact(userId, friendId);
+	@DELETE //DELETE at http://localhost:XXXX/users/1/contacts/2
+	@Path("{userId}/contacts/{contactId}")
+	public Response deleteContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId) {
+		fakeDataProfile.deleteContact(userId, contactId);
 
 		return Response.noContent().build();
 	}
 
-	// Accept contact
-	@PATCH //PATCH at http://localhost:XXXX/users/1/2
-	@Path("{friendId}/{userId}")
-	public Response acceptContact(@PathParam("friendId") int friendId, @PathParam("userId") int userId) {
-		fakeDataProfile.acceptContact(friendId, userId);
+	// Update contact (used to Accept contact)
+	@PATCH //PATCH at http://localhost:XXXX/users/1/contacts/2
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{userId}/contacts/{contactId}")
+	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact) {
+		fakeDataProfile.updateContact(contactId, contact);
 
 		return Response.noContent().build();
 	}
+
+	@GET
+	@Path("{userId}")
+	public Response getUser(@PathParam("userId") int userId) {
+		UserDTO user = fakeDataProfile.getUserDTO(userId);
+
+		if(user != null){
+			return Response.ok(user).build(); // Status ok 200, return user
+		}
+		else {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid user id").build();
+		}
+	}
+	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+
 
 
 	//to get all the experiences
