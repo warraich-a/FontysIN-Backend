@@ -82,12 +82,12 @@ public class User {
         this.password = password;
     }
 
-    public String getPhoneNumbar() {
-        return phoneNumbar;
+    public String getUserPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhoneNumbar(String phoneNumbar) {
-        this.phoneNumbar = phoneNumbar;
+    public void setUserPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public int getAddressId() {
