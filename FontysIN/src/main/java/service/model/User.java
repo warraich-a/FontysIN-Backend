@@ -50,20 +50,37 @@ public class User {
         this.id = id;
     }
 
-    public String getUserFirstName() {
-        return firstName;
-    }
+//    public String getUserFirstName() {
+//        return firstName;
+//    }
+//
+//    public void setUserFirstName(String name) {
+//        this.firstName = name;
+//    }
+//
+//    public String getUserLastName() {
+//        return lastName;
+//    }
+//
+//    public void setUserLastName(String name) {
+//        this.lastName = name;
+//    }
 
-    public void setUserFirstName(String name) {
-        this.firstName = name;
-    }
 
-    public String getUserLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setUserLastName(String name) {
-        this.lastName = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public UserType getUserType() {
