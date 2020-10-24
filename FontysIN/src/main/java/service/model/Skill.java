@@ -4,14 +4,17 @@ public class Skill {
     private int id;
     private int profileId;
     private String name;
+    private static int idSeeder = 1;
 
-    public Skill(int id, int profileId, String name) {
-        this.id = id;
+    public Skill(int profileId, String name) {
+        this.id = idSeeder;
+        idSeeder++;
         this.profileId = profileId;
         this.name = name;
     }
     public Skill(){
-
+        this.id = idSeeder;
+        idSeeder++;
     }
 
     public int getId() {

@@ -8,6 +8,8 @@ import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+//import org.json.simple.JSONObject;
+
 
 @Path("users")
 public class UsersResources {
@@ -70,41 +72,21 @@ public class UsersResources {
 	}
 
 
-	//to get all the experiences
+
 	@GET //GET at http://localhost:XXXX/profile/experiences
-	@Path("{userId}/profiles/{profileId}")
+	@Path("{userId}/profiles/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetProfile(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
+	public Response GetProfile(@PathParam("userId") int userId) {
 
 		List<Profile> foundProfiles = fakeDataProfile.GetProfileByUserId(userId); // getting the profile by userid
 
 		if (foundProfiles == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid student number.").build();
 		} else {
+			GenericEntity<List<Profile>> entity = new GenericEntity<>(foundProfiles) {
+			};
 
-			for (Profile p: foundProfiles){
-				if(p.getId() == profileId){
-					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(userId, profileId);List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(userId,profileId);
-					List<About> aboutByProfileId = fakeDataProfile.GetAboutByProfileID(userId,profileId);
-
-					List<Skill> skillByProfileId = fakeDataProfile.GetSkillsByProfileId(userId,profileId);
-
-					// to combine different types of lists into 1
-					List<Object> combined = new ArrayList<>();
-					combined.add(educationByProfileId);
-					combined.add(experienceByProfileId);
-					combined.add(aboutByProfileId);
-					combined.add(skillByProfileId);
-
-					// to show a list correctly
-					GenericEntity<List<Object>> entity = new GenericEntity<>(combined) {
-					};
-
-					return Response.ok(entity).build();
-				}
-			}
-
-			return Response.status(Response.Status.BAD_REQUEST).entity("Profile does not exist.").build();
+			return Response.ok(entity).build();
 
 		}
 	}
@@ -114,9 +96,13 @@ public class UsersResources {
 	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
 		List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(userId, profileId);
 
-		GenericEntity<List<Experience>> entity = new GenericEntity<>(experienceByProfileId) {
-		};
-		return Response.ok(entity).build();
+		if (experienceByProfileId == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		} else {
+			GenericEntity<List<Experience>> entity = new GenericEntity<>(experienceByProfileId) {
+			};
+			return Response.ok(entity).build();
+		}
 	}
 //
 	@GET //GET at http://localhost:XXXX/profile/educations
@@ -125,9 +111,13 @@ public class UsersResources {
 	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
 		List<Education> educations = fakeDataProfile.GetEducationsByProfileId(userId, profileId);
 
-		GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
-		};
-		return Response.ok(entity).build();
+		if (educations == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		} else {
+			GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
+			};
+			return Response.ok(entity).build();
+		}
 	}
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/abouts")
@@ -135,9 +125,13 @@ public class UsersResources {
 	public Response  GetAbouts(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
 		List<About> abouts = fakeDataProfile.GetAboutByProfileID(userId, profileId);
 
-		GenericEntity<List<About>> entity = new GenericEntity<>(abouts) {
-		};
-		return Response.ok(entity).build();
+		if (abouts == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		} else {
+			GenericEntity<List<About>> entity = new GenericEntity<>(abouts) {
+			};
+			return Response.ok(entity).build();
+		}
 	}
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/skills")
@@ -145,9 +139,13 @@ public class UsersResources {
 	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
 		List<Skill> skills = fakeDataProfile.GetSkillsByProfileId(userId, profileId);
 
-		GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
-		};
-		return Response.ok(entity).build();
+		if (skills == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		} else {
+			GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
+			};
+			return Response.ok(entity).build();
+		}
 	}
 
 	// to add a new experience
@@ -217,6 +215,25 @@ public class UsersResources {
 			String url = uriInfo.getAbsolutePath() + "/" + s.getId(); // url of the created student
 			URI uri = URI.create(url);
 			return Response.created(uri).build();
+		}
+	}
+
+	@POST //POST at http://localhost:XXXX/profile/experience
+	@Path("{userId}/profiles/new")
+	public Response AddProfile(@PathParam("userId") int userId, Profile p) {
+
+
+		if (!fakeDataProfile.AddProfile(userId, p))
+		{
+			String entity =  "Profile Exists";
+			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
+			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+		} else {
+			int Id = p.getId();
+//			String url = uriInfo.getAbsolutePath() + "/" + p.getId(); // url of the created student
+			URI uri = URI.create(String.valueOf(Id));
+			return Response.ok(p.getId()).build();
+			//return Response.con;
 		}
 	}
 }
