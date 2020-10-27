@@ -23,7 +23,7 @@ public class User {
 
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                 String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber) {
+                 String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber, String img) {
 
         this.id = id;
         this.firstName = firstName;
@@ -36,6 +36,7 @@ public class User {
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
+        this.img = img;
     }
 
     public User() {
