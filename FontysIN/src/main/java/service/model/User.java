@@ -19,11 +19,12 @@ public class User {
     private int departmentId; // user's department
     private String userNumber; // user's number
     private String img; // user's image /* I will add this to the constracture later*/
-    private UserType userType;
+    private UserType userType; // user's type
+    private Education education; // user's education
 
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber) {
+                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber, Education education) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,6 +36,7 @@ public class User {
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
+        this.education = education;
     }
 
     public User() {
@@ -135,6 +137,22 @@ public class User {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Education getEducation() {
+        return education;
+    }
+
+    public void setEducation(Education education) {
+        this.education = education;
     }
 
     //methods

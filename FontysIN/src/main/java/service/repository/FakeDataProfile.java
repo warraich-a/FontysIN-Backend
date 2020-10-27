@@ -17,6 +17,8 @@ public class FakeDataProfile {
     private final List<About> abouts = new ArrayList<>();
     private final List<Skill> skills = new ArrayList<>();
     private final List<Address> addresses = new ArrayList<>();
+    private final List<Department> departments = new ArrayList<>();
+    private final List<Location> locations = new ArrayList<>();
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
 
@@ -66,18 +68,40 @@ public class FakeDataProfile {
 
         addresses.add(adress1);
 
-          
+        //adding department to alist
+        Department dep1 = new Department(1, "ICT", "Information....");
+        Department dep2 = new Department(2, "Pedagogy", "Information....");
+        Department dep3 = new Department(3, "Buisness", "Information....");
+        Department dep4 = new Department(4, "Economy", "Information....");
+
+
+        departments.add(dep1);
+        departments.add(dep2);
+        departments.add(dep3);
+        departments.add(dep4);
+
+        //adding location at a list
+        Location loc1 = new Location(1, "Rachelsmolen", "R10", "Eindhoven", "5612 MA");
+        Location loc2 = new Location(2, "Professor Goossenslaan", "R01", "Tilburg", "5022 DM ");
+        Location loc3 = new Location(3, "Tegelseweg", "T12", "Venlo", "5912 BG");
+
+
+        locations.add(loc1);
+        locations.add(loc2);
+        locations.add(loc3);
+
+
         // Users
 
-        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 2, 2, "123748");
-        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 2, 2, "364957");
-        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947");
-        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 2, 2, "947392");
-        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
-        User user6 = new User(6, "Ahmad", "Ahmad", UserType.Student, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
-        User user7 = new User(7, "Robin", "Bomers", UserType.Student, "robin@fontys.com", "1234", "0638465283", 4, 2, 2, "947392");
-        User user8 = new User(8, "Kelvin", "Kanen", UserType.Student, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
-        User user9 = new User(9, "Ali", "Hweja", UserType.Student, "ali@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
+        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1);
+        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2,1, 1, "364957", edu2);
+        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3);
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1);
+        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3);
+        User user6 = new User(6, "Ahmad", "Ahmad", UserType.Employee, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6);
+        User user7 = new User(7, "Robin", "Bomers", UserType.Employee, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu2);
+        User user8 = new User(8, "Kelvin", "Kanen", UserType.Teacher, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6);
+        User user9 = new User(9, "Ali", "Hweja", UserType.Teacher, "ali@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3);
 
 
         users.add(user1);
@@ -194,6 +218,91 @@ public class FakeDataProfile {
         skills.add(s5);
         skills.add(s6);
 
+    }
+
+    //searching implementation by filtering
+
+    //first:
+    //get all users
+    public List<User> getUsers() {
+        return users;
+    }
+
+    //Second:
+    // get User type
+    public User getUserType(UserType type) {
+        for (User u : users) {
+            if (u.getUserType().equals(type)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    // get education by its studyYear
+    public Education getEducation(int year) {
+        for (Education e : educations) {
+            if (e.getStartYearEducation() == year) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    // get department by its name
+    public Department getDepartment(String depName) {
+        for (Department d : departments) {
+            if (d.getName().equals(depName)) {
+                return d;
+            }
+        }
+        return null;
+    }
+
+    //filters:
+
+    //1. filter users by type
+    public List<User> getUsersByUserType(UserType type) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getUserType().equals(type)) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
+    //2. filter users by department
+    public List<User> getUsersByDepartment(int depId) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getDepartmentId() == depId) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
+    //3. filter users by location
+    public List<User> getUsersByLocation(int locId) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getLocationId() == locId) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
+    //4. filter users by study year
+    public List<User> getUsersByStudyYear(Education education) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getEducation().equals(education)) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
     }
 
 
