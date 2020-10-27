@@ -30,12 +30,13 @@ public class FakeDataProfile {
     private FakeDataProfile(){
 
 
-        Experience e1 = new Experience(1, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e2 = new Experience(2, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
-        Experience e3 = new Experience(3, 1, "Profile id 1", "Fontys", EmplymentType.PartTime, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I dont like it" );
-        Experience e4 = new Experience(4, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
-        Experience e5 = new Experience(5, 1, "Profile id 1", "Fontys", EmplymentType.FreeLancer, 1, LocalDate.of(1998,01,01), LocalDate.of(2000,01,01), "I love it" );
-        Experience e6 = new Experience(6, 2, "profile id 2", "Fontys", EmplymentType.FullTime, 1, LocalDate.of(1996,01,01), LocalDate.of(1998,01,01), "was good" );
+        Experience e1 = new Experience( 1, "Content Writer", "Private", EmplymentType.FreeLancer, "Islamabad, Pakistan",2016, 2020, "I had a pretty good time there" );
+        Experience e2 = new Experience( 2, "Manager", "AKU", EmplymentType.FullTime,  "Islamabad, Pakistan",2016, 2020, "One of my best jobs" );
+        Experience e3 = new Experience( 3, "Staff", "Fontys", EmplymentType.PartTime,  "Islamabad, Pakistan",2016, 2020,"Loved to work there" );
+        Experience e4 = new Experience( 2, "Employee", "Fontys", EmplymentType.FullTime,  "Islamabad, Pakistan",2016, 2020, "Not bad" );
+        Experience e5 = new Experience( 4, "Clerk", "Fontys", EmplymentType.FreeLancer,  "Islamabad, Pakistan",2016, 2020, "I was happy there" );
+        Experience e6 = new Experience( 2, "Boss", "Fontys", EmplymentType.FullTime,  "Islamabad, Pakistan",2016, 2020, "Good one" );
+
 
 
         experiences.add(e1);
@@ -45,12 +46,12 @@ public class FakeDataProfile {
         experiences.add(e5);
         experiences.add(e6);
 
-        Education edu1 = new Education(1, 1, "Fontys", LocalDate.of(2018,01,01), LocalDate.of(2020,01,01), "High School", "ICT", "Got good grades" );
-        Education edu2 = new Education(2, 2, "NJC", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu3 = new Education(3, 3, "jklafd ", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu4 = new Education(4, 4, "FoId", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu5 = new Education(5, 5, "AGA ", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
-        Education edu6 = new Education(6, 6, "----- Id", LocalDate.of(2016,01,01), LocalDate.of(2020,01,01), "Bechelors", "ICT", "Got good grades" );
+        Education edu1 = new Education(1, "Fontys", 2019, 2023, "High School", "ICT", "Got good grades" );
+        Education edu2 = new Education(2, "NJC", 2000, 2005, "Bechelors", "ICT", "Got good grades" );
+        Education edu3 = new Education(3, "SGD ", 2016, 2021, "Bechelors", "ICT", "Got good grades" );
+        Education edu4 = new Education(4, "FoId", 2015, 2020, "Bechelors", "ICT", "Got good grades" );
+        Education edu5 = new Education(5, "AGA ", 2017,2022, "Bechelors", "ICT", "Got good grades" );
+        Education edu6 = new Education(6, "Lahore",1997, 2005, "Bechelors", "ICT", "Got good grades" );
 
 
 
@@ -67,6 +68,7 @@ public class FakeDataProfile {
 
           
         // Users
+
         User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 2, 2, "123748");
         User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 2, 2, "364957");
         User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947");
@@ -76,6 +78,7 @@ public class FakeDataProfile {
         User user7 = new User(7, "Robin", "Bomers", UserType.Student, "robin@fontys.com", "1234", "0638465283", 4, 2, 2, "947392");
         User user8 = new User(8, "Kelvin", "Kanen", UserType.Student, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
         User user9 = new User(9, "Ali", "Hweja", UserType.Student, "ali@fontys.com", "1234", "0638483829", 5, 2, 2, "734695");
+
 
         users.add(user1);
         users.add(user2);
@@ -122,24 +125,24 @@ public class FakeDataProfile {
 
 
 
-        Profile p1 = new Profile(1, 1, "English");
-        Profile p2 = new Profile(2, 1, "Dutch");
-        Profile p3 = new Profile(3, 2, "English");
-        Profile p4 = new Profile(4, 2, "Dutch");
-        Profile p5 = new Profile(5, 3, "English");
-        Profile p6 = new Profile(6, 3, "Dutch");
-        Profile p7 = new Profile(7, 4, "English");
-        Profile p8 = new Profile(8, 4, "Dutch");
-        Profile p9 = new Profile(9, 5, "English");
-        Profile p10 = new Profile(10, 5, "Dutch");
-        Profile p11 = new Profile(11, 6, "English");
-        Profile p12 = new Profile(12, 6, "Dutch");
-        Profile p13 = new Profile(13, 7, "English");
-        Profile p14 = new Profile(14, 7, "Dutch");
-        Profile p15 = new Profile(15, 8, "English");
-        Profile p16 = new Profile(16, 8, "Dutch");
-        Profile p17 = new Profile(17, 9, "English");
-        Profile p18 = new Profile(18, 9, "Dutch");
+        Profile p1 = new Profile(1, "English");
+        Profile p2 = new Profile(1, "Dutch");
+        Profile p3 = new Profile( 2, "English");
+        Profile p4 = new Profile( 2, "Dutch");
+        Profile p5 = new Profile( 3, "English");
+        Profile p6 = new Profile( 3, "Dutch");
+        Profile p7 = new Profile( 4, "English");
+        Profile p8 = new Profile( 4, "Dutch");
+        Profile p9 = new Profile( 5, "English");
+        Profile p10 = new Profile( 5, "Dutch");
+        Profile p11 = new Profile( 6, "English");
+        Profile p12 = new Profile( 6, "Dutch");
+        Profile p13 = new Profile( 7, "English");
+        Profile p14 = new Profile( 7, "Dutch");
+        Profile p15 = new Profile( 8, "English");
+        Profile p16 = new Profile( 8, "Dutch");
+        Profile p17 = new Profile( 9, "English");
+        Profile p18 = new Profile( 9, "Dutch");
 
 
         profiles.add(p1);
@@ -162,12 +165,12 @@ public class FakeDataProfile {
         profiles.add(p18);
 
 
-        About a1 = new About(1,1, "I am software engineer");
-        About a2 = new About(2,2, "I am businesman");
-        About a3 = new About(3,3, "I am software engineer");
-        About a4 = new About(4,4, "I am businesman");
-        About a5 = new About(5,5, "I am software engineer");
-        About a6 = new About(6,6, "I am businesman");
+        About a1 = new About(1, "I am software engineer");
+        About a2 = new About(2, "I am businesman");
+        About a3 = new About(3, "I am architecture");
+        About a4 = new About(4, "I am chief");
+        About a5 = new About(5, "I am free engineer");
+        About a6 = new About(6, "I am nothing");
 
         abouts.add(a1);
         abouts.add(a2);
@@ -176,12 +179,12 @@ public class FakeDataProfile {
         abouts.add(a5);
         abouts.add(a6);
 
-        Skill s1 = new Skill(1,1, "HTML");
-        Skill s2 = new Skill(2,1, "PHP");
-        Skill s3 = new Skill(3,2, "C#");
-        Skill s4 = new Skill(4,3, "Java");
-        Skill s5 = new Skill(5,4, "C#");
-        Skill s6 = new Skill(6,5, "Java");
+        Skill s1 = new Skill(1, "HTML");
+        Skill s2 = new Skill(1, "PHP");
+        Skill s3 = new Skill(2, "C#");
+        Skill s4 = new Skill(3, "Java");
+        Skill s5 = new Skill(4, "C#");
+        Skill s6 = new Skill(5, "Java");
 
 
         skills.add(s1);
@@ -213,14 +216,24 @@ public class FakeDataProfile {
 
 
     // get experiences by profile id
-    public List<Experience> GetExperiencesByProfileID(int id){
+    public List<Experience> GetExperiencesByProfileID(int userId, int profileId){
+
         List<Experience> foundExperiences = new ArrayList<>();
-        for (Experience e: experiences){
-            if(e.getProfileId() == id){
-                foundExperiences.add(e);
+        for (Profile p: profiles)
+        {
+            if(p.getUserId() == userId && p.getId() == profileId)
+            {
+                for (Experience e : experiences) {
+                    if (e.getProfileId() == profileId) {
+                        foundExperiences.add(e);
+                    }
+                }
+                return foundExperiences;
             }
+
         }
-        return foundExperiences;
+
+        return null;
     }
 
     //
@@ -263,7 +276,7 @@ public class FakeDataProfile {
     public  Education GetEducationById(int id){
 
         for (Education e: educations){
-            if(e.getProfileId() == id){
+            if(e.getId() == id){
                return e;
             }
         }
@@ -282,14 +295,24 @@ public class FakeDataProfile {
     }
 
     //get educations by profile id
-    public  List<Education>  GetEducationsByProfileId(int id){
+    public  List<Education>  GetEducationsByProfileId(int userId, int profileId){
+
         List<Education> foundEducations = new ArrayList<>();
-        for (Education e: educations){
-            if(e.getProfileId() == id){
-                foundEducations.add(e);
+        for (Profile p: profiles)
+        {
+            if(p.getUserId() == userId && p.getId() == profileId)
+            {
+                for (Education e : educations) {
+                    if (e.getProfileId() == profileId) {
+                        foundEducations.add(e);
+                    }
+                }
+                return foundEducations;
             }
+
         }
-        return foundEducations;
+
+        return null;
     }
 
     //get skills by profile id
@@ -317,6 +340,7 @@ public class FakeDataProfile {
             }
         }
         return false;
+
     }
 
     //update
@@ -357,14 +381,22 @@ public class FakeDataProfile {
     }
 
     // get about by profile id
-    public List<About> GetAboutByProfileID(int id){
+    public List<About> GetAboutByProfileID(int userId, int profileId){
+
         List<About> foundAbout = new ArrayList<>();
-        for (About a: abouts){
-            if(a.getProfileId() == id){
-                foundAbout.add(a);
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId && p.getId() == profileId)
+            {
+                for (About a : abouts) {
+                    if (a.getProfileId() == profileId) {
+                        foundAbout.add(a);
+                    }
+                }
+                return foundAbout;
             }
         }
-        return foundAbout;
+
+        return null;
     }
     //to add about
     public boolean AddAbout(About a, int userId, int profileId){
@@ -389,9 +421,9 @@ public class FakeDataProfile {
     public List<Skill> GetSkills (){return skills;}
 
     //to get about
-    public Skill GetSkillById(int id){
+    public Skill GetSkillById(String name){
         for (Skill s: skills){
-            if(s.getId() == id){
+            if(s.getName().equals(name)){
                 return s;
             }
         }
@@ -399,29 +431,61 @@ public class FakeDataProfile {
     }
 
     // get skill by profile id
-    public List<Skill> GetSkillByProfileID(int id){
+    public  List<Skill>  GetSkillsByProfileId(int userId, int profileId){
+
         List<Skill> foundSkills = new ArrayList<>();
-        for (Skill s: skills){
-            if(s.getProfileId() == id){
-                foundSkills.add(s);
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId && p.getId() == profileId) {
+                for (Skill s : skills) {
+                    if (s.getProfileId() == profileId) {
+                        foundSkills.add(s);
+                    }
+                }
+                return foundSkills;
             }
         }
-        return foundSkills;
+
+        return null;
     }
     //to add about
     public boolean AddSkill(Skill s, int userId, int profileId){
 
         for (Profile p: profiles) {
             if (p.getUserId() == userId) {
-                if (p.getId() == profileId) {
-                    if (this.GetSkillById(s.getId()) == null) {
-                        skills.add(s);
-                        return true;
+                for (Skill sk: skills){
+                    if(sk.getProfileId() == profileId) {
+                        if (sk.getName().equals(s.getName())) {
+
+                            return false;
+                        }
                     }
                 }
             }
         }
-        return false;
+        skills.add(s);
+        return true;
+    }
+
+
+    //to add profile
+
+
+    public boolean AddProfile(int userId, Profile newProfile){
+
+        About about = new About();
+
+        for (Profile p: profiles) {
+            if (p.getUserId() == userId) {
+                if (p.getLanguage().equals(newProfile.getLanguage())) {
+                    return false;
+                }
+            }
+        }
+        profiles.add(newProfile);
+//        about.setContent(contentAbout);
+//        about.setProfileId(newProfile.getId()); ;
+//        AddAbout(about, userId, newProfile.getId());
+        return true;
     }
 
     public boolean updateAbout(int id, About a) {
@@ -440,7 +504,7 @@ public class FakeDataProfile {
         }
         old.setTitle(e.getTitle());
         old.setEmploymentType(e.getEmploymentType());
-        old.setLocationId(e.getLocationId());
+        old.setLocation(e.getLocation());
         old.setCompany(e.getCompany());
         old.setStartDateExperience(e.getStartDateExperience());
         old.setEndDateExperience(e.getEndDateExperience());

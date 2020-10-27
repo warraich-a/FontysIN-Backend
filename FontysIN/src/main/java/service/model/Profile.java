@@ -5,11 +5,17 @@ public class Profile {
     private int id;
     private int userId;
     private String language;
-
-    public Profile(int id, int userId, String language) {
-        this.id = id;
+    private static int idSeeder = 1;
+    public Profile(int userId, String language) {
+        this.id = idSeeder;
+        idSeeder++;
         this.userId = userId;
         this.language = language;
+    }
+
+    public Profile() {
+        this.id = idSeeder;
+        idSeeder++;
     }
 
     public int getId() {
