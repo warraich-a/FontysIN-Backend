@@ -6,23 +6,23 @@ public enum Setting {
 }
 private int id;
  private int userId;
- private Setting EducationSetting;
-    private Setting ExperienceSetting;
-    private Setting SkillSetting;
+ private Setting educationSetting;
+    private Setting experienceSetting;
+    private Setting skillSetting;
 
 //0 is everyone, 1 is friends and 2 is only me
     public Privacy(){
-        EducationSetting = Setting.EVERYONE;
-        ExperienceSetting = Setting.EVERYONE;
-        SkillSetting = Setting.EVERYONE;
+        educationSetting = Setting.EVERYONE;
+        experienceSetting = Setting.EVERYONE;
+        skillSetting = Setting.EVERYONE;
     }
 
     public Privacy(int id, int userId) {
         this.id = id;
         this.userId = userId;
-        EducationSetting = Setting.EVERYONE;
-        ExperienceSetting = Setting.EVERYONE;
-        SkillSetting = Setting.EVERYONE;
+        educationSetting = Setting.EVERYONE;
+        experienceSetting = Setting.EVERYONE;
+        skillSetting = Setting.EVERYONE;
     }
 
     public int getId() {
@@ -34,27 +34,27 @@ private int id;
     }
 
     public Setting getEducationSetting() {
-        return EducationSetting;
+        return educationSetting;
     }
 
-    public void setEducationSetting(Setting educationSetting) {
-        EducationSetting = educationSetting;
+    public void setEducationSetting(Setting EducationSetting) {
+        educationSetting = EducationSetting;
     }
 
     public Setting getExperienceSetting() {
-        return ExperienceSetting;
+        return experienceSetting;
     }
 
-    public void setExperienceSetting(Setting experienceSetting) {
-        ExperienceSetting = experienceSetting;
+    public void setExperienceSetting(Setting ExperienceSetting) {
+        experienceSetting = ExperienceSetting;
     }
 
     public Setting getSkillSetting() {
-        return SkillSetting;
+        return skillSetting;
     }
 
-    public void setSkillSetting(Setting skillSetting) {
-        SkillSetting = skillSetting;
+    public void setSkillSetting(Setting SkillSetting) {
+        skillSetting = SkillSetting;
     }
 
     public int getUserId() {
