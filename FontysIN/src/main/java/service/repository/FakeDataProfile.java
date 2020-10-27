@@ -831,9 +831,9 @@ public class FakeDataProfile {
     }
 
     //////////////////Privacy
-    public Privacy GetPrivacySetting(User u){
+    public Privacy GetPrivacySetting(int id){
         for (Privacy p :privacyList){
-            if(p.getUserId() == u.getId()){
+            if(p.getUserId() == id){
                 return p;
             }
         }
@@ -858,25 +858,43 @@ public class FakeDataProfile {
         return true;
     }
 
-    public boolean AllowedToSee(int userId, int visitorId){
-        User user = getUser(userId);
+    public boolean AllowedToSee(int userId, int visitorId, ProfilePart profilePart){
         User visitor = getUser(visitorId);
-        Privacy settings = GetPrivacySetting(user);
+        Privacy settings = GetPrivacySetting(userId);
 
-        if(user.getId() == visitor.getId()){ // So am i visting my own page
+        Privacy.Setting privacySetting;
+        switch(profilePart)
+        {
+            case EDUCATION:
+                privacySetting = settings.getEducationSetting();
+                break;
+            case EXPERIENCE:
+                privacySetting = settings.getExperienceSetting();
+                break;
+            case SKILLS:
+                privacySetting = settings.getSkillSetting();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + profilePart);
+        }
+        if(userId == visitorId){ // So am i visting my own page
             return true;
         }
-       else if(settings.getEducationSetting() == Privacy.Setting.EVERYONE){
+        else if(privacySetting == Privacy.Setting.EVERYONE){
            return true;
         }
-       else if(settings.getEducationSetting() == Privacy.Setting.CONNECTIONS){
-           List<Contact> Connections = getAllContacts(user.getId()); // Get a user connections
+        else if(privacySetting == Privacy.Setting.CONNECTIONS){
+           List<Contact> Connections = getAllContacts(userId); // Get a user connections
            if(Connections.contains(visitor)){
                return true;
            }
         }
-    return false;
+        return false;
+    }
 
+    public enum ProfilePart
+    {
+        EDUCATION, EXPERIENCE, SKILLS
     }
 
 }

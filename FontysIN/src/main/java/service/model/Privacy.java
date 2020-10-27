@@ -13,7 +13,7 @@ private int id;
 //0 is everyone, 1 is friends and 2 is only me
     public Privacy(){
         educationSetting = Setting.EVERYONE;
-        experienceSetting = Setting.EVERYONE;
+        experienceSetting = Setting.ONLYME;
         skillSetting = Setting.EVERYONE;
     }
 
@@ -21,7 +21,7 @@ private int id;
         this.id = id;
         this.userId = userId;
         educationSetting = Setting.EVERYONE;
-        experienceSetting = Setting.EVERYONE;
+        experienceSetting = Setting.ONLYME;
         skillSetting = Setting.EVERYONE;
     }
 

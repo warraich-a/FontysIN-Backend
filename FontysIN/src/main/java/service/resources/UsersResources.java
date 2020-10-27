@@ -200,6 +200,8 @@ public class UsersResources {
 	public Response GetSkill(@PathParam("userId") int userId, @PathParam("profileId") int profileId
 			, @PathParam("skillId") int skillId) {
 
+
+
 		List<Skill> foundSkills = fakeDataProfile.GetSkillsByProfileId(profileId); // getting the education by profile id
 
 		if(foundSkills == null){
@@ -232,30 +234,41 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
+	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
 		List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(userId, profileId);
 
-		if (experienceByProfileId == null) {
-			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
-		} else {
-			GenericEntity<List<Experience>> entity = new GenericEntity<>(experienceByProfileId) {
-			};
-			return Response.ok(entity).build();
+		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EXPERIENCE);
+
+		if(AllowToSee){
+			if (experienceByProfileId == null) {
+				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+			} else {
+				GenericEntity<List<Experience>> entity = new GenericEntity<>(experienceByProfileId) {
+				};
+				return Response.ok(entity).build();
+			}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
 		}
+
 	}
 //
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/educations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
+	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
 		List<Education> educations = fakeDataProfile.GetEducationsByProfileId(userId, profileId);
-
+		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EDUCATION);
+		if(AllowToSee){
 		if (educations == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
 		} else {
 			GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
 			};
 			return Response.ok(entity).build();
+		}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
 		}
 	}
 	@GET //GET at http://localhost:XXXX/profile/educations
@@ -275,16 +288,21 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/skills")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
+	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
 		List<Skill> skills = fakeDataProfile.GetSkillsByProfileId(userId, profileId);
-
-		if (skills == null) {
-			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
-		} else {
-			GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
-			};
-			return Response.ok(entity).build();
+		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EDUCATION);
+		if(AllowToSee){
+			if (skills == null) {
+				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+			} else {
+				GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
+				};
+				return Response.ok(entity).build();
+			}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
 		}
+
 	}
 
 	// to add a new experience
