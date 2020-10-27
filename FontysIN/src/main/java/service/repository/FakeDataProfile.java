@@ -17,6 +17,7 @@ public class FakeDataProfile {
     private final List<About> abouts = new ArrayList<>();
     private final List<Skill> skills = new ArrayList<>();
     private final List<Address> addresses = new ArrayList<>();
+    private final List<Privacy> privacyList = new ArrayList<>();
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
 
@@ -191,6 +192,8 @@ public class FakeDataProfile {
         skills.add(s5);
         skills.add(s6);
 
+        Privacy privacy1 = new Privacy(1,1);
+        privacyList.add(privacy1);
     }
 
 
@@ -761,6 +764,55 @@ public class FakeDataProfile {
             }
         }
         return false;
+    }
+
+    //////////////////Privacy
+    public Privacy GetPrivacySetting(User u){
+        for (Privacy p :privacyList){
+            if(p.getUserId() == u.getId()){
+                return p;
+            }
+        }
+        return null;
+    }
+    public Privacy GetPrivacyById(int id){
+        for (Privacy p: privacyList){
+            if(p.getId() == id){
+                return p;
+            }
+        }
+        return null;
+    }
+    public boolean updatePrivacy(int id, Privacy p) {
+        Privacy old = this.GetPrivacyById(id);
+        if (old == null) {
+            return false;
+        }
+        old.setEducationSetting(p.getEducationSetting());
+        old.setExperienceSetting(p.getExperienceSetting());
+        old.setSkillSetting(p.getSkillSetting());
+        return true;
+    }
+
+    public boolean AllowedToSee(int userId, int visitorId){
+        User user = getUser(userId);
+        User visitor = getUser(visitorId);
+        Privacy settings = GetPrivacySetting(user);
+
+        if(user.getId() == visitor.getId()){ // So am i visting my own page
+            return true;
+        }
+       else if(settings.getEducationSetting() == Privacy.Setting.EVERYONE){
+           return true;
+        }
+       else if(settings.getEducationSetting() == Privacy.Setting.CONNECTIONS){
+           List<Contact> Connections = getAllContacts(user.getId()); // Get a user connections
+           if(Connections.contains(visitor)){
+               return true;
+           }
+        }
+    return false;
+
     }
 
 }

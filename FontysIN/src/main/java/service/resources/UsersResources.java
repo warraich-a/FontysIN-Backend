@@ -504,6 +504,27 @@ public class UsersResources {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
 		}
 	}
-
+	@GET
+	@Path("privacy/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPrivacyById(@PathParam("id") int id) {
+		Privacy a = fakeDataProfile.GetPrivacyById(id);
+		if (a == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(a).build();
+		}
+	}
+	@PUT //PUT at http://localhost:9099/users/address/id
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/privacy/{id}")
+	public Response updatePrivacy(@PathParam("id") int id, Privacy p) {
+		// Idempotent method. Always update (even if the resource has already been updated before).
+		if (fakeDataProfile.updatePrivacy(id, p)) {
+			return Response.noContent().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
+		}
+	}
 
 }
