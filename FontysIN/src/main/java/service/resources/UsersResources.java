@@ -105,6 +105,14 @@ public class UsersResources {
 	}
 	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("p/{userId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GeUser(@PathParam("userId") int userId) {
+		User user = fakeDataProfile.getUser(userId);
+
+		return Response.ok(user).build();
+	}
 
 
 
