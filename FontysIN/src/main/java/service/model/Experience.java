@@ -10,18 +10,20 @@ public class Experience {
     private String title;
     private String company;
     private EmplymentType employmentType;
-    private int locationId;
-    private LocalDate startDateExperience;
-    private LocalDate endDateExperience;
+    private String location;
+    private int startDateExperience;
+    private int endDateExperience;
     private String descriptionExperience;
+    private static int idSeeder = 1;
 
-    public Experience(int id, int profileId, String title, String company, EmplymentType employmentType, int locationId, LocalDate startDate, LocalDate endDate, String description) {
-        this.id = id;
+    public Experience(int profileId, String title, String company, EmplymentType employmentType, String location, int startDate, int endDate, String description) {
+        this.id = idSeeder;
+        idSeeder++;
         this.profileId = profileId;
         this.title = title;
         this.company = company;
         this.employmentType = employmentType;
-        this.locationId = locationId;
+        this.location = location;
         this.startDateExperience = startDate;
         this.endDateExperience = endDate;
         this.descriptionExperience = description;
@@ -29,6 +31,8 @@ public class Experience {
 
 
     public Experience() {
+        this.id = idSeeder;
+        idSeeder++;
 
     }
 
@@ -72,27 +76,27 @@ public class Experience {
         this.employmentType = employmentType;
     }
 
-    public int getLocationId() {
-        return locationId;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public LocalDate getStartDateExperience() {
+    public int getStartDateExperience() {
         return startDateExperience;
     }
 
-    public void setStartDateExperience(LocalDate startDateExperience) {
+    public void setStartDateExperience(int startDateExperience) {
         this.startDateExperience = startDateExperience;
     }
 
-    public LocalDate getEndDateExperience() {
+    public int getEndDateExperience() {
         return endDateExperience;
     }
 
-    public void setEndDateExperience(LocalDate endDateExperience) {
+    public void setEndDateExperience(int endDateExperience) {
         this.endDateExperience = endDateExperience;
     }
 
@@ -104,18 +108,18 @@ public class Experience {
         this.descriptionExperience = descriptionExperience;
     }
 
-    @Override
-    public String toString() {
-        return "Experience{" +
-                "id=" + id +
-                ", profileId=" + profileId +
-                ", title='" + title + '\'' +
-                ", company='" + company + '\'' +
-                ", employmentType=" + employmentType +
-                ", locationId=" + locationId +
-                ", startDateExperience=" + startDateExperience +
-                ", endDateExperience=" + endDateExperience +
-                ", descriptionExperience='" + descriptionExperience + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Experience{" +
+//                "id=" + id +
+//                ", profileId=" + profileId +
+//                ", title='" + title + '\'' +
+//                ", company='" + company + '\'' +
+//                ", employmentType=" + employmentType +
+//                ", location=" + location +
+//                ", startDateExperience=" + startDateExperience +
+//                ", endDateExperience=" + endDateExperience +
+//                ", descriptionExperience='" + descriptionExperience + '\'' +
+//                '}';
+//    }
 }

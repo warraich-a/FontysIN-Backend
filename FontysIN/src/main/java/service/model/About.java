@@ -4,15 +4,19 @@ public class About {
     private int id;
     private int profileId;
     private String content;
+    private static int idSeeder = 1;
 
-    public About(int id, int profileId, String content) {
-        this.id = id;
+    public About(int profileId, String content) {
+        this.id = idSeeder;
+        idSeeder++;
         this.profileId = profileId;
         this.content = content;
     }
 
 
     public About() {
+        this.id = idSeeder;
+        idSeeder++;
     }
 
     public int getId() {

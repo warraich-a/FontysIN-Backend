@@ -40,9 +40,9 @@ public class PostResources {
     @GET
     @Path("user/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPostsByUser(@PathParam("id") int stNr) {
+    public Response getPostByUser(@PathParam("id") int stNr) {
 
-        GenericEntity<List<Posts>> entity = new GenericEntity<>(fakeDataStore.getPostsListByUser(stNr)) {  };
+        GenericEntity<List<Posts>> entity = new GenericEntity<>(fakeDataStore.getPostsListbyUserId(stNr)) {  };
         return Response.ok(entity).build();
     }
 
@@ -83,8 +83,9 @@ public class PostResources {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.TEXT_PLAIN})
     public Response updatePost(Posts post) {
         if (fakeDataStore.updatePost(post)) {
             return Response.noContent().build();
