@@ -988,6 +988,12 @@ public class FakeDataProfile {
         User visitor = getUser(visitorId);
         Privacy settings = GetPrivacySetting(userId);
 
+        // If there are no settings everyone is allowed to see
+        if(settings == null)
+        {
+            return true;
+        }
+
         Privacy.Setting privacySetting;
         switch(profilePart)
         {
