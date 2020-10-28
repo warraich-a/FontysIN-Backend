@@ -12,17 +12,17 @@ private int id;
 
 //0 is everyone, 1 is friends and 2 is only me
     public Privacy(){
-        educationSetting = Setting.EVERYONE;
-        experienceSetting = Setting.ONLYME;
-        skillSetting = Setting.EVERYONE;
+        educationSetting = Setting.CONNECTIONS;
+        experienceSetting = Setting.CONNECTIONS;
+        skillSetting = Setting.CONNECTIONS;
     }
 
     public Privacy(int id, int userId) {
         this.id = id;
         this.userId = userId;
-        educationSetting = Setting.EVERYONE;
-        experienceSetting = Setting.ONLYME;
-        skillSetting = Setting.EVERYONE;
+        educationSetting = Setting.CONNECTIONS;
+        experienceSetting = Setting.CONNECTIONS;
+        skillSetting = Setting.CONNECTIONS;
     }
 
     public int getId() {

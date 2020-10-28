@@ -219,6 +219,11 @@ public class FakeDataProfile {
         skills.add(s5);
         skills.add(s6);
 
+
+        Privacy privacy1 = new Privacy(1,1);
+        Privacy privacy2 = new Privacy(2,2);
+        privacyList.add(privacy1);
+        privacyList.add(privacy2);
     }
 
     //searching implementation by filtering
@@ -965,6 +970,20 @@ public class FakeDataProfile {
         return true;
     }
 
+    private List<User> GetUsersConnections(int userId){
+        List<User> connections = new ArrayList<>();
+        for (Contact c :contacts) {
+            if(c.getUser().getId() == userId){
+                if(c.getIsAccepted()){
+                    User u = c.getFriend();
+                    connections.add(u);
+                }
+
+            }
+        }
+        return connections;
+    }
+
     public boolean AllowedToSee(int userId, int visitorId, ProfilePart profilePart){
         User visitor = getUser(visitorId);
         Privacy settings = GetPrivacySetting(userId);
@@ -991,7 +1010,7 @@ public class FakeDataProfile {
            return true;
         }
         else if(privacySetting == Privacy.Setting.CONNECTIONS){
-           List<Contact> Connections = getAllContacts(userId); // Get a user connections
+           List<User> Connections = GetUsersConnections(userId); // Get a user connections
            if(Connections.contains(visitor)){
                return true;
            }
