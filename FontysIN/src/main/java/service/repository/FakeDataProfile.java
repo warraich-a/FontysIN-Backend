@@ -18,6 +18,8 @@ public class FakeDataProfile {
     private final List<Skill> skills = new ArrayList<>();
     private final List<Department> departments = new ArrayList<>();
     private final List<Location> locations = new ArrayList<>();
+    private final List<Work> working = new ArrayList<>();
+
 
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
@@ -84,15 +86,26 @@ public class FakeDataProfile {
         locations.add(loc2);
         locations.add(loc3);
 
+        //adding work to alist
+        Work work1 = new Work(1,6,"fontys", 2005);
+        Work work2 = new Work(2,5,"fontys", 2000);
+        Work work3 = new Work(3,4,"fontys", 2001);
+
+
+        working.add(work1);
+        working.add(work2);
+        working.add(work3);
+
+
           //public User(int id, String firstName, String lastName, UserType type, String email, String password,
               //  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber)
         // Users
-        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1);
-        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 1, 1, "364957", edu2);
-        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3);
-        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1);
-        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3);
-        User user6 = new User(6, "Michiel", "Koehorst", UserType.Teacher, "michiel@fontys.com", "1294", "0638489029", 5, 2, 3, "734695", edu6);
+        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1, null);
+        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 1, 1, "364957", edu2, null);
+        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3, null);
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1, null);
+        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, null);
+        User user6 = new User(6, "Michiel", "Koehorst", UserType.Teacher, "michiel@fontys.com", "1294", "0638489029", 5, 2, 3, "734695", edu6, work1);
 
         users.add(user1);
         users.add(user2);
@@ -183,6 +196,16 @@ public class FakeDataProfile {
         return null;
     }
 
+    // get work by its work year
+    public Work getWork(int year) {
+        for (Work w : working) {
+            if (w.getStartWorkYear() == year) {
+                return w;
+            }
+        }
+        return null;
+    }
+
     // get department by its name
     public Department getDepartment(String depName) {
         for (Department d : departments) {
@@ -233,6 +256,17 @@ public class FakeDataProfile {
         List<User> filetered = new ArrayList<>();
         for (User u : users) {
             if (u.getEducation().equals(education)) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
+    //5. filter users by study year
+    public List<User> getUsersByWorkYear(Work work) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getWork().equals(work)) {
                 filetered.add(u);
             }
         }

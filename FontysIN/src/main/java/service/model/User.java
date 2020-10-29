@@ -22,9 +22,12 @@ public class User {
     private UserType userType; // user's type
     private Education education;
 
+    private Work work;
+
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                 String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber, Education education) {
+                 String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber,
+                Education education, Work work) {
 
         this.id = id;
         this.firstName = firstName;
@@ -38,6 +41,7 @@ public class User {
         this.locationId = locationId;
         this.userNumber = userNumber;
         this.education = education;
+        this.work = work;
     }
 
     public User() {
@@ -139,6 +143,13 @@ public class User {
     }
     public void setEducation(Education education) {
         this.education = education;
+    }
+
+    public Work getWork() {
+        return work;
+    }
+    public void setWork(Work work) {
+        this.work = work;
     }
 
     //methods
