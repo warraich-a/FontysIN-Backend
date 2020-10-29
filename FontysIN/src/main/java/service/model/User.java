@@ -21,11 +21,11 @@ public class User {
     private String img; // user's image /* I will add this to the constracture later*/
     private UserType userType; // user's type
     private Education education;
-    private Working working;
+    private Work working;
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
                  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber,
-                Education education, Working working) {
+                Education education, Work working) {
 
         this.id = id;
         this.firstName = firstName;
@@ -126,10 +126,10 @@ public class User {
         this.education = education;
     }
 
-    public Working getWorking() {
+    public Work getWorking() {
         return working;
     }
-    public void setWorking(Working working) {
+    public void setWorking(Work working) {
         this.working = working;
     }
 

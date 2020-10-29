@@ -3,7 +3,7 @@ package service.model;
 import java.time.LocalDate;
 
 
-public class Working {
+public class Work {
     // fields
     private int id;
     private int profileId;
@@ -11,14 +11,14 @@ public class Working {
     private int startYearWork;
 
     // constracture
-    public Working(int id, int profileId, String company, int startYear) {
+    public Work(int id, int profileId, String company, int startYear) {
         this.id = id;
         this.profileId = profileId;
         this.company = company;
         this.startYearWork = startYear;
     }
 
-    public Working() {
+    public Work() {
 
     }
 

@@ -2,8 +2,6 @@ package service.repository;
 
 import service.model.*;
 
-import javax.management.Descriptor;
-import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ public class FakeDataProfile {
     private final List<Department> departments = new ArrayList<>();
     private final List<Location> locations = new ArrayList<>();
 
-    private final List<Working> workings = new ArrayList<>();
+    private final List<Work> workings = new ArrayList<>();
 
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
@@ -64,9 +62,9 @@ public class FakeDataProfile {
         educations.add(edu6);
 
         //adding work info to the workings list
-        Working work1 = new Working(1, 1, "Fontys", 101010);
-        Working work2 = new Working(2, 2, "Fontys", 2005);
-        Working work3 = new Working(3, 6, "Fontys ", 2000);
+        Work work1 = new Work(1, 1, "Fontys", 101010);
+        Work work2 = new Work(2, 2, "Fontys", 2005);
+        Work work3 = new Work(3, 4, "Fontys ", 2000);
 
         workings.add(work1);
         workings.add(work2);
@@ -103,7 +101,7 @@ public class FakeDataProfile {
         User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1, work1);
         User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2, 1, 1, "364957", edu2, work1);
         User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3, work1);
-        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1, work1);
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.FontysStaff, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1, work2);
         User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, work1);
         User user6 = new User(6, "Michiel", "Koehorst", UserType.Teacher, "michiel@fontys.com", "1294", "0638489029", 5, 2, 3, "734695", edu6, work3);
 
@@ -197,8 +195,8 @@ public class FakeDataProfile {
     }
 
     // get woking by its start work year
-    public Working getWorking(int year) {
-        for (Working w : workings) {
+    public Work getWorking(int year) {
+        for (Work w : workings) {
             if (w.getStartYearWork() == year) {
                 return w;
             }
@@ -263,7 +261,7 @@ public class FakeDataProfile {
     }
 
     //5. filter users by work year
-    public List<User> getUsersByWorkYear(Working working) {
+    public List<User> getUsersByWorkYear(Work working) {
         List<User> filetered = new ArrayList<>();
         for (User u : users) {
             if (u.getWorking().equals(working)) {

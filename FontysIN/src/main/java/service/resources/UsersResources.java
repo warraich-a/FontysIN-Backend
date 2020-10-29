@@ -3,11 +3,9 @@ package service.resources;
 import service.model.*;
 import service.repository.FakeDataProfile;
 
-import javax.json.bind.annotation.JsonbDateFormat;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -433,7 +431,7 @@ public class UsersResources {
 			users = fakeDataProfile.getUsersByStudyYear(e);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
-			Working w = fakeDataProfile.getWorking(workYear);
+			Work w = fakeDataProfile.getWorking(workYear);
 			users = fakeDataProfile.getUsersByWorkYear(w);
 		}
         else {
