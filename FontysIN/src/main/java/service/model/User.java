@@ -21,13 +21,11 @@ public class User {
     private String img; // user's image /* I will add this to the constracture later*/
     private UserType userType; // user's type
     private Education education;
-
-    private Work work;
-
+    private Working working;
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
                  String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber,
-                Education education, Work work) {
+                Education education, Working working) {
 
         this.id = id;
         this.firstName = firstName;
@@ -41,7 +39,7 @@ public class User {
         this.locationId = locationId;
         this.userNumber = userNumber;
         this.education = education;
-        this.work = work;
+        this.working = working;
     }
 
     public User() {
@@ -53,23 +51,6 @@ public class User {
     public void setUserID(int id) {
         this.id = id;
     }
-
-//    public String getUserFirstName() {
-//        return firstName;
-//    }
-//
-//    public void setUserFirstName(String name) {
-//        this.firstName = name;
-//    }
-//
-//    public String getUserLastName() {
-//        return lastName;
-//    }
-//
-//    public void setUserLastName(String name) {
-//        this.lastName = name;
-//    }
-
 
     public String getLastName() {
         return lastName;
@@ -145,11 +126,11 @@ public class User {
         this.education = education;
     }
 
-    public Work getWork() {
-        return work;
+    public Working getWorking() {
+        return working;
     }
-    public void setWork(Work work) {
-        this.work = work;
+    public void setWorking(Working working) {
+        this.working = working;
     }
 
     //methods
@@ -165,20 +146,4 @@ public class User {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "User ID: " + id +
-//                ", First Name: '" + firstName + '\'' +
-//                ", Last Name: '" + lastName + '\'' +
-//                ", Email: '" + email + '\'' +
-//                ", Password: '" + password + '\'' +
-//                ", Phone Number: " + phoneNumbar + '\'' +
-//                ", Address: " + addressId + '\'' +
-//                ", Location: " + locationId + '\'' +
-//                ", Department: " + departmentId + '\'' +
-//                ", User Number: " + userNumber + '\'' +
-//                '}';
-//    }
 }

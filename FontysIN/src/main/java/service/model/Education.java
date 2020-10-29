@@ -92,17 +92,17 @@ public class Education {
         this.descriptionEducation = descriptionEducation;
     }
 
-    @Override
-    public String toString() {
-        return "Education{" +
-                "id=" + id +
-                ", profileId=" + profileId +
-                ", school='" + school + '\'' +
-                ", startYearEducation=" + startYearEducation +
-                ", endYearEducation=" + endYearEducation +
-                ", degreeEducation='" + degreeEducation + '\'' +
-                ", fieldStudy='" + fieldStudy + '\'' +
-                ", descriptionEducation='" + descriptionEducation + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Education{" +
+//                "id=" + id +
+//                ", profileId=" + profileId +
+//                ", school='" + school + '\'' +
+//                ", startYearEducation=" + startYearEducation +
+//                ", endYearEducation=" + endYearEducation +
+//                ", degreeEducation='" + degreeEducation + '\'' +
+//                ", fieldStudy='" + fieldStudy + '\'' +
+//                ", descriptionEducation='" + descriptionEducation + '\'' +
+//                '}';
+//    }
 }
