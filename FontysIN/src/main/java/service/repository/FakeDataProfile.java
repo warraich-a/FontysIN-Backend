@@ -56,7 +56,7 @@ public class FakeDataProfile {
         Education edu3 = new Education(3, "SGD ", 2016, 2021, "Bechelors", "ICT", "Got good grades" );
         Education edu4 = new Education(4, "FoId", 2015, 2020, "Bechelors", "ICT", "Got good grades" );
         Education edu5 = new Education(5, "AGA ", 2017,2022, "Bechelors", "ICT", "Got good grades" );
-        Education edu6 = new Education(6, "Lahore",1997, 2005, "Bechelors", "ICT", "Got good grades" );
+        Education edu6 = new Education(6, "Lahore",101010, 2005, "Bechelors", "ICT", "Got good grades" );
 
 
 
@@ -111,9 +111,9 @@ public class FakeDataProfile {
         User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1, work1);
         User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, work1);
         User user6 = new User(6, "Ahmad", "Ahmad", UserType.FontysStaff, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
-        User user7 = new User(7, "Robin", "Bomers", UserType.FontysStaff, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu2,work2);
+        User user7 = new User(7, "Robin", "Bomers", UserType.FontysStaff, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu6,work2);
         User user8 = new User(8, "Kelvin", "Kanen", UserType.Teacher, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
-        User user9 = new User(9, "Ali", "Hweja", UserType.Teacher, "ali@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, work2);
+        User user9 = new User(9, "Ali", "Hweja", UserType.Teacher, "ali@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu6, work2);
 
 
         users.add(user1);
