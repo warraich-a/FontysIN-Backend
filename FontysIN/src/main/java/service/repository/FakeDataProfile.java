@@ -266,6 +266,16 @@ public class FakeDataProfile {
         return null;
     }
 
+    // get woking by its start work year
+    public Work getWorking(int year) {
+        for (Work w : workings) {
+            if (w.getStartYearWork() == year) {
+                return w;
+            }
+        }
+        return null;
+    }
+
     // get department by its name
     public Department getDepartment(String depName) {
         for (Department d : departments) {
@@ -316,6 +326,17 @@ public class FakeDataProfile {
         List<User> filetered = new ArrayList<>();
         for (User u : users) {
             if (u.getEducation().equals(education)) {
+                filetered.add(u);
+            }
+        }
+        return filetered;
+    }
+
+    //5. filter users by work year
+    public List<User> getUsersByWorkYear(Work working) {
+        List<User> filetered = new ArrayList<>();
+        for (User u : users) {
+            if (u.getWorking().equals(working)) {
                 filetered.add(u);
             }
         }

@@ -571,11 +571,12 @@ public class UsersResources {
 		}
 	}
 
-	//filter users by user type department, location and start study year(searching by filter)
-	@GET //GET at http://localhost:9090/users?type= Or ?department= Or ?location= Or ?studyYear=
+	//filter users by user type department, location, start study year and start work year (searching by filter)
+	@GET //GET at http://localhost:9090/users?type= Or ?department= Or ?location= Or ?studyYear= Or ?workingYear=
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
-									 @QueryParam("location") int locId, @QueryParam("studyYear") int year) {
+									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
+									 @QueryParam("workingYear") int workYear) {
 
 		List<User> users;
 		//If query parameter is missing return all users. Otherwise filter users by given user type
@@ -593,6 +594,10 @@ public class UsersResources {
 		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
 			Education e = fakeDataProfile.getEducation(year);
 			users = fakeDataProfile.getUsersByStudyYear(e);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
+			Work w = fakeDataProfile.getWorking(workYear);
+			users = fakeDataProfile.getUsersByWorkYear(w);
 		}
 		else {
 			users = fakeDataProfile.getUsers();
