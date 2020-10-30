@@ -20,6 +20,8 @@ public class FakeDataProfile {
     private final List<Department> departments = new ArrayList<>();
     private final List<Location> locations = new ArrayList<>();
     private final List<Privacy> privacyList = new ArrayList<>();
+    private final List<Work> workings = new ArrayList<>();
+
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
 
@@ -91,18 +93,27 @@ public class FakeDataProfile {
         locations.add(loc2);
         locations.add(loc3);
 
+        //adding work info to the workings list
+        Work work1 = new Work(1, 1, "Fontys", 101010);
+        Work work2 = new Work(2, 2, "Fontys", 2005);
+        Work work3 = new Work(3, 4, "Fontys ", 2000);
+
+        workings.add(work1);
+        workings.add(work2);
+        workings.add(work3);
+
 
         // Users
 
-        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1);
-        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2,1, 1, "364957", edu2);
-        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3);
-        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1);
-        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3);
-        User user6 = new User(6, "Ahmad", "Ahmad", UserType.Employee, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6);
-        User user7 = new User(7, "Robin", "Bomers", UserType.Employee, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu2);
-        User user8 = new User(8, "Kelvin", "Kanen", UserType.Teacher, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6);
-        User user9 = new User(9, "Ali", "Hweja", UserType.Teacher, "ali@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3);
+        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1, work1);
+        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2,1, 1, "364957", edu2, work1);
+        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3, work1);
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1, work1);
+        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, work1);
+        User user6 = new User(6, "Ahmad", "Ahmad", UserType.Employee, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
+        User user7 = new User(7, "Robin", "Bomers", UserType.Employee, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu2,work2);
+        User user8 = new User(8, "Kelvin", "Kanen", UserType.Teacher, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
+        User user9 = new User(9, "Ali", "Hweja", UserType.Teacher, "ali@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, work2);
 
 
         users.add(user1);
