@@ -110,8 +110,8 @@ public class FakeDataProfile {
         User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3, work1);
         User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1, work1);
         User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, work1);
-        User user6 = new User(6, "Ahmad", "Ahmad", UserType.Employee, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
-        User user7 = new User(7, "Robin", "Bomers", UserType.Employee, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu2,work2);
+        User user6 = new User(6, "Ahmad", "Ahmad", UserType.FontysStaff, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
+        User user7 = new User(7, "Robin", "Bomers", UserType.FontysStaff, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu2,work2);
         User user8 = new User(8, "Kelvin", "Kanen", UserType.Teacher, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
         User user9 = new User(9, "Ali", "Hweja", UserType.Teacher, "ali@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, work2);
 
