@@ -1,7 +1,7 @@
 package service.model;
 
 public enum UserType {
-    Employee,
+    FontysStaff,
     Student,
     Teacher
 }

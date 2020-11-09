@@ -23,7 +23,13 @@ public class CommentResources {
         GenericEntity<List<Comments>> entity = new GenericEntity<>(fakeDataStore.getCommentsList()) {  };
         return Response.ok(entity).build();
     }
-
+    @GET
+    @Path("post/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllCommentsByPostId(@PathParam("id") int stNr) {
+        GenericEntity<List<Comments>> entity = new GenericEntity<>(fakeDataStore.getCommentsListByPost(stNr)) {  };
+        return Response.ok(entity).build();
+    }
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -36,6 +42,7 @@ public class CommentResources {
             return Response.ok(comment).build();
         }
     }
+
 
     @GET
     @Path("{id}/content")
@@ -62,25 +69,26 @@ public class CommentResources {
     @Path("")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_PLAIN})
-    public Response createComment(Comments comment) {
-        if (!fakeDataStore.addComment(comment)){
-            String entity =  "Post with same comment id " + comment.getId() + " already exists.";
+    public Response createComment(Comments comm) {
+        if (!fakeDataStore.addComment(comm)){
+            String entity =  "comm with same comm id " + comm.getId() + " already exists.";
             return Response.status(Response.Status.CONFLICT).entity(entity).build();
         } else {
-            String url = uriInfo.getAbsolutePath() + "/" + comment.getId();
+            String url = uriInfo.getAbsolutePath() + "/" + comm.getId();
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response updateComment(Comments comment) {
-        if (fakeDataStore.updateComment(comment)) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.TEXT_PLAIN})
+    public Response updateComment(Comments comm) {
+        if (fakeDataStore.updateComment(comm)) {
             return Response.noContent().build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid comment id.").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid comm id.").build();
         }
     }
 }

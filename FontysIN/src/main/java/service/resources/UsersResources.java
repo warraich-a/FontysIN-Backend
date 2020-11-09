@@ -1,12 +1,17 @@
 package service.resources;
 
 import service.model.*;
+import service.model.dto.ContactDTO;
+import service.model.dto.UserDTO;
 import service.repository.FakeDataProfile;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+//import org.json.simple.JSONObject;
+
 
 @Path("users")
 public class UsersResources {
@@ -14,56 +19,52 @@ public class UsersResources {
 	@Context
 	private UriInfo uriInfo;
 
-	//return Users with specific id
-	@GET //GET at http://localhost:9099/users/3
-	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUsersPath(@PathParam("id") int id) {
-		User u = fakeDataProfile.getUser(id);
-		if (u == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid user ID!.").build();
-		} else {
-			return Response.ok(u).build();
-		}
-	}
+	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
-	//filter users by user type (searching by filter)
-	@GET //GET at http://localhost:9099/users?type=
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getFilteredUsers(@QueryParam("type") UserType type) {
-
-		List<User> users;
-		//If query parameter is missing return all users. Otherwise filter users by given user type
-		if (uriInfo.getQueryParameters().containsKey("type")) {
-			User u = fakeDataProfile.getUserType(type);
-			users = fakeDataProfile.getUsersByUserType(type);
-		} else {
-			users = fakeDataProfile.getUsers();
-		}
-		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
-		};
-		return Response.ok(entity).build();
-	}
-
-
-	// CONTACTS
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
-	public Response getContacts(@PathParam("id") int id) {
-		List<User> contacts = fakeDataProfile.getContacts(id);
+	public Response getContacts(@PathParam("id") int id) { // returns users list or contacts list?
 
-		GenericEntity<List<User>> entity = new GenericEntity<>(contacts) { };
+		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
+
+		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
 		return Response.ok(entity).build();
 	}
 
-	@POST //POST at http://localhost:XXXX/users/1/2
-	@Path("{userId}/{friendId}")
-	public Response createContact(@PathParam("userId") int userId, @PathParam("friendId") int friendId) {
-		int contactId = fakeDataProfile.createContact(userId, friendId);
+	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
+	@Path("{id}/acceptedContacts")
+	public Response getAcceptedContacts(@PathParam("id") int id) { // returns users list or contacts list?
+
+		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
+
+		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
+
+		return Response.ok(entity).build();
+	}
+
+	@GET //GET at http://localhost:XXXX/users/1/requests
+	@Path("{id}/requests")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getContactsRequests(@PathParam("id") int id) { // returns users list or contacts list?
+		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
+
+		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(requests) { };
+
+		return Response.ok(entity).build();
+	}
+
+	@POST //POST at http://localhost:XXXX/users/1
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{userId}/contacts")
+	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
+
+		int contactId = fakeDataProfile.createContact(contact);
 		if (contactId < 0){ // already friends
-			String entity =  "You and user with id " + friendId + " are already connected.";
+			//String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
+			String entity =  "You and user with id " + contact.getFriend().getId() + " are already connected.";
+
 			return Response.status(Response.Status.CONFLICT).entity(entity).build();
 		} else {
 			String url = uriInfo.getAbsolutePath() + "/" + contactId; // url of the created contact
@@ -72,59 +73,63 @@ public class UsersResources {
 		}
 	}
 
-	@DELETE //DELETE at http://localhost:XXXX/users/1/2
-	@Path("{userId}/{friendId}")
-	public Response deleteContact(@PathParam("userId") int userId, @PathParam("friendId") int friendId) {
-		fakeDataProfile.deleteContact(userId, friendId);
+	@DELETE //DELETE at http://localhost:XXXX/users/1/contacts/2
+	@Path("{userId}/contacts/{contactId}")
+	public Response deleteContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId) {
+		fakeDataProfile.deleteContact(userId, contactId);
 
 		return Response.noContent().build();
 	}
 
-	// Accept contact
-	@PATCH //PATCH at http://localhost:XXXX/users/1/2
-	@Path("{friendId}/{userId}")
-	public Response acceptContact(@PathParam("friendId") int friendId, @PathParam("userId") int userId) {
-		fakeDataProfile.acceptContact(friendId, userId);
+	// Update contact (used to Accept contact)
+	@PATCH //PATCH at http://localhost:XXXX/users/1/contacts/2
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{userId}/contacts/{contactId}")
+	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact) {
+		fakeDataProfile.updateContact(contactId, contact);
 
 		return Response.noContent().build();
 	}
 
+	@GET
+	@Path("{userId}")
+	public Response getUser(@PathParam("userId") int userId) {
+		UserDTO user = fakeDataProfile.getUserDTO(userId);
 
-	//to get all the experiences
-	@GET //GET at http://localhost:XXXX/profile/experiences
-	@Path("{userId}/profiles/{profileId}")
+		if(user != null){
+			return Response.ok(user).build(); // Status ok 200, return user
+		}
+		else {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid user id").build();
+		}
+	}
+	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("p/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetProfile(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
+	public Response GeUser(@PathParam("userId") int userId) {
+		User user = fakeDataProfile.getUser(userId);
+
+		return Response.ok(user).build();
+	}
+
+
+
+	@GET //GET at http://localhost:XXXX/profile/experiences
+	@Path("{userId}/profiles/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetProfile(@PathParam("userId") int userId) {
 
 		List<Profile> foundProfiles = fakeDataProfile.GetProfileByUserId(userId); // getting the profile by userid
 
 		if (foundProfiles == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid student number.").build();
 		} else {
+			GenericEntity<List<Profile>> entity = new GenericEntity<>(foundProfiles) {
+			};
 
-			for (Profile p: foundProfiles){
-				if(p.getId() == profileId){
-					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(profileId);
-					List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(profileId);
-					List<About> aboutByProfileId = fakeDataProfile.GetAboutByProfileID(profileId);
-					List<Skill> skillByProfileId = fakeDataProfile.GetSkillByProfileID(profileId);
-
-					// to combine different types of lists into 1
-					List<Object> combined = new ArrayList<>();
-					combined.add(educationByProfileId);
-					combined.add(experienceByProfileId);
-					combined.add(aboutByProfileId);
-					combined.add(skillByProfileId);
-
-					// to show a list correctly
-					GenericEntity<List<Object>> entity = new GenericEntity<>(combined) {
-					};
-
-					return Response.ok(entity).build();
-				}
-			}
-
-			return Response.status(Response.Status.BAD_REQUEST).entity("Profile does not exist.").build();
+			return Response.ok(entity).build();
 
 		}
 	}
@@ -144,7 +149,7 @@ public class UsersResources {
 
 			for (Experience e: foundExperiences){
 				if(e.getId() == experienceId){
-					List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(profileId);
+					List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(userId,profileId);
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
@@ -169,7 +174,7 @@ public class UsersResources {
 	public Response GetEducation(@PathParam("userId") int userId, @PathParam("profileId") int profileId
 			, @PathParam("educationId") int educationId) {
 
-		List<Education> foundEducations = fakeDataProfile.GetEducationsByProfileId(profileId); // getting the education by profile id
+		List<Education> foundEducations = fakeDataProfile.GetEducationsByProfileId(userId ,profileId); // getting the education by profile id
 
 		if(foundEducations == null){
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid profile id.").build();
@@ -178,7 +183,7 @@ public class UsersResources {
 
 			for (Education e: foundEducations){
 				if(e.getId() == educationId){
-					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(profileId);
+					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(userId,profileId);
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
@@ -203,6 +208,8 @@ public class UsersResources {
 	public Response GetSkill(@PathParam("userId") int userId, @PathParam("profileId") int profileId
 			, @PathParam("skillId") int skillId) {
 
+
+
 		List<Skill> foundSkills = fakeDataProfile.GetSkillsByProfileId(profileId); // getting the education by profile id
 
 		if(foundSkills == null){
@@ -212,7 +219,7 @@ public class UsersResources {
 
 			for (Skill s: foundSkills){
 				if(s.getId() == skillId){
-					List<Skill> skillByProfileId = fakeDataProfile.GetSkillByProfileID(profileId);
+					List<Skill> skillByProfileId = fakeDataProfile.GetSkillsByProfileId(profileId);
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
@@ -235,43 +242,75 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
-		List<Experience> experiences = fakeDataProfile.GetExperiencesByProfileID(profileId1);
+	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+		List<Experience> experienceByProfileId = fakeDataProfile.GetExperiencesByProfileID(userId, profileId);
 
-		GenericEntity<List<Experience>> entity = new GenericEntity<>(experiences) {
-		};
-		return Response.ok(entity).build();
+		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EXPERIENCE);
+
+		if(AllowToSee){
+			if (experienceByProfileId == null) {
+				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+			} else {
+				GenericEntity<List<Experience>> entity = new GenericEntity<>(experienceByProfileId) {
+				};
+				return Response.ok(entity).build();
+			}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+		}
+
 	}
 //
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/educations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
-		List<Education> educations = fakeDataProfile.GetEducationsByProfileId(profileId1);
-
-		GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
-		};
-		return Response.ok(entity).build();
+	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+		List<Education> educations = fakeDataProfile.GetEducationsByProfileId(userId, profileId);
+		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EDUCATION);
+		if(AllowToSee){
+		if (educations == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		} else {
+			GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
+			};
+			return Response.ok(entity).build();
+		}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+		}
 	}
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/abouts")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response  GetAbouts(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
-		List<About> abouts = fakeDataProfile.GetAboutByProfileID(profileId1);
+	public Response  GetAbouts(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
+		List<About> abouts = fakeDataProfile.GetAboutByProfileID(userId, profileId);
 
-		GenericEntity<List<About>> entity = new GenericEntity<>(abouts) {
-		};
-		return Response.ok(entity).build();
+		if (abouts == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		} else {
+			GenericEntity<List<About>> entity = new GenericEntity<>(abouts) {
+			};
+			return Response.ok(entity).build();
+		}
 	}
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/skills")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId1) {
-		List<Skill> skills = fakeDataProfile.GetSkillByProfileID(profileId1);
+	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+		List<Skill> skills = fakeDataProfile.GetSkillsByProfileId(userId, profileId);
+		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.SKILLS);
+		if(AllowToSee){
+			if (skills == null) {
+				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+			} else {
+				GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
+				};
+				return Response.ok(entity).build();
+			}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+		}
 
-		GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
-		};
-		return Response.ok(entity).build();
 	}
 
 	// to add a new experience
@@ -375,6 +414,65 @@ public class UsersResources {
 			return Response.created(uri).build();
 		}
 	}
+
+	@GET
+	@Path("profile/education/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getEducationById(@PathParam("id") int id) {
+		Education e = fakeDataProfile.getEducationID(id);
+		if (e == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid education id.").build();
+		} else {
+			return Response.ok(e).build();
+		}
+	}
+	@GET
+	@Path("profile/experience/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getExperienceById(@PathParam("id") int id) {
+		Experience e = fakeDataProfile.getExperienceID(id);
+		if (e == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid experience id.").build();
+		} else {
+			return Response.ok(e).build();
+		}
+	}
+	@GET
+	@Path("profile/about/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAboutById(@PathParam("id") int id) {
+		About a = fakeDataProfile.GetAboutById(id);
+		if (a == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(a).build();
+		}
+	}
+
+	@GET
+	@Path("user/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserById(@PathParam("id") int id) {
+		User u = fakeDataProfile.GetUserById(id);
+		if (u == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(u).build();
+		}
+	}
+	@GET
+	@Path("address/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAddressById(@PathParam("id") int id) {
+		Address a = fakeDataProfile.GetAddressById(id);
+		if (a == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(a).build();
+		}
+	}
+
+
 	@PUT //PUT at http://localhost:XXXX/users/profile/about/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/about/{id}")
@@ -409,7 +507,7 @@ public class UsersResources {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
 		}
 	}
-	@PUT //PUT at http://localhost:XXXX/profile/information
+	@PUT //PUT at http://localhost:XXXX/profile/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}")
 	public Response updateUser(@PathParam("userId") int id, User user) {
@@ -419,5 +517,93 @@ public class UsersResources {
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
 		}
+	}
+	@PUT //PUT at http://localhost:9099/users/address/id
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/address/{id}")
+	public Response updateAddress(@PathParam("id") int id, Address a) {
+		// Idempotent method. Always update (even if the resource has already been updated before).
+		if (fakeDataProfile.updateAddress(id, a)) {
+			return Response.noContent().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
+		}
+	}
+	@GET
+	@Path("privacy/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPrivacyById(@PathParam("id") int id) {
+		Privacy a = fakeDataProfile.GetPrivacyById(id);
+		if (a == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(a).build();
+		}
+	}
+	@PUT //PUT at http://localhost:9099/users/address/id
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/privacy/{id}")
+	public Response updatePrivacy(@PathParam("id") int id, Privacy p) {
+		// Idempotent method. Always update (even if the resource has already been updated before).
+		if (fakeDataProfile.updatePrivacy(id, p)) {
+			return Response.noContent().build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
+		}
+	}
+
+	@POST //POST at http://localhost:XXXX/profile/experience
+	@Path("{userId}/profiles/new")
+	public Response AddProfile(@PathParam("userId") int userId, Profile p) {
+
+
+		if (!fakeDataProfile.AddProfile(userId, p))
+		{
+			String entity =  "Profile Exists";
+			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
+			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+		} else {
+			int Id = p.getId();
+//			String url = uriInfo.getAbsolutePath() + "/" + p.getId(); // url of the created student
+			URI uri = URI.create(String.valueOf(Id));
+			return Response.ok(p.getId()).build();
+			//return Response.con;
+		}
+	}
+
+	//filter users by user type department, location, start study year and start work year (searching by filter)
+	@GET //GET at http://localhost:9090/users?type= Or ?department= Or ?location= Or ?studyYear= Or ?workingYear=
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
+									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
+									 @QueryParam("workingYear") int workYear) {
+
+		List<User> users;
+		//If query parameter is missing return all users. Otherwise filter users by given user type
+		if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
+			User u = fakeDataProfile.getUserType(type);
+			users = fakeDataProfile.getUsersByUserType(type);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
+			//Department department = fakeDataProfile.getDepartment(depName);
+			users = fakeDataProfile.getUsersByDepartment(depId);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
+			users = fakeDataProfile.getUsersByLocation(locId);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
+			Education e = fakeDataProfile.getEducation(year);
+			users = fakeDataProfile.getUsersByStudyYear(e);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
+			Work w = fakeDataProfile.getWorking(workYear);
+			users = fakeDataProfile.getUsersByWorkYear(w);
+		}
+		else {
+			users = fakeDataProfile.getUsers();
+		}
+		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
+		};
+		return Response.ok(entity).build();
 	}
 }

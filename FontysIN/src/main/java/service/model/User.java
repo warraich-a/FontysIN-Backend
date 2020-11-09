@@ -13,107 +13,158 @@ public class User {
     private String lastName; // user's last name
     private String email; // user's email
     private String password; // user's password
-    private String phoneNumbar; // user's phone number
+    private String phoneNumber; // user's phone number
     private int addressId; // user's address
     private int locationId; // user's location
     private int departmentId; // user's department
     private String userNumber; // user's number
     private String img; // user's image /* I will add this to the constracture later*/
-    private UserType userType;
+    private UserType userType; // user's type
+    private Education education; // user's education
+    private Work working; // user's work
 
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                 String phoneNumbar, int addressId, int locationId, int departmentId, String userNumber) {
-
+                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber, Education education,
+                Work work) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.userType = type;
         this.password = password;
-        this.phoneNumbar = phoneNumbar;
+        this.phoneNumber = phoneNumber;
         this.addressId = addressId;
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
+        this.education = education;
+        this.working = work;
     }
 
     public User() {
     }
 
     //getters and setters
-    public int getUserID() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setUserID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getUserFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setUserFirstName(String name) {
-        this.firstName = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getUserLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setUserLastName(String name) {
-        this.lastName = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUserPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setUserPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(String userNumber) {
+        this.userNumber = userNumber;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(UserType type) {
-        this.userType = type;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
-    public String getUserEmail() {
-        return email;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setUserEmail(String mail) {
-        this.email = mail;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getUserPassword() {
-        return password;
+    public Education getEducation() {
+        return education;
     }
 
-    public void setUserPassword(String pass) {
-        this.password = pass;
+    public void setEducation(Education education) {
+        this.education = education;
     }
 
-    public String getUserPhoneNumber() {
-        return phoneNumbar;
+    public Work getWorking() {
+        return working;
     }
 
-    public void setUserPhoneNumber(String phone) {
-        this.phoneNumbar = phone;
+    public void setWorking(Work working) {
+        this.working = working;
     }
-
-    public int getUserAddress() {
-        return addressId;
-    }
-    public void setUserAddress(int addressId) { this.addressId = addressId; }
-
-    public int getUserLocation() {
-        return locationId;
-    }
-    public void setUserLocation(int locationId) { this.locationId = locationId; }
-
-    public int getUserDepartment() { return departmentId; }
-    public void setUserDepartment(int departmentId) { this.departmentId = departmentId; }
-
-    public String getUserNumber() { return userNumber; }
-    public void setUserNumber(String userNumber) { this.userNumber = userNumber; }
-
-    public String getUserImage() { return img; }
-    public void setUserImage(String img) { this.img = img; }
 
     //methods
     @Override
@@ -129,19 +180,19 @@ public class User {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "User ID: " + id +
-                ", First Name: '" + firstName + '\'' +
-                ", Last Name: '" + lastName + '\'' +
-                ", Email: '" + email + '\'' +
-                ", Password: '" + password + '\'' +
-                ", Phone Number: " + phoneNumbar + '\'' +
-                ", Address: " + addressId + '\'' +
-                ", Location: " + locationId + '\'' +
-                ", Department: " + departmentId + '\'' +
-                ", User Number: " + userNumber + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "User ID: " + id +
+//                ", First Name: '" + firstName + '\'' +
+//                ", Last Name: '" + lastName + '\'' +
+//                ", Email: '" + email + '\'' +
+//                ", Password: '" + password + '\'' +
+//                ", Phone Number: " + phoneNumber + '\'' +
+//                ", Address: " + addressId + '\'' +
+//                ", Location: " + locationId + '\'' +
+//                ", Department: " + departmentId + '\'' +
+//                ", User Number: " + userNumber + '\'' +
+//                '}';
+//    }
 }
