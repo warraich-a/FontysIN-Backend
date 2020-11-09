@@ -12,7 +12,7 @@ public class Posts {
     private int id;
     private int userId;
     private String content;
-    private LocalDate date;
+    private Date date;
     private Blob image;
 
 
@@ -20,7 +20,7 @@ public class Posts {
 
     }
 
-    public Posts(int id, int userId, String content, LocalDate date, Blob image){
+    public Posts(int id, int userId, String content, Date date, Blob image){
         setId(id);
         setUserId(userId);
         setContent(content);
@@ -28,7 +28,7 @@ public class Posts {
         setImage(image);
 
     }
-    public Posts(int id, int userId, String content, LocalDate date){
+    public Posts(int id, int userId, String content, Date date){
         setId(id);
         setUserId(userId);
         setContent(content);
@@ -57,10 +57,10 @@ public class Posts {
         this.content = content;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

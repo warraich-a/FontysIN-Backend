@@ -5,23 +5,27 @@ import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.Date;
 
+
 @XmlRootElement
 public class Comments {
     private int id;
     private int userId;
     private int postId;
     private String content;
-    private LocalDate date;
+    private Date date;
+    private String username;
 
     public Comments(){
 
     }
-    public Comments(int id, int userId, int postId, String content, LocalDate date){
+    public Comments(int id, int userId, int postId, String content, Date date){
         setId(id);
         setUserId(userId);
         setContent(content);
         setDate(date);
         setPostId(postId);
+
+
 
     }
     public int getId() {
@@ -52,10 +56,10 @@ public class Comments {
         this.content = content;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
