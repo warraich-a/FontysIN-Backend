@@ -261,7 +261,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         Boolean exist;
         exist = false;
 
-        String sql = "INSERT INTO experiences ( profileId, title, company, location, startDate, endDate, description) VALUES (?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO experiences ( profileId, title, company, location, employmentType, startDate, endDate, description) VALUES (?,?,?,?,?,?,?,?) ";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
         try {
@@ -269,9 +269,10 @@ public class JDBCProfileRepository extends JDBCRepository {
                 preparedStatement.setString(2, experience.getTitle());
                 preparedStatement.setString(3, experience.getCompany());
                 preparedStatement.setString(4, experience.getLocation());
-                preparedStatement.setInt(5,  experience.getStartDateExperience());
-                preparedStatement.setInt(6,  experience.getEndDateExperience());
-                preparedStatement.setString(7,  experience.getDescriptionExperience());
+                preparedStatement.setString(5, String.valueOf(experience.getEmploymentType()));
+                preparedStatement.setInt(6,  experience.getStartDateExperience());
+                preparedStatement.setInt(7,  experience.getEndDateExperience());
+                preparedStatement.setString(8,  experience.getDescriptionExperience());
                 preparedStatement.executeUpdate();
 
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
