@@ -262,7 +262,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         exist = false;
 
         String sql = "INSERT INTO experiences ( profileId, title, company, location, employmentType, startDate, endDate, description) VALUES (?,?,?,?,?,?,?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         try {
                 preparedStatement.setInt(1, experience.getProfileId());
@@ -275,10 +275,10 @@ public class JDBCProfileRepository extends JDBCRepository {
                 preparedStatement.setString(8,  experience.getDescriptionExperience());
                 preparedStatement.executeUpdate();
 
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, "value");
+//                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//                ps.setString(1, "value");
                 connection.setAutoCommit(false);
-                ps.close();
+//                ps.close();
                 connection.commit();
                 connection.close();
 
@@ -301,7 +301,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         exist = false;
 
         String sql = "INSERT INTO educations ( profileId, school, startYear, endYear, degree, fieldStudy, description) VALUES (?,?,?,?,?,?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
 
         try {
             preparedStatement.setInt(1, education.getProfileId());
@@ -313,17 +313,17 @@ public class JDBCProfileRepository extends JDBCRepository {
             preparedStatement.setString(7,  education.getDescriptionEducation());
             preparedStatement.executeUpdate();
 
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, "value");
+//            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//            ps.setString(1, "value");
             connection.setAutoCommit(false);
-            ps.close();
+//            ps.close();
             connection.commit();
             connection.close();
 
             return true;
 
         } catch (SQLException throwable) {
-            throw new DatabaseException("Cannot create new experience.", throwable);
+            throw new DatabaseException("Cannot create new education.", throwable);
         }
         finally {
             preparedStatement.close();
@@ -335,14 +335,12 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         for (Skill p: getSkills(userId, skill.getProfileId())) {
-          if(p.getId() == skill.getProfileId()){
-              if (p.getName().equals(skill.getName())) {
-                  return false;
-              }
+          if (p.getName().equals(skill.getName())) {
+              return false;
           }
         }
         String sql = "INSERT INTO skills ( profileId, name) VALUES (?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
 
         try {
             preparedStatement.setInt(1, skill.getProfileId());
@@ -350,17 +348,14 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
 
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, "value");
             connection.setAutoCommit(false);
-            ps.close();
             connection.commit();
             connection.close();
 
             return true;
 
         } catch (SQLException throwable) {
-            throw new DatabaseException("Cannot create new experience.", throwable);
+            throw new DatabaseException("Cannot create new skill.", throwable);
         }
         finally {
             preparedStatement.close();
@@ -374,7 +369,6 @@ public class JDBCProfileRepository extends JDBCRepository {
         int id = 0;
         boolean exist;
         exist = false;
-        String generatedColumns[] = { "ID" };
 
         for (Profile p: getProfile(userId)) {
             if (p.getUserId() == userId) {
