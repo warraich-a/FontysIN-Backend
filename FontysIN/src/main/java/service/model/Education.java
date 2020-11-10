@@ -27,6 +27,17 @@ public class Education {
         this.descriptionEducation = description;
     }
 
+    public Education(int id, int profileId, String school, int startYear, int endYear, String degree, String fieldStudy, String description) {
+        this.id = id;
+        this.profileId = profileId;
+        this.school = school;
+        this.startYearEducation = startYear;
+        this.endYearEducation = endYear;
+        this.degreeEducation = degree;
+        this.fieldStudy = fieldStudy;
+        this.descriptionEducation = description;
+    }
+
 
     public Education() {
         this.id = idSeeder;

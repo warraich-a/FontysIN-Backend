@@ -600,12 +600,12 @@ public class FakeDataProfile {
         for (Profile p: profiles) {
             if (p.getUserId() == userId) {
                 for (Skill sk: skills){
-                    if(sk.getProfileId() == profileId) {
-                        if (sk.getName().equals(s.getName())) {
+                        if(sk.getProfileId() == profileId) {
+                            if (sk.getName().equals(s.getName())) {
 
-                            return false;
+                                return false;
+                            }
                         }
-                    }
                 }
             }
         }

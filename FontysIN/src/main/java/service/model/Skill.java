@@ -12,6 +12,11 @@ public class Skill {
         this.profileId = profileId;
         this.name = name;
     }
+    public Skill(int id, int profileId, String name) {
+        this.id = id;
+        this.profileId = profileId;
+        this.name = name;
+    }
     public Skill(){
         this.id = idSeeder;
         idSeeder++;

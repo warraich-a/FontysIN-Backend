@@ -12,6 +12,11 @@ public class About {
         this.profileId = profileId;
         this.content = content;
     }
+    public About(int id, int profileId, String content) {
+        this.id = id;
+        this.profileId = profileId;
+        this.content = content;
+    }
 
 
     public About() {
