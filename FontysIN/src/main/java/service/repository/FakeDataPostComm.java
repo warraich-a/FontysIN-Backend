@@ -2,8 +2,9 @@ package service.repository;
 
 
 
-import service.model.Comments;
 import service.model.Posts;
+import service.model.Comments;
+
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -15,17 +16,40 @@ public class FakeDataPostComm{
 
     private final List<Comments> commentsList = new ArrayList<>();
     private final List<Posts> postsList = new ArrayList<>();
+    public static int lastPostId = 0;
+    public static int lastCommId = 0;
 
     public FakeDataPostComm(){
-        postsList.add(new Posts(1,1,"First post!!", new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
-        postsList.add(new Posts(2,1,"Wow!!Second post!", new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+        //postsList.add(new Posts(1,1,"First post!!", new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+        //postsList.add(new Posts(2,1,"Wow!!Second post!", new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
 
-        commentsList.add(new Comments(1,1,1,"Good post",new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
-        commentsList.add(new Comments(2,1,2,"Bad post",new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+        //commentsList.add(new Comments(1,1,1,"Good post",new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+       // commentsList.add(new Comments(2,1,2,"Bad post",new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+
+        for(Posts post : postsList) {
+            if(post.getId() >= lastPostId){
+                lastPostId = post.getId();
+            }
+        }
+        for(Comments comm : commentsList) {
+            if(comm.getId() >= lastCommId){
+                lastCommId = comm.getId();
+            }
+        }
+
     }
 
     public List<Comments> getCommentsList() {
         return commentsList;
+    }
+    public List<Comments> getCommentsListByPost(int id) {
+        List<Comments> commlist = new ArrayList<>();
+        for(Comments comments : commentsList) {
+            if(comments.getPostId() == id){
+                commlist.add(comments);
+            }
+        }
+        return commlist;
     }
     public Comments getComment(int id){
         for(Comments comments : commentsList) {
@@ -45,8 +69,11 @@ public class FakeDataPostComm{
     }
 
     public boolean addComment(Comments comments) {
-        if (this.getComment(comments.getId()) != null){
-            return false;
+        comments.setId(lastCommId+1);
+        for(Comments comm : commentsList) {
+            if(comm.getId() >= lastCommId){
+                lastCommId = comm.getId();
+            }
         }
         commentsList.add(comments);
         return true;
@@ -67,6 +94,16 @@ public class FakeDataPostComm{
         return postsList;
     }
 
+    public List<Posts> getPostsListbyUserId(int id){
+        List<Posts> newPosts = new ArrayList<>();
+        for(Posts posts : postsList) {
+            if(posts.getUserId() == id){
+                newPosts.add(posts);
+            }
+        }
+        return newPosts;
+    }
+
     public Posts getPost(int id){
         for(Posts posts : postsList) {
             if(posts.getId() == id){
@@ -85,8 +122,11 @@ public class FakeDataPostComm{
     }
 
     public boolean addPost(Posts post) {
-        if (this.getPost(post.getId()) != null){
-            return false;
+        post.setId(lastPostId+1);
+        for(Posts p : postsList) {
+            if(p.getId() >= lastPostId){
+                lastPostId = p.getId();
+            }
         }
         postsList.add(post);
         return true;

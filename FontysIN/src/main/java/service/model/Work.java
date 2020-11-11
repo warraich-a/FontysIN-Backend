@@ -1,7 +1,5 @@
 package service.model;
 
-import java.time.LocalDate;
-
 
 public class Work {
     // fields
@@ -9,10 +7,13 @@ public class Work {
     private int profileId;
     private String company;
     private int startYearWork;
+    private static int idSeeder = 1;
+
 
     // constracture
     public Work(int id, int profileId, String company, int startYear) {
-        this.id = id;
+        this.id = idSeeder;
+        idSeeder++;
         this.profileId = profileId;
         this.company = company;
         this.startYearWork = startYear;
