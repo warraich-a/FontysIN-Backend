@@ -338,5 +338,126 @@ public class PersistenceController {
         }
     }
 
+    public Experience getExp(int Id){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            Experience exp = (Experience) profileRepository.getExperienceById(Id);
+
+            System.out.println("ok");
+
+            return exp;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public Education getEdu(int Id){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            Education exp = (Education) profileRepository.getEducationById(Id);
+
+            System.out.println("ok");
+
+            return exp;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public About getAbo(int Id){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            About exp = (About) profileRepository.getAboutById(Id);
+
+            System.out.println("ok");
+
+            return exp;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public Address getAddress(int Id){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            Address exp = (Address) profileRepository.getAddressById(Id);
+
+            System.out.println("ok");
+
+            return exp;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public Privacy getPrivacy(int Id){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            Privacy exp = (Privacy) profileRepository.getPrivacyById(Id);
+
+            System.out.println("ok");
+
+            return exp;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public boolean updateEdu(Education edu){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            return profileRepository.updateEducation(edu);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updateExp(Experience edu){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            return profileRepository.updateExperience(edu);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updateAbo(About edu){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            return profileRepository.updateAbout(edu);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updateAd(Address edu){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            return profileRepository.updateAddress(edu);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updatePri(Privacy edu){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            return profileRepository.updatePrivacy(edu);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updatePh(User edu){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            return profileRepository.updatePhone(edu);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }

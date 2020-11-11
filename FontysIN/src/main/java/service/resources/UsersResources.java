@@ -19,6 +19,7 @@ import java.util.List;
 @Path("users")
 public class UsersResources {
 	private final FakeDataProfile fakeDataProfile = FakeDataProfile.getInstance();
+	PersistenceController persistenceController = new PersistenceController();
 	@Context
 	private UriInfo uriInfo;
 
@@ -438,7 +439,7 @@ public class UsersResources {
 	@Path("profile/education/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getEducationById(@PathParam("id") int id) {
-		Education e = fakeDataProfile.getEducationID(id);
+		Education e = persistenceController.getEdu(id);
 		if (e == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid education id.").build();
 		} else {
@@ -449,7 +450,7 @@ public class UsersResources {
 	@Path("profile/experience/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getExperienceById(@PathParam("id") int id) {
-		Experience e = fakeDataProfile.getExperienceID(id);
+		Experience e = persistenceController.getExp(id);
 		if (e == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid experience id.").build();
 		} else {
@@ -460,7 +461,7 @@ public class UsersResources {
 	@Path("profile/about/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAboutById(@PathParam("id") int id) {
-		About a = fakeDataProfile.GetAboutById(id);
+		About a = persistenceController.getAbo(id);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -472,7 +473,7 @@ public class UsersResources {
 	@Path("user/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserById(@PathParam("id") int id) {
-		User u = fakeDataProfile.GetUserById(id);
+		User u = persistenceController.getUser(id);
 		if (u == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -483,7 +484,7 @@ public class UsersResources {
 	@Path("address/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAddressById(@PathParam("id") int id) {
-		Address a = fakeDataProfile.GetAddressById(id);
+		Address a = persistenceController.getAddress(id);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -495,9 +496,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:XXXX/users/profile/about/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/about/{id}")
-	public Response updateAbout(@PathParam("id") int id, About a) {
+	public Response updateAbout(About a) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateAbout(id, a)) {
+		if (persistenceController.updateAbo(a)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid about.").build();
@@ -507,9 +508,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:XXXX/users/profile/education/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/education/{id}")
-	public Response updateEducation(@PathParam("id") int id, Education e) {
+	public Response updateEducation(Education e) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateEducation(id, e)) {
+		if (persistenceController.updateEdu(e)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid education.").build();
@@ -518,9 +519,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:XXXX/users/profile/experience/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/experience/{id}")
-	public Response updateExperience(@PathParam("id") int id, Experience e) {
+	public Response updateExperience(Experience e) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateExperience(id, e)) {
+		if (persistenceController.updateExp(e)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
@@ -529,9 +530,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:XXXX/profile/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}")
-	public Response updateUser(@PathParam("userId") int id, User user) {
+	public Response updateUserPhone(User user) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateUser(id, user)) {
+		if (persistenceController.updatePh(user)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
@@ -540,9 +541,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:9099/users/address/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/address/{id}")
-	public Response updateAddress(@PathParam("id") int id, Address a) {
+	public Response updateAddress(Address a) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateAddress(id, a)) {
+		if (persistenceController.updateAd(a)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
@@ -552,7 +553,7 @@ public class UsersResources {
 	@Path("privacy/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPrivacyById(@PathParam("id") int id) {
-		Privacy a = fakeDataProfile.GetPrivacyById(id);
+		Privacy a = persistenceController.getPrivacy(id);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -562,9 +563,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:9099/users/address/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/privacy/{id}")
-	public Response updatePrivacy(@PathParam("id") int id, Privacy p) {
+	public Response updatePrivacy(Privacy p) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updatePrivacy(id, p)) {
+		if (persistenceController.updatePri(p)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();

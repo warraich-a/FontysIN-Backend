@@ -24,6 +24,13 @@ private int id;
         experienceSetting = Setting.EVERYONE;
         skillSetting = Setting.EVERYONE;
     }
+    public Privacy(int id, int userId, Setting edu, Setting exp, Setting ski) {
+        this.id = id;
+        this.userId = userId;
+        educationSetting = edu;
+        experienceSetting = exp;
+        skillSetting = ski;
+    }
 
     public int getId() {
         return id;
