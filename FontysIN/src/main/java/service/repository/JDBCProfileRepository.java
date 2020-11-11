@@ -497,6 +497,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
                 String email = resultSet.getString("email");
+                String userType = resultSet.getString("userType");
                 String password = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phoneNr");
                 int addressId = resultSet.getInt("addressId");
@@ -504,9 +505,22 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                UserType r = UserType.Teacher;
+                if (userType == "student")
+                {
+                    r = UserType.Student;
+                }
+                else if (userType == "employee")
+                {
+                    r = UserType.Teacher;
+                }
+                else  if (userType == "admin")
+                {
+                    r = UserType.FontysStaff;
+                }
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                User u = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+
                 users.add(u);
             }
 
@@ -583,34 +597,30 @@ public class JDBCProfileRepository extends JDBCRepository {
     // Delete education in profile page
     public void deleteEducation(int userId, int profileId, int educationId) throws DatabaseException {
 
-        Education eId = GetEducationById(educationId);
-
         Connection connection = this.getDatabaseConnection();
 
-        for (User u: getUsersList()){
-            for (Profile p: getProfiles()){
-                for (Education e: getEducationsList()){
+//        for (User u: getUsersList()){
+//            for (Profile p: getProfiles()){
+//                for (Education e: getEducationsList()){
+//
+//                    if (u.getId()==userId && p.getId()==profileId && e.getId()==educationId){
+                        String sql = "Delete FROM educations where id = ? AND profileId = ?";
+                        try {
+                            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                            preparedStatement.setInt(1,educationId);
+                            preparedStatement.setInt(2,profileId);
 
-                    if (u.getId()==userId && p.getId()==profileId && e.getId()==educationId){
-                        this.getEducationsList().remove(educationId);
-                    }
-
-                }
-            }
-        }
-
-        String sql = "Delete FROM educations where id = ? AND profileId = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,educationId);
-            preparedStatement.setInt(2,profileId);
-
-            preparedStatement.executeUpdate();
-            connection.commit();
-        }
-        catch (SQLException throwable){
-            throw  new DatabaseException("Cannot delete education.", throwable);
-        }
+                            preparedStatement.executeUpdate();
+                            connection.commit();
+                        }
+                        catch (SQLException throwable){
+                            throw  new DatabaseException("Cannot delete education.", throwable);
+                        }
+//                    }
+//
+//                }
+//            }
+//        }
 
     }
 }

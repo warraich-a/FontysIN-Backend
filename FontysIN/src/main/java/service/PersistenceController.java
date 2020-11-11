@@ -352,6 +352,7 @@ public class PersistenceController {
 
         try{
             profileRepository.deleteEducation(userId, profileId, educationId);
+            System.out.println("deleted");
             return true;
         }
         catch (DatabaseException e) {
