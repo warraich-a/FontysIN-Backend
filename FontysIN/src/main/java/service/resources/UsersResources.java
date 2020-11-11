@@ -182,7 +182,8 @@ public class UsersResources {
 	public Response GetEducation(@PathParam("userId") int userId, @PathParam("profileId") int profileId
 			, @PathParam("educationId") int educationId) {
 
-		List<Education> foundEducations = fakeDataProfile.GetEducationsByProfileId(userId ,profileId); // getting the education by profile id
+		PersistenceController controller = new PersistenceController();
+		List<Education> foundEducations = controller.getEducations(userId, profileId); // getting the education by profile id
 
 		if(foundEducations == null){
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid profile id.").build();
@@ -191,7 +192,7 @@ public class UsersResources {
 
 			for (Education e: foundEducations){
 				if(e.getId() == educationId){
-					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(userId,profileId);
+					List<Education> educationByProfileId = controller.getEducations(userId,profileId);
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
@@ -377,11 +378,22 @@ public class UsersResources {
 
 	// DELETE 1//2/3///
 	//delete user's education with specific id
+//	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
+//	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
+//	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+//										@PathParam("educationID") int educationID) {
+//		fakeDataProfile.deleteEducation(userId, profileID, educationID);
+//
+//		return Response.noContent().build();
+//	}
+
 	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
 	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
 	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										@PathParam("educationID") int educationID) {
-		fakeDataProfile.deleteEducation(userId, profileID, educationID);
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteEducation(userId,profileID,educationID);
 
 		return Response.noContent().build();
 	}
