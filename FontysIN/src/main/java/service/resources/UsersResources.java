@@ -609,7 +609,8 @@ public class UsersResources {
 		}
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
 			//Department department = fakeDataProfile.getDepartment(depName);
-			users = fakeDataProfile.getUsersByDepartment(depId);
+//			users = fakeDataProfile.getUsersByDepartment(depId);
+			users = controller.UserFilteredWithDepartment(depId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
 //			users = fakeDataProfile.getUsersByLocation(locId);

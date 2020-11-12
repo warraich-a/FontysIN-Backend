@@ -448,6 +448,26 @@ public class PersistenceController {
         }
     }
 
+    /**
+     * Show/print the users with the given department id
+     * @param id of the user to be shown.
+     */
+    //show book by user type
+    public List<User> UserFilteredWithDepartment(int id){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByDepartment(id);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 }
