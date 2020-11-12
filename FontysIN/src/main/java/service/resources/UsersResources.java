@@ -598,11 +598,14 @@ public class UsersResources {
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
 									 @QueryParam("workingYear") int workYear) {
 
+		PersistenceController controller = new PersistenceController();
+
 		List<User> users;
 		//If query parameter is missing return all users. Otherwise filter users by given user type
 		if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
-			User u = fakeDataProfile.getUserType(type);
-			users = fakeDataProfile.getUsersByUserType(type);
+//			User u = fakeDataProfile.getUserType(type);
+//			users = fakeDataProfile.getUsersByUserType(type);
+			users = controller.UserFilteredWithType(type);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
 			//Department department = fakeDataProfile.getDepartment(depName);

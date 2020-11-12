@@ -408,6 +408,26 @@ public class PersistenceController {
         }
     }
 
+    /**
+     * Show/print the users with the given type code
+     * @param type of the user to be shown.
+     */
+    //show user by user type code
+    public List<User> UserFilteredWithType(UserType type){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByType(type);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 }
