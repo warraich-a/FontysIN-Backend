@@ -1,5 +1,8 @@
 package service;
 
+import service.model.User;
+import service.model.UserType;
+
 import java.net.URI;
 import java.time.LocalDate;
 
@@ -14,6 +17,8 @@ class DataMain {
 
         PersistenceController controller = new PersistenceController();
 
-        controller.DeleteEducation(5,6,12);
+//        controller.DeleteEducation(5,6,12);
+
+        controller.UserFilteredWithType(UserType.Student);
     }
 }

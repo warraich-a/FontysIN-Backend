@@ -338,6 +338,9 @@ public class PersistenceController {
         }
     }
 
+
+    /******************RANIM*********************/
+
     //delete education
     /**
      * This method deletes the education record from the DB for given education id and profileId.
@@ -404,6 +407,26 @@ public class PersistenceController {
         catch (DatabaseException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * Show/print the book with given type code
+     * @param type of the book to be shown.
+     */
+    //show book by language code
+    public List<User> UserFilteredWithType(UserType type){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByType(type);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
