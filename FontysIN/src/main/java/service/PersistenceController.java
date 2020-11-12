@@ -471,6 +471,26 @@ public class PersistenceController {
         }
     }
 
+    /**
+     * Show/print the users with the given start study year
+     * @param year of the user to be shown.
+     */
+    //show book by start study year
+    public List<User> UserFilteredWithStartStudyYear(int year){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByStartStudyYear(year);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 }

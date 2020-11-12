@@ -56,6 +56,13 @@ public class User {
         this.userNumber = userNumber;
     }
 
+    public User(int id, String firstName, String lastName, UserType type) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userType = type;
+    }
+
 
     public User() {
     }

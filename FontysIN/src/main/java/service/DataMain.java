@@ -21,6 +21,7 @@ class DataMain {
 
 //        controller.UserFilteredWithType(UserType.Student);
 //        controller.UserFilteredWithLocation(1);
-        controller.UserFilteredWithDepartment(2);
+//        controller.UserFilteredWithDepartment(2);
+        controller.UserFilteredWithStartStudyYear(2012);
     }
 }
