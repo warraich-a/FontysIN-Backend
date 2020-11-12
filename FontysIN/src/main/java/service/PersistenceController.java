@@ -411,16 +411,37 @@ public class PersistenceController {
     }
 
     /**
-     * Show/print the book with given type code
-     * @param type of the book to be shown.
+     * Show/print the users with the given type
+     * @param type of the user to be shown.
      */
-    //show book by language code
+    //show book by user type
     public List<User> UserFilteredWithType(UserType type){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
             List<User> users = profileRepository.getUsersByType(type);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * Show/print the users with the given location id
+     * @param id of the user to be shown.
+     */
+    //show book by user type
+    public List<User> UserFilteredWithLocation(int id){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByLocation(id);
             System.out.println(users);
             return users;
         }

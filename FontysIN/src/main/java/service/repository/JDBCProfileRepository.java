@@ -665,6 +665,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
    /**************Ranim******************************Filter users**************************/
+
    //get all users with the given user type from data base
    public List<User> getUsersByType(UserType type) throws DatabaseException {
 
@@ -703,5 +704,44 @@ public class JDBCProfileRepository extends JDBCRepository {
        }
        return filtered;
    }
+
+    //get all users with the given location id from data base
+    public List<User> getUsersByLocation(int lId) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT * FROM users WHERE locationId = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, lId); // set user fontys location parameter
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
 
 }

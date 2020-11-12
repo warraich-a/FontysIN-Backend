@@ -642,7 +642,8 @@ public class UsersResources {
 			users = fakeDataProfile.getUsersByDepartment(depId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
-			users = fakeDataProfile.getUsersByLocation(locId);
+//			users = fakeDataProfile.getUsersByLocation(locId);
+			users = controller.UserFilteredWithLocation(locId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
 			Education e = fakeDataProfile.getEducation(year);

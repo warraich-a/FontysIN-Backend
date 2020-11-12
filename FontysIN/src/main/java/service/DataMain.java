@@ -19,6 +19,7 @@ class DataMain {
 
 //        controller.DeleteEducation(5,6,12);
 
-        controller.UserFilteredWithType(UserType.Student);
+//        controller.UserFilteredWithType(UserType.Student);
+        controller.UserFilteredWithLocation(1);
     }
 }
