@@ -470,4 +470,24 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
 
     }
+
+    // Delete experience in profile page
+    public void deleteExperience(int userId, int profileId, int experienceId) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM experiences where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,experienceId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete experience.", throwable);
+        }
+
+    }
 }

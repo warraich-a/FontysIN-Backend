@@ -365,12 +365,24 @@ public class UsersResources {
 		}
 	}
 
+//	//delete user's experince with specific id
+//	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
+//	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}") // userId'/profiles/profileId/experiences/experienceId
+//	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+//										 @PathParam("experinceID") int experinceID) {
+//		fakeDataProfile.deleteExperience(userId, profileID, experinceID);
+//
+//		return Response.noContent().build();
+//	}
+
 	//delete user's experince with specific id
 	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
-	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}") // userId'/profiles/profileId/experiences/experienceId
+	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}")
 	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										 @PathParam("experinceID") int experinceID) {
-		fakeDataProfile.deleteExperience(userId, profileID, experinceID);
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteExperience(userId,profileID,experinceID);
 
 		return Response.noContent().build();
 	}

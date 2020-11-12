@@ -362,5 +362,28 @@ public class PersistenceController {
         }
     }
 
+    //delete experience
+    /**
+     * This method deletes the experience record from the DB for given experience id and profileId.
+     * @param userId
+     * @param experienceId
+     * @param profileId
+     * @throws DatabaseException
+     */
+    public boolean DeleteExperience(int userId, int profileId, int experienceId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try{
+            profileRepository.deleteExperience(userId, profileId, experienceId);
+            System.out.println("deleted");
+            return true;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }
