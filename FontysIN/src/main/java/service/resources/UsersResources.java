@@ -410,11 +410,22 @@ public class UsersResources {
 	}
 
 	//delete user's skill with specific id
+//	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
+//	@Path("{userId}/profiles/{profileID}/skills/{skillID}")
+//	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+//									@PathParam("skillID") int skillID) {
+//		fakeDataProfile.deleteSkill(userId, profileID, skillID);
+//
+//		return Response.noContent().build();
+//	}
+
 	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
-	@Path("{userId}/profiles/{profileID}/skills/{skillID}")
+	@Path("{userId}/profiles/{profileID}/skills/{skillId}")
 	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-									@PathParam("skillID") int skillID) {
-		fakeDataProfile.deleteSkill(userId, profileID, skillID);
+									@PathParam("skillId") int skillId) {
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteSkill(userId,profileID,skillId);
 
 		return Response.noContent().build();
 	}

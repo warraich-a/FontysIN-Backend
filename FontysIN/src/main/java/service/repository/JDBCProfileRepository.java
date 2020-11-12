@@ -490,4 +490,25 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
 
     }
+
+    // Delete skill in profile page
+    public void deleteSkill(int userId, int profileId, int skillId) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM skills where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,skillId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete skill.", throwable);
+        }
+
+    }
+
 }
