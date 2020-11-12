@@ -622,8 +622,9 @@ public class UsersResources {
 			users = controller.UserFilteredWithStartStudyYear(year);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
-			Work w = fakeDataProfile.getWorking(workYear);
-			users = fakeDataProfile.getUsersByWorkYear(w);
+//			Work w = fakeDataProfile.getWorking(workYear);
+//			users = fakeDataProfile.getUsersByWorkYear(w);
+			users = controller.UserFilteredWithStartWorkYear(workYear);
 		}
 		else {
 			users = fakeDataProfile.getUsers();
