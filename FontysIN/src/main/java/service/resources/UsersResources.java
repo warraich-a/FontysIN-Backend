@@ -603,27 +603,18 @@ public class UsersResources {
 		List<User> users;
 		//If query parameter is missing return all users. Otherwise filter users by given user type
 		if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
-//			User u = fakeDataProfile.getUserType(type);
-//			users = fakeDataProfile.getUsersByUserType(type);
 			users = controller.UserFilteredWithType(type);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
-			//Department department = fakeDataProfile.getDepartment(depName);
-//			users = fakeDataProfile.getUsersByDepartment(depId);
 			users = controller.UserFilteredWithDepartment(depId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
-//			users = fakeDataProfile.getUsersByLocation(locId);
 			users = controller.UserFilteredWithLocation(locId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
-//			Education e = fakeDataProfile.getEducation(year);
-//			users = fakeDataProfile.getUsersByStudyYear(e);
 			users = controller.UserFilteredWithStartStudyYear(year);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
-//			Work w = fakeDataProfile.getWorking(workYear);
-//			users = fakeDataProfile.getUsersByWorkYear(w);
 			users = controller.UserFilteredWithStartWorkYear(workYear);
 		}
 		else {
