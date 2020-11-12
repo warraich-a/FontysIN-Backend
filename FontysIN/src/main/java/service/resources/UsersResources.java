@@ -365,16 +365,6 @@ public class UsersResources {
 		}
 	}
 
-//	//delete user's experince with specific id
-//	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
-//	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}") // userId'/profiles/profileId/experiences/experienceId
-//	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-//										 @PathParam("experinceID") int experinceID) {
-//		fakeDataProfile.deleteExperience(userId, profileID, experinceID);
-//
-//		return Response.noContent().build();
-//	}
-
 	//delete user's experince with specific id
 	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
 	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}")
@@ -387,17 +377,7 @@ public class UsersResources {
 		return Response.noContent().build();
 	}
 
-	// DELETE 1//2/3///
 	//delete user's education with specific id
-//	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
-//	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
-//	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-//										@PathParam("educationID") int educationID) {
-//		fakeDataProfile.deleteEducation(userId, profileID, educationID);
-//
-//		return Response.noContent().build();
-//	}
-
 	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
 	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
 	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
@@ -410,15 +390,6 @@ public class UsersResources {
 	}
 
 	//delete user's skill with specific id
-//	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
-//	@Path("{userId}/profiles/{profileID}/skills/{skillID}")
-//	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-//									@PathParam("skillID") int skillID) {
-//		fakeDataProfile.deleteSkill(userId, profileID, skillID);
-//
-//		return Response.noContent().build();
-//	}
-
 	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
 	@Path("{userId}/profiles/{profileID}/skills/{skillId}")
 	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
