@@ -384,6 +384,29 @@ public class PersistenceController {
         }
     }
 
+    //delete skill
+    /**
+     * This method deletes the experience record from the DB for given skill id and profileId.
+     * @param userId
+     * @param skillId
+     * @param profileId
+     * @throws DatabaseException
+     */
+    public boolean DeleteSkill(int userId, int profileId, int skillId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try{
+            profileRepository.deleteSkill(userId, profileId, skillId);
+            System.out.println("deleted");
+            return true;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 
 }
