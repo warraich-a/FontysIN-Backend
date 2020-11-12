@@ -449,4 +449,25 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
     }
 
+    /******************Ranim******************Deleting data in profile page*********************/
+
+    // Delete education in profile page
+    public void deleteEducation(int userId, int profileId, int educationId) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM educations where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,educationId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete education.", throwable);
+        }
+
+    }
 }

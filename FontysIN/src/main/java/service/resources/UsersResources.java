@@ -377,11 +377,22 @@ public class UsersResources {
 
 	// DELETE 1//2/3///
 	//delete user's education with specific id
+//	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
+//	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
+//	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
+//										@PathParam("educationID") int educationID) {
+//		fakeDataProfile.deleteEducation(userId, profileID, educationID);
+//
+//		return Response.noContent().build();
+//	}
+
 	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
 	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
 	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										@PathParam("educationID") int educationID) {
-		fakeDataProfile.deleteEducation(userId, profileID, educationID);
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteEducation(userId,profileID,educationID);
 
 		return Response.noContent().build();
 	}

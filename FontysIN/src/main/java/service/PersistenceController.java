@@ -339,4 +339,28 @@ public class PersistenceController {
     }
 
 
+    //delete education
+    /**
+     * This method deletes the education record from the DB for given education id and profileId.
+     * @param userId
+     * @param educationId
+     * @param profileId
+     * @throws DatabaseException
+     */
+    public boolean DeleteEducation(int userId, int profileId, int educationId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try{
+            profileRepository.deleteEducation(userId, profileId, educationId);
+            System.out.println("deleted");
+            return true;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
