@@ -23,7 +23,7 @@ class DataMain {
 //        controller.UserFilteredWithLocation(1);
 //        controller.UserFilteredWithDepartment(2);
 //        controller.UserFilteredWithStartStudyYear(2012);
-        controller.UserFilteredWithStartWorkYear(2013);
+        controller.UserFilteredWithStartWorkYear(2011);
 
     }
 }

@@ -835,7 +835,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
                 "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber " +
                 "FROM ((experiences INNER JOIN profiles ON experiences.profileId = profiles.id) INNER JOIN users ON profiles.userId = users.id) " +
-                "WHERE company = 'Fontys' AND startDate = ?";
+                "WHERE company = 'Fontys' AND users.userType != 'Student' AND startDate = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, year); // set user start study year parameter
