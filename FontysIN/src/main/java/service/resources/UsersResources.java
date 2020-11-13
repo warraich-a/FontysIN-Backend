@@ -631,8 +631,13 @@ public class UsersResources {
 		PersistenceController controller = new PersistenceController();
 
 		List<User> users;
+		//If query parameter is missing return all users. Otherwise filter users by given user type location and department and start study year
+		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("studyYear")
+				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start study year
+			users = controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(type, year, locId, depId);
+		}
 		//If query parameter is missing return all users. Otherwise filter users by given user type location and department
-		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
 		&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
 			users = controller.UserFilterByTypeLocationAndDepartment(type, locId, depId);
 		}

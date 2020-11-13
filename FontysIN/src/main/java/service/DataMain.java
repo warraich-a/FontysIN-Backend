@@ -25,7 +25,9 @@ class DataMain {
 //        controller.UserFilteredWithStartStudyYear(2012);
 //        controller.UserFilteredWithStartWorkYear(2011);
 
-        controller.UserFilterByTypeLocationAndDepartment(UserType.Student, 1, 2);
+//        controller.UserFilterByTypeLocationAndDepartment(UserType.Student, 1, 2);
+
+        controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType.Student, 2012,1,2);
 
 
     }
