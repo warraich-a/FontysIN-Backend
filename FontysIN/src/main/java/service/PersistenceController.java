@@ -416,7 +416,7 @@ public class PersistenceController {
      * Show/print the users with the given type
      * @param type of the user to be shown.
      */
-    //show user by user type type
+    //show user by user type
     public List<User> UserFilteredWithType(UserType type){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -436,7 +436,7 @@ public class PersistenceController {
      * Show/print the users with the given location id
      * @param id of the user to be shown.
      */
-    //show book by user type
+    //show book by location
     public List<User> UserFilteredWithLocation(int id){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -456,7 +456,7 @@ public class PersistenceController {
      * Show/print the users with the given department id
      * @param id of the user to be shown.
      */
-    //show book by user type
+    //show book by department
     public List<User> UserFilteredWithDepartment(int id){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -497,7 +497,7 @@ public class PersistenceController {
      * Show/print the users with the given start work year
      * @param year of the user to be shown.
      */
-    //show book by start study year
+    //show book by start work year
     public List<User> UserFilteredWithStartWorkYear(int year){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -522,13 +522,37 @@ public class PersistenceController {
      * @param dId
      * of the user to be shown.
      */
-    //show book by start study year
+    //show book by user type location and department
     public List<User> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
             List<User> users = profileRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Show/print the users with the given usertype start study year location and department
+     * @param type
+     * @param year
+     * @param lId
+     * @param dId
+     * of the user to be shown.
+     */
+    //show book by location user type department and start study year
+    public List<User> UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType type, int year, int lId, int dId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(type, year, lId, dId);
             System.out.println(users);
             return users;
         }
