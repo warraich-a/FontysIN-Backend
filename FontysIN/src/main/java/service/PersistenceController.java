@@ -337,6 +337,255 @@ public class PersistenceController {
         }
     }
 
+    /******************RANIM***********************Delete data in the profile page**************************/
+
+    //delete education
+    /**
+     * This method deletes the education record from the DB for given education id and profileId.
+     * @param userId
+     * @param educationId
+     * @param profileId
+     * @throws DatabaseException
+     */
+    public boolean DeleteEducation(int userId, int profileId, int educationId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try{
+            profileRepository.deleteEducation(userId, profileId, educationId);
+            System.out.println("deleted");
+            return true;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //delete experience
+    /**
+     * This method deletes the experience record from the DB for given experience id and profileId.
+     * @param userId
+     * @param experienceId
+     * @param profileId
+     * @throws DatabaseException
+     */
+    public boolean DeleteExperience(int userId, int profileId, int experienceId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try{
+            profileRepository.deleteExperience(userId, profileId, experienceId);
+            System.out.println("deleted");
+            return true;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //delete skill
+    /**
+     * This method deletes the experience record from the DB for given skill id and profileId.
+     * @param userId
+     * @param skillId
+     * @param profileId
+     * @throws DatabaseException
+     */
+    public boolean DeleteSkill(int userId, int profileId, int skillId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try{
+            profileRepository.deleteSkill(userId, profileId, skillId);
+            System.out.println("deleted");
+            return true;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /******************RANIM***********************Filter Search One bu One**************************/
+
+
+    /**
+     * Show/print the users with the given type
+     * @param type of the user to be shown.
+     */
+    //show user by user type
+    public List<User> UserFilteredWithType(UserType type){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByType(type);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Show/print the users with the given location id
+     * @param id of the user to be shown.
+     */
+    //show book by location
+    public List<User> UserFilteredWithLocation(int id){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByLocation(id);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Show/print the users with the given department id
+     * @param id of the user to be shown.
+     */
+    //show book by department
+    public List<User> UserFilteredWithDepartment(int id){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByDepartment(id);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Show/print the users with the given start study year
+     * @param year of the user to be shown.
+     */
+    //show book by start study year
+    public List<User> UserFilteredWithStartStudyYear(int year){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByStartStudyYear(year);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * Show/print the users with the given start work year
+     * @param year of the user to be shown.
+     */
+    //show book by start work year
+    public List<User> UserFilteredWithStartWorkYear(int year){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByStartWorkYear(year);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /******************RANIM***********************Combined Filter Search**************************/
+
+    /**
+     * Show/print the users with the given usertype location and department
+     * @param type
+     * @param lId
+     * @param dId
+     * of the user to be shown.
+     */
+    //show book by user type location and department
+    public List<User> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Show/print the users with the given usertype start study year location and department
+     * @param type
+     * @param year
+     * @param lId
+     * @param dId
+     * of the user to be shown.
+     */
+    //show book by location user type department and start study year
+    public List<User> UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType type, int year, int lId, int dId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(type, year, lId, dId);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Show/print the users with the given usertype start work year location and department
+     * @param type
+     * @param year
+     * @param lId
+     * @param dId
+     * of the user to be shown.
+     */
+    //show book by location user type department and start study year
+    public List<User> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(type, year, lId, dId);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
     /* ------------------------------------------------- Contats -----------------------------------------------------------------*/
     public List<ContactDTO> getAllContactsDTO(int id) {

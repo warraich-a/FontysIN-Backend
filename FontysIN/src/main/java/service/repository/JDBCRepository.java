@@ -17,6 +17,7 @@ class JDBCRepository {
 
         try {
             Connection connection = DriverManager.getConnection(url,username,password);
+            connection.setAutoCommit(false);
             return connection;
         } catch (SQLException e) {
             throw new IllegalStateException("Driver failed " + url+".",e);

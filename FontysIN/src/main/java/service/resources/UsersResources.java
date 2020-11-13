@@ -385,31 +385,36 @@ public class UsersResources {
 
 	//delete user's experince with specific id
 	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
-	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}") // userId'/profiles/profileId/experiences/experienceId
+	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}")
 	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										 @PathParam("experinceID") int experinceID) {
-		fakeDataProfile.deleteExperience(userId, profileID, experinceID);
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteExperience(userId,profileID,experinceID);
 
 		return Response.noContent().build();
 	}
 
-	// DELETE 1//2/3///
 	//delete user's education with specific id
 	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
 	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
 	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										@PathParam("educationID") int educationID) {
-		fakeDataProfile.deleteEducation(userId, profileID, educationID);
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteEducation(userId,profileID,educationID);
 
 		return Response.noContent().build();
 	}
 
 	//delete user's skill with specific id
 	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
-	@Path("{userId}/profiles/{profileID}/skills/{skillID}")
+	@Path("{userId}/profiles/{profileID}/skills/{skillId}")
 	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-									@PathParam("skillID") int skillID) {
-		fakeDataProfile.deleteSkill(userId, profileID, skillID);
+									@PathParam("skillId") int skillId) {
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteSkill(userId,profileID,skillId);
 
 		return Response.noContent().build();
 	}
@@ -611,26 +616,39 @@ public class UsersResources {
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
 									 @QueryParam("workingYear") int workYear) {
 
+		PersistenceController controller = new PersistenceController();
+
 		List<User> users;
+		//If query parameter is missing return all users. Otherwise filter users by given user type fontys staff location and department and start work year
+		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
+				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
+			users = controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(type, workYear, locId, depId);
+		}
+		//If query parameter is missing return all users. Otherwise filter users by given user type location and department and start study year
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("studyYear")
+				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start study year
+			users = controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(type, year, locId, depId);
+		}
+		//If query parameter is missing return all users. Otherwise filter users by given user type location and department
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
+				&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
+			users = controller.UserFilterByTypeLocationAndDepartment(type, locId, depId);
+		}
 		//If query parameter is missing return all users. Otherwise filter users by given user type
-		if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
-			User u = fakeDataProfile.getUserType(type);
-			users = fakeDataProfile.getUsersByUserType(type);
+		else if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
+			users = controller.UserFilteredWithType(type);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
-			//Department department = fakeDataProfile.getDepartment(depName);
-			users = fakeDataProfile.getUsersByDepartment(depId);
+			users = controller.UserFilteredWithDepartment(depId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
-			users = fakeDataProfile.getUsersByLocation(locId);
+			users = controller.UserFilteredWithLocation(locId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
-			Education e = fakeDataProfile.getEducation(year);
-			users = fakeDataProfile.getUsersByStudyYear(e);
+			users = controller.UserFilteredWithStartStudyYear(year);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
-			Work w = fakeDataProfile.getWorking(workYear);
-			users = fakeDataProfile.getUsersByWorkYear(w);
+			users = controller.UserFilteredWithStartWorkYear(workYear);
 		}
 		else {
 			users = fakeDataProfile.getUsers();
