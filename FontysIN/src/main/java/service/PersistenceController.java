@@ -338,6 +338,7 @@ public class PersistenceController {
         }
     }
 
+    /******************RANIM***********************Delete data in the profile page**************************/
 
     //delete education
     /**
@@ -407,6 +408,9 @@ public class PersistenceController {
             return false;
         }
     }
+
+    /******************RANIM***********************Filter Search One bu One**************************/
+
 
     /**
      * Show/print the users with the given type
@@ -500,6 +504,31 @@ public class PersistenceController {
 
         try {
             List<User> users = profileRepository.getUsersByStartWorkYear(year);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /******************RANIM***********************Combined Filter Search**************************/
+
+    /**
+     * Show/print the users with the given usertype location and department
+     * @param type
+     * @param lId
+     * @param dId
+     * of the user to be shown.
+     */
+    //show book by start study year
+    public List<User> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
             System.out.println(users);
             return users;
         }
