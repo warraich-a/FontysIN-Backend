@@ -587,7 +587,13 @@ public class PersistenceController {
 
 
 
-    /* ------------------------------------------------- Contats -----------------------------------------------------------------*/
+    /* ------------------------------------------------- Contacts -----------------------------------------------------------------*/
+
+    /**
+     *
+     * @param id
+     * @return List of all contacts of type ContactDTO
+     */
     public List<ContactDTO> getAllContactsDTO(int id) {
         ContactsRepository contactsRepository = new ContactsRepository();
 
@@ -604,6 +610,12 @@ public class PersistenceController {
         }
     }
 
+
+    /**
+     *
+     * @param id
+     * @return List of accepted contacts of type ContactDTO
+     */
     public List<ContactDTO> getAcceptedContactsDTO(int id) {
         System.out.println("Accepted contact repository");
 
@@ -623,6 +635,11 @@ public class PersistenceController {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return List of contacts requests of type ContactDTO
+     */
     public List<ContactDTO> getContactsRequestsDTO(int id) {
         ContactsRepository contactsRepository = new ContactsRepository();
 
@@ -639,21 +656,31 @@ public class PersistenceController {
     }
 
 
-    // Not working???????????
+    /**
+     *
+     * @param contact
+     * @return Create new contact
+     */
     public int createContact(ContactDTO contact) {
         ContactsRepository contactsRepository = new ContactsRepository();
 
+        int contactId = -1;
         try {
-            return contactsRepository.createContact(contact);
+            contactId =  contactsRepository.createContact(contact);
         }
         catch (DatabaseException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
-            return -1;
         }
+        return contactId;
     }
 
-    // REJECT DOESN:T WORK?????????????????
+    /**
+     *
+     * @param userId
+     * @param contactId
+     * @return Delete a contact
+     */
     public boolean deleteContact(int userId, int contactId) {
         ContactsRepository contactsRepository = new ContactsRepository();
 
@@ -666,8 +693,11 @@ public class PersistenceController {
         }
     }
 
-
-    // TEST??????????????
+    /**
+     *
+     * @param contactId
+     * @param contact
+     */
     public void updateContact(int contactId, Contact contact) {
         ContactsRepository contactsRepository = new ContactsRepository();
 
@@ -679,6 +709,11 @@ public class PersistenceController {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return User of type UserDTO
+     */
     public UserDTO getUserDTO(int id) {
         ContactsRepository contactsRepository = new ContactsRepository();
 
@@ -690,6 +725,6 @@ public class PersistenceController {
             return null;
         }
     }
-    /* ------------------------------------------------- Contats -----------------------------------------------------------------*/
+    /* ------------------------------------------------- Contacts -----------------------------------------------------------------*/
 
 }

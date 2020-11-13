@@ -74,6 +74,8 @@ public class UsersResources {
 		PersistenceController controller = new PersistenceController();
 		int contactId = controller.createContact(contact);
 
+		System.out.println("Contact id route " + contactId);
+
 		if (contactId < 0){ // already friends
 			//String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
 			String entity =  "You and user with id " + contact.getFriend().getId() + " are already connected.";

@@ -16,8 +16,9 @@ public class ContactsRepository extends JDBCRepository {
 
         String sql = "INSERT INTO contacts (userId, friendId, isAccepted) VALUES (?, ?, false)";
 
-        int contactId = -1;
         try {
+            int contactId = -1;
+
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, createdContactDTO.getUser().getId());
             statement.setInt(2, createdContactDTO.getFriend().getId());
@@ -26,11 +27,8 @@ public class ContactsRepository extends JDBCRepository {
 
             ResultSet resultSet = statement.getGeneratedKeys();
 
-            if(resultSet.next()) {
+            if(resultSet != null && resultSet.next()) {
                 contactId = resultSet.getInt(1);
-
-                connection.commit();
-                connection.close();
             }
 
             connection.commit();
