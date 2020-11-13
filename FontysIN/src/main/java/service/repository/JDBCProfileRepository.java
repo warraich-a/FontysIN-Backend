@@ -806,5 +806,54 @@ public class JDBCProfileRepository extends JDBCRepository {
         return filtered;
     }
 
+    //get all users with the given user type, location and department from data base
+    public List<User> getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(UserType type, int year, int lId, int dId) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
+                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber " +
+                "FROM ((experiences INNER JOIN profiles ON experiences.profileId = profiles.id) INNER JOIN users " +
+                "ON profiles.userId = users.id)" +
+                " WHERE company = 'Fontys' AND users.userType = ? AND users.locationId = ? " +
+                "And users.departmentId = ? AND startDate = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, UserType.FontysStaff.name()); // set user start study year parameter
+            statement.setInt(2, lId); // set user location id parameter
+            statement.setInt(3, dId); // set user department id parameter
+            statement.setInt(4, year); // set user start work year parameter
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
 
 }

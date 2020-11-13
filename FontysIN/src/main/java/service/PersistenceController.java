@@ -562,6 +562,30 @@ public class PersistenceController {
         }
     }
 
+    /**
+     * Show/print the users with the given usertype start work year location and department
+     * @param type
+     * @param year
+     * @param lId
+     * @param dId
+     * of the user to be shown.
+     */
+    //show book by location user type department and start study year
+    public List<User> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(type, year, lId, dId);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 }
