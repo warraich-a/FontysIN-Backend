@@ -238,10 +238,11 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
-        } finally {
-            statement.close();
-            connection.close();
         }
+//        finally {
+//            statement.close();
+//            connection.close();
+//        }
         return allUsers;
     }
 

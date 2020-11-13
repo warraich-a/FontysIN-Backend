@@ -49,4 +49,14 @@ public class ContactDTO {
 	public void setAccepted(boolean accepted) {
 		isAccepted = accepted;
 	}
+
+	@Override
+	public String toString() {
+		return "ContactDTO{" +
+				"id=" + id +
+				", user=" + user +
+				", friend=" + friend +
+				", isAccepted=" + isAccepted +
+				'}';
+	}
 }

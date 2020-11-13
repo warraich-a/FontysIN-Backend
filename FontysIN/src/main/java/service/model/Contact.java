@@ -20,6 +20,12 @@ public class Contact {
 		this.isAccepted = false;
 	}
 
+	public Contact(int id, User user, User friend) {
+		this.id = id;
+		this.user = user;
+		this.friend = friend;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}

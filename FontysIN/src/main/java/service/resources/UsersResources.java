@@ -24,12 +24,14 @@ public class UsersResources {
 
 	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
-
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
 	public Response getContacts(@PathParam("id") int id) { // returns users list or contacts list?
+		System.out.println("Contacts route");
 
-		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
+//		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> contacts = controller.getAllContactsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -39,8 +41,11 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
 	@Path("{id}/acceptedContacts")
 	public Response getAcceptedContacts(@PathParam("id") int id) { // returns users list or contacts list?
+		System.out.println("Accepted Contacts route");
 
-		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
+//		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> contacts = controller.getAcceptedContactsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -51,7 +56,9 @@ public class UsersResources {
 	@Path("{id}/requests")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContactsRequests(@PathParam("id") int id) { // returns users list or contacts list?
-		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
+//		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> requests = controller.getContactsRequestsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(requests) { };
 
@@ -63,7 +70,10 @@ public class UsersResources {
 	@Path("{userId}/contacts")
 	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
 
-		int contactId = fakeDataProfile.createContact(contact);
+//		int contactId = fakeDataProfile.createContact(contact);
+		PersistenceController controller = new PersistenceController();
+		int contactId = controller.createContact(contact);
+
 		if (contactId < 0){ // already friends
 			//String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
 			String entity =  "You and user with id " + contact.getFriend().getId() + " are already connected.";
@@ -79,7 +89,9 @@ public class UsersResources {
 	@DELETE //DELETE at http://localhost:XXXX/users/1/contacts/2
 	@Path("{userId}/contacts/{contactId}")
 	public Response deleteContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId) {
-		fakeDataProfile.deleteContact(userId, contactId);
+//		fakeDataProfile.deleteContact(userId, contactId);
+		PersistenceController controller = new PersistenceController();
+		controller.deleteContact(userId, contactId);
 
 		return Response.noContent().build();
 	}
@@ -89,7 +101,9 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
 	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact) {
-		fakeDataProfile.updateContact(contactId, contact);
+//		fakeDataProfile.updateContact(contactId, contact);
+		PersistenceController controller = new PersistenceController();
+		controller.updateContact(contactId, contact);
 
 		return Response.noContent().build();
 	}
@@ -97,7 +111,9 @@ public class UsersResources {
 	@GET
 	@Path("{userId}")
 	public Response getUser(@PathParam("userId") int userId) {
-		UserDTO user = fakeDataProfile.getUserDTO(userId);
+//		UserDTO user = fakeDataProfile.getUserDTO(userId);
+		PersistenceController controller = new PersistenceController();
+		UserDTO user = controller.getUserDTO(userId);
 
 		if(user != null){
 			return Response.ok(user).build(); // Status ok 200, return user
@@ -114,6 +130,8 @@ public class UsersResources {
 	public Response GeUser(@PathParam("userId") int userId) {
 		PersistenceController persistenceController = new PersistenceController();
 		User u = persistenceController.getUser(userId);
+		System.out.println("User id " + userId);
+		System.out.println("Got user by id " + u);
 		if (u == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {

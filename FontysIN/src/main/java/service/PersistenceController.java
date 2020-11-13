@@ -1,10 +1,9 @@
 package service;
 
 import service.model.*;
-import service.repository.DatabaseException;
-import service.repository.JDBCComments;
-import service.repository.JDBCPosts;
-import service.repository.JDBCProfileRepository;
+import service.model.dto.ContactDTO;
+import service.model.dto.UserDTO;
+import service.repository.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -338,5 +337,110 @@ public class PersistenceController {
         }
     }
 
+
+    /* ------------------------------------------------- Contats -----------------------------------------------------------------*/
+    public List<ContactDTO> getAllContactsDTO(int id) {
+        ContactsRepository contactsRepository = new ContactsRepository();
+
+
+        List<ContactDTO> allContacts;
+        try {
+            allContacts = contactsRepository.getAllContactsDTO(id);
+
+            return allContacts;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<ContactDTO> getAcceptedContactsDTO(int id) {
+        System.out.println("Accepted contact repository");
+
+
+        ContactsRepository contactsRepository = new ContactsRepository();
+
+        List<ContactDTO> acceptedContacts;
+        try {
+            acceptedContacts = contactsRepository.getAcceptedContactsDTO(id);
+            System.out.println("Accepted contact repository");
+
+            return acceptedContacts;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<ContactDTO> getContactsRequestsDTO(int id) {
+        ContactsRepository contactsRepository = new ContactsRepository();
+
+        List<ContactDTO> requests;
+        try {
+            requests = contactsRepository.getContactsRequestsDTO(id);
+
+            return requests;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    // Not working???????????
+    public int createContact(ContactDTO contact) {
+        ContactsRepository contactsRepository = new ContactsRepository();
+
+        try {
+            return contactsRepository.createContact(contact);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return -1;
+        }
+    }
+
+    // REJECT DOESN:T WORK?????????????????
+    public boolean deleteContact(int userId, int contactId) {
+        ContactsRepository contactsRepository = new ContactsRepository();
+
+        try {
+            return contactsRepository.deleteContact(userId, contactId);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    // TEST??????????????
+    public void updateContact(int contactId, Contact contact) {
+        ContactsRepository contactsRepository = new ContactsRepository();
+
+        try {
+            contactsRepository.updateContact(contactId, contact);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public UserDTO getUserDTO(int id) {
+        ContactsRepository contactsRepository = new ContactsRepository();
+
+        try {
+            return contactsRepository.getUserDTO(id);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    /* ------------------------------------------------- Contats -----------------------------------------------------------------*/
 
 }
