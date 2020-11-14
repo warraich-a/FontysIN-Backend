@@ -670,36 +670,36 @@ public class JDBCProfileRepository extends JDBCRepository {
 
     // ----------------------------------------- Privacy
 
-//    public boolean createPrivacy(Privacy p) throws DatabaseException{
-//        Connection connection = this.getDatabaseConnection();
-//        boolean exist = false;
-//        String sql = "INSERT INTO privacy(`userId`,`educationSetting`, `experienceSetting`, `skillSetting`) VALUES (?,?,?,?)";
-//        try {
-//            if(!exist){
-//                PreparedStatement statement = connection.prepareStatement(sql);
-//
-//                statement.setInt(1, comm.getUserId());
-//                statement.setString(3,comm.getContent());
-//                statement.setDate(4, (Date) comm.getDate());
-//
-//
-//                statement.executeUpdate();
-//
-//                PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-//                ps.setInt(1,1);
-//                connection.setAutoCommit(false);
-//                connection.commit();
-//                connection.close();
-//                return true;
-//            } else  {
-//                connection.close();
-//                return false;
-//            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        return false;
-//    }
+    public boolean createPrivacy(Privacy p) throws DatabaseException{
+        Connection connection = this.getDatabaseConnection();
+        boolean exist = false;
+        String sql = "INSERT INTO privacy(`userId`,`educationSetting`, `experienceSetting`, `skillSetting`) VALUES (?,?,?,?)";
+        try {
+            if(!exist){
+                PreparedStatement statement = connection.prepareStatement(sql);
+
+                statement.setInt(1, p.getUserId());
+                statement.setString(2,p.getEducationSetting().toString());
+                statement.setString(3,p.getExperienceSetting().toString());
+                statement.setString(4,p.getSkillSetting().toString());
+
+                statement.executeUpdate();
+
+                PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+                ps.setInt(1,1);
+                connection.setAutoCommit(false);
+                connection.commit();
+                connection.close();
+                return true;
+            } else  {
+                connection.close();
+                return false;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
 
     public List<Privacy> getPrivacyList() throws DatabaseException {
         List<Privacy> privacyList = new ArrayList<>();
@@ -849,8 +849,9 @@ public class JDBCProfileRepository extends JDBCRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        return false;
     }
-
+    // ----------------------------------------- Privacy ^
     /******************Ranim******************Deleting data in profile page*********************/
 
     // Delete education in profile page

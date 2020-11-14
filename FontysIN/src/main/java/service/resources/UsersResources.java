@@ -276,7 +276,7 @@ public class UsersResources {
 		PersistenceController persistenceController = new PersistenceController();
 		List<Experience> experienceByProfileId = persistenceController.getExperience(userId, profileId);
 
-		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EXPERIENCE);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.EXPERIENCE);
 
 		if(AllowToSee){
 			if (experienceByProfileId == null) {
@@ -298,7 +298,7 @@ public class UsersResources {
 	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
 		PersistenceController persistenceController = new PersistenceController();
 		List<Education> educations = persistenceController.getEducations(userId, profileId);
-		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EDUCATION);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.EDUCATION);
 		if(AllowToSee){
 		if (educations == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -334,7 +334,7 @@ public class UsersResources {
 		PersistenceController persistenceController = new PersistenceController();
 
 		List<Skill> skills = persistenceController.getSkills(userId, profileId);
-		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.SKILLS);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.SKILLS);
 		if(AllowToSee){
 			if (skills == null) {
 				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();

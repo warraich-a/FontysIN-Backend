@@ -6,6 +6,7 @@ import service.model.dto.UserDTO;
 import service.repository.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersistenceController {
@@ -846,6 +847,87 @@ public class PersistenceController {
             e.printStackTrace();
         }
         return false;
+    }
+    public Privacy GetPrivacySetting(int id){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try{
+            List<Privacy> privacyList = profileRepository.getPrivacyList();
+            for (Privacy p :privacyList){
+                if(p.getUserId() == id){
+                    return p;
+                }
+            }
+        } catch (DatabaseException e) {
+        e.printStackTrace();
+    }
+        return null;
+
+    }
+
+    private List<User> GetUsersConnections(int userId){
+        ContactsRepository contactsRepository = new ContactsRepository();
+        try{
+            List<Contact> contactList = contactsRepository.getAllContacts(userId);
+            List<User> connections = new ArrayList<>();
+            for (Contact c :contactList) {
+                if(c.getUser().getId() == userId){
+                    if(c.getIsAccepted()){
+                        User u = c.getFriend();
+                        connections.add(u);
+                    }
+                }
+            }
+
+            return connections;
+        } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        return null;
+    }
+
+    public boolean AllowedToSee(int userId, int visitorId, ProfilePart profilePart){
+        User visitor = getUser(visitorId);
+        Privacy settings = GetPrivacySetting(userId);
+
+        // If there are no settings everyone is allowed to see
+        if(settings == null)
+        {
+            return true;
+        }
+
+        Privacy.Setting privacySetting;
+        switch(profilePart)
+        {
+            case EDUCATION:
+                privacySetting = settings.getEducationSetting();
+                break;
+            case EXPERIENCE:
+                privacySetting = settings.getExperienceSetting();
+                break;
+            case SKILLS:
+                privacySetting = settings.getSkillSetting();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + profilePart);
+        }
+        if(userId == visitorId){ // So am i visting my own page
+            return true;
+        }
+        else if(privacySetting == Privacy.Setting.EVERYONE){
+            return true;
+        }
+        else if(privacySetting == Privacy.Setting.CONNECTIONS){
+            List<User> Connections = GetUsersConnections(userId); // Get a user connections
+            if(Connections.contains(visitor)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public enum ProfilePart
+    {
+        EDUCATION, EXPERIENCE, SKILLS
     }
 
 }
