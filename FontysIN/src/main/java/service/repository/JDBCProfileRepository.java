@@ -973,7 +973,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            statement.setString(1, UserType.FontysStaff.name()); // set user start study year parameter
+            statement.setString(1, type.name()); // set user start work year parameter
             statement.setInt(2, lId); // set user location id parameter
             statement.setInt(3, dId); // set user department id parameter
             statement.setInt(4, year); // set user start work year parameter

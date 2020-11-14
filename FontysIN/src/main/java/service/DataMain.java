@@ -29,7 +29,8 @@ class DataMain {
 
 //        controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType.Student, 2012,1,2);
 
-        controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType.FontysStaff, 2013, 1,3);
+//        controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType.FontysStaff, 2013, 1,3);
 
+//        controller.UserFilterByTypeLocationDepartmentAndStartWorkyearTeacher(UserType.Teacher, 2011, 1,1);
     }
 }
