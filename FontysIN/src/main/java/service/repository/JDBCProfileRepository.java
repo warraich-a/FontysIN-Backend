@@ -148,7 +148,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             statement.setString(7, ex.getDescriptionExperience());
             statement.setInt(8, ex.getId());
             statement.executeUpdate();
-
+            connection.commit();
+            connection.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -237,6 +238,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             statement.setInt(7, education.getId());
 
             statement.executeUpdate();
+            connection.commit();
+            connection.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -305,12 +308,14 @@ public class JDBCProfileRepository extends JDBCRepository {
         String sql = "UPDATE `about` SET `content`=? WHERE id=?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-
-            statement.setInt(2, about.getId());
             statement.setString(1, about.getContent());
+            statement.setInt(2, about.getId());
+
 
 
             statement.executeUpdate();
+            connection.commit();
+            connection.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -644,6 +649,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             statement.setString(4, a.getZipCode());
 
             statement.executeUpdate();
+            connection.commit();
+            connection.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -661,6 +668,8 @@ public class JDBCProfileRepository extends JDBCRepository {
 
 
             statement.executeUpdate();
+            connection.commit();
+            connection.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -717,41 +726,41 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String skillSetting = resultSet.getString("skillSetting");
 
                 Privacy.Setting edu = Privacy.Setting.EVERYONE;
-                if (educationSetting == "EVERYONE")
+                if (educationSetting.equals("EVERYONE"))
                 {
                     edu = Privacy.Setting.EVERYONE;
                 }
-                else if (educationSetting == "CONNECTIONS")
+                else if (educationSetting.equals("CONNECTIONS"))
                 {
                     edu = Privacy.Setting.CONNECTIONS;
                 }
-                else  if (educationSetting == "ONLYME")
+                else  if (educationSetting.equals("ONLYME"))
                 {
                     edu = Privacy.Setting.ONLYME;
                 }
                 Privacy.Setting exp = Privacy.Setting.EVERYONE;
-                if (experienceSetting == "EVERYONE")
+                if (experienceSetting.equals("EVERYONE"))
                 {
                     exp = Privacy.Setting.EVERYONE;
                 }
-                else if (experienceSetting == "CONNECTIONS")
+                else if (experienceSetting.equals("CONNECTIONS"))
                 {
                     exp = Privacy.Setting.CONNECTIONS;
                 }
-                else  if (experienceSetting == "ONLYME")
+                else  if (experienceSetting.equals("ONLYME"))
                 {
                     exp = Privacy.Setting.ONLYME;
                 }
                 Privacy.Setting ski = Privacy.Setting.EVERYONE;
-                if (skillSetting == "EVERYONE")
+                if (skillSetting.equals( "EVERYONE"))
                 {
                     ski = Privacy.Setting.EVERYONE;
                 }
-                else if (skillSetting == "CONNECTIONS")
+                else if (skillSetting.equals("CONNECTIONS"))
                 {
                     ski = Privacy.Setting.CONNECTIONS;
                 }
-                else  if (skillSetting == "ONLYME")
+                else  if (skillSetting.equals("ONLYME"))
                 {
                     ski = Privacy.Setting.ONLYME;
                 }
@@ -786,41 +795,41 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String skillSetting = resultSet.getString("skillSetting");
 
                 Privacy.Setting edu = Privacy.Setting.EVERYONE;
-                if (educationSetting == "EVERYONE")
+                if (educationSetting.equals("EVERYONE"))
                 {
                     edu = Privacy.Setting.EVERYONE;
                 }
-                else if (educationSetting == "CONNECTIONS")
+                else if (educationSetting.equals("CONNECTIONS"))
                 {
                     edu = Privacy.Setting.CONNECTIONS;
                 }
-                else  if (educationSetting == "ONLYME")
+                else  if (educationSetting.equals("ONLYME"))
                 {
                     edu = Privacy.Setting.ONLYME;
                 }
                 Privacy.Setting exp = Privacy.Setting.EVERYONE;
-                if (experienceSetting == "EVERYONE")
+                if (experienceSetting.equals("EVERYONE"))
                 {
                     exp = Privacy.Setting.EVERYONE;
                 }
-                else if (experienceSetting == "CONNECTIONS")
+                else if (experienceSetting.equals("CONNECTIONS"))
                 {
                     exp = Privacy.Setting.CONNECTIONS;
                 }
-                else  if (experienceSetting == "ONLYME")
+                else  if (experienceSetting.equals("ONLYME"))
                 {
                     exp = Privacy.Setting.ONLYME;
                 }
                 Privacy.Setting ski = Privacy.Setting.EVERYONE;
-                if (skillSetting == "EVERYONE")
+                if (skillSetting.equals( "EVERYONE"))
                 {
                     ski = Privacy.Setting.EVERYONE;
                 }
-                else if (skillSetting == "CONNECTIONS")
+                else if (skillSetting.equals("CONNECTIONS"))
                 {
                     ski = Privacy.Setting.CONNECTIONS;
                 }
-                else  if (skillSetting == "ONLYME")
+                else  if (skillSetting.equals("ONLYME"))
                 {
                     ski = Privacy.Setting.ONLYME;
                 }
@@ -845,6 +854,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             statement.setString(3, String.valueOf(a.getSkillSetting()));
 
             statement.executeUpdate();
+            connection.commit();
+            connection.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
