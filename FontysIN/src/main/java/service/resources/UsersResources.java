@@ -108,20 +108,6 @@ public class UsersResources {
 	}
 	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
-	@GET //GET at http://localhost:XXXX/profile/educations
-	@Path("p/{userId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response GeUser(@PathParam("userId") int userId) {
-		PersistenceController persistenceController = new PersistenceController();
-		User u = persistenceController.getUser(userId);
-		if (u == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
-		} else {
-			return Response.ok(u).build();
-		}
-	}
-
-
 
 	@GET //GET at http://localhost:XXXX/profile/experiences
 	@Path("{userId}/profiles/")
@@ -367,16 +353,6 @@ public class UsersResources {
 	}
 
 	//delete user's experince with specific id
-//	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
-//	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}") // userId'/profiles/profileId/experiences/experienceId
-//	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-//										 @PathParam("experinceID") int experinceID) {
-//		fakeDataProfile.deleteExperience(userId, profileID, experinceID);
-//
-//		return Response.noContent().build();
-//	}
-
-	//delete user's experince with specific id
 	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
 	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}")
 	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
@@ -389,15 +365,6 @@ public class UsersResources {
 	}
 
 	// DELETE 1//2/3///
-	//delete user's education with specific id
-//	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
-//	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
-//	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-//										@PathParam("educationID") int educationID) {
-//		fakeDataProfile.deleteEducation(userId, profileID, educationID);
-//
-//		return Response.noContent().build();
-//	}
 
 	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
 	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
@@ -410,15 +377,6 @@ public class UsersResources {
 		return Response.noContent().build();
 	}
 
-	//delete user's skill with specific id
-//	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
-//	@Path("{userId}/profiles/{profileID}/skills/{skillID}")
-//	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-//									@PathParam("skillID") int skillID) {
-//		fakeDataProfile.deleteSkill(userId, profileID, skillID);
-//
-//		return Response.noContent().build();
-//	}
 
 	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
 	@Path("{userId}/profiles/{profileID}/skills/{skillId}")
@@ -635,17 +593,14 @@ public class UsersResources {
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(type, workYear, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type location and department and start study year
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("studyYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start study year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(type, year, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type location and department
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
 		&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
 			users = controller.UserFilterByTypeLocationAndDepartment(type, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type
 		else if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
 			users = controller.UserFilteredWithType(type);
 		}
@@ -663,7 +618,7 @@ public class UsersResources {
 
 		}
 		else {
-			users = fakeDataProfile.getUsers();
+			users = controller.GetAllUsers();
 		}
 		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
 		};
