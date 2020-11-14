@@ -25,12 +25,14 @@ public class UsersResources {
 
 	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
-
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
 	public Response getContacts(@PathParam("id") int id) { // returns users list or contacts list?
+		System.out.println("Contacts route");
 
-		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
+//		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> contacts = controller.getAllContactsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -40,8 +42,11 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
 	@Path("{id}/acceptedContacts")
 	public Response getAcceptedContacts(@PathParam("id") int id) { // returns users list or contacts list?
+		System.out.println("Accepted Contacts route");
 
-		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
+//		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> contacts = controller.getAcceptedContactsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -52,7 +57,9 @@ public class UsersResources {
 	@Path("{id}/requests")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContactsRequests(@PathParam("id") int id) { // returns users list or contacts list?
-		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
+//		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> requests = controller.getContactsRequestsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(requests) { };
 
@@ -64,7 +71,12 @@ public class UsersResources {
 	@Path("{userId}/contacts")
 	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
 
-		int contactId = fakeDataProfile.createContact(contact);
+//		int contactId = fakeDataProfile.createContact(contact);
+		PersistenceController controller = new PersistenceController();
+		int contactId = controller.createContact(contact);
+
+		System.out.println("Contact id route " + contactId);
+
 		if (contactId < 0){ // already friends
 			//String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
 			String entity =  "You and user with id " + contact.getFriend().getId() + " are already connected.";
@@ -80,7 +92,9 @@ public class UsersResources {
 	@DELETE //DELETE at http://localhost:XXXX/users/1/contacts/2
 	@Path("{userId}/contacts/{contactId}")
 	public Response deleteContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId) {
-		fakeDataProfile.deleteContact(userId, contactId);
+//		fakeDataProfile.deleteContact(userId, contactId);
+		PersistenceController controller = new PersistenceController();
+		controller.deleteContact(userId, contactId);
 
 		return Response.noContent().build();
 	}
@@ -90,7 +104,9 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
 	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact) {
-		fakeDataProfile.updateContact(contactId, contact);
+//		fakeDataProfile.updateContact(contactId, contact);
+		PersistenceController controller = new PersistenceController();
+		controller.updateContact(contactId, contact);
 
 		return Response.noContent().build();
 	}
@@ -98,7 +114,9 @@ public class UsersResources {
 	@GET
 	@Path("{userId}")
 	public Response getUser(@PathParam("userId") int userId) {
-		UserDTO user = fakeDataProfile.getUserDTO(userId);
+//		UserDTO user = fakeDataProfile.getUserDTO(userId);
+		PersistenceController controller = new PersistenceController();
+		UserDTO user = controller.getUserDTO(userId);
 
 		if(user != null){
 			return Response.ok(user).build(); // Status ok 200, return user
@@ -115,6 +133,8 @@ public class UsersResources {
 	public Response GeUser(@PathParam("userId") int userId) {
 		PersistenceController persistenceController = new PersistenceController();
 		User u = persistenceController.getUser(userId);
+		System.out.println("User id " + userId);
+		System.out.println("Got user by id " + u);
 		if (u == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -368,31 +388,36 @@ public class UsersResources {
 
 	//delete user's experince with specific id
 	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
-	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}") // userId'/profiles/profileId/experiences/experienceId
+	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}")
 	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										 @PathParam("experinceID") int experinceID) {
-		fakeDataProfile.deleteExperience(userId, profileID, experinceID);
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteExperience(userId,profileID,experinceID);
 
 		return Response.noContent().build();
 	}
 
-	// DELETE 1//2/3///
 	//delete user's education with specific id
 	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
 	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
 	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										@PathParam("educationID") int educationID) {
-		fakeDataProfile.deleteEducation(userId, profileID, educationID);
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteEducation(userId,profileID,educationID);
 
 		return Response.noContent().build();
 	}
 
 	//delete user's skill with specific id
 	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
-	@Path("{userId}/profiles/{profileID}/skills/{skillID}")
+	@Path("{userId}/profiles/{profileID}/skills/{skillId}")
 	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-									@PathParam("skillID") int skillID) {
-		fakeDataProfile.deleteSkill(userId, profileID, skillID);
+									@PathParam("skillId") int skillId) {
+
+		PersistenceController controller = new PersistenceController();
+		controller.DeleteSkill(userId,profileID,skillId);
 
 		return Response.noContent().build();
 	}
@@ -594,26 +619,39 @@ public class UsersResources {
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
 									 @QueryParam("workingYear") int workYear) {
 
+		PersistenceController controller = new PersistenceController();
+
 		List<User> users;
+		//If query parameter is missing return all users. Otherwise filter users by given user type fontys staff location and department and start work year
+		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
+				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
+			users = controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(type, workYear, locId, depId);
+		}
+		//If query parameter is missing return all users. Otherwise filter users by given user type location and department and start study year
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("studyYear")
+				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start study year
+			users = controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(type, year, locId, depId);
+		}
+		//If query parameter is missing return all users. Otherwise filter users by given user type location and department
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
+				&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
+			users = controller.UserFilterByTypeLocationAndDepartment(type, locId, depId);
+		}
 		//If query parameter is missing return all users. Otherwise filter users by given user type
-		if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
-			User u = fakeDataProfile.getUserType(type);
-			users = fakeDataProfile.getUsersByUserType(type);
+		else if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
+			users = controller.UserFilteredWithType(type);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
-			//Department department = fakeDataProfile.getDepartment(depName);
-			users = fakeDataProfile.getUsersByDepartment(depId);
+			users = controller.UserFilteredWithDepartment(depId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
-			users = fakeDataProfile.getUsersByLocation(locId);
+			users = controller.UserFilteredWithLocation(locId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
-			Education e = fakeDataProfile.getEducation(year);
-			users = fakeDataProfile.getUsersByStudyYear(e);
+			users = controller.UserFilteredWithStartStudyYear(year);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
-			Work w = fakeDataProfile.getWorking(workYear);
-			users = fakeDataProfile.getUsersByWorkYear(w);
+			users = controller.UserFilteredWithStartWorkYear(workYear);
 		}
 		else {
 			users = fakeDataProfile.getUsers();

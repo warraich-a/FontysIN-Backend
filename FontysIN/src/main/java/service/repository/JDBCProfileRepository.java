@@ -394,10 +394,11 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
-        } finally {
-            statement.close();
-            connection.close();
         }
+//        finally {
+//            statement.close();
+//            connection.close();
+//        }
         return allUsers;
     }
 
@@ -848,7 +849,413 @@ public class JDBCProfileRepository extends JDBCRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return false;
     }
+
+    /******************Ranim******************Deleting data in profile page*********************/
+
+    // Delete education in profile page
+    public void deleteEducation(int userId, int profileId, int educationId) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM educations where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,educationId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete education.", throwable);
+        }
+
+    }
+
+    // Delete experience in profile page
+    public void deleteExperience(int userId, int profileId, int experienceId) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM experiences where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,experienceId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete experience.", throwable);
+        }
+
+    }
+
+    // Delete skill in profile page
+    public void deleteSkill(int userId, int profileId, int skillId) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM skills where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,skillId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete skill.", throwable);
+        }
+
+    }
+
+    /**************Ranim******************************Filter users**************************/
+
+    //get all users with the given user type from data base
+    public List<User> getUsersByType(UserType type) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT * FROM users WHERE userType = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, type.name()); // set user type parameter
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+    //get all users with the given location id from data base
+    public List<User> getUsersByLocation(int lId) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT * FROM users WHERE locationId = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, lId); // set user fontys location parameter
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+    //get all users with the given department id from data base
+    public List<User> getUsersByDepartment(int bId) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT * FROM users WHERE departmentId = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, bId); // set user fontys location parameter
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+    //get all users with the given start study year from data base
+    public List<User> getUsersByStartStudyYear(int year) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
+                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber FROM ((educations INNER JOIN profiles " +
+                "ON educations.profileId = profiles.id) INNER JOIN users ON profiles.userId = users.id) WHERE school = 'Fontys'" +
+                "AND startYear = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, year); // set user start study year parameter
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+    //get all users with the given start work year from data base
+    public List<User> getUsersByStartWorkYear(int year) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
+                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber " +
+                "FROM ((experiences INNER JOIN profiles ON experiences.profileId = profiles.id) INNER JOIN users ON profiles.userId = users.id) " +
+                "WHERE company = 'Fontys' AND users.userType != 'Student' AND startDate = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, year); // set user start study year parameter
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+    /******************RANIM***********************Combined Filter Search**************************/
+
+    //get all users with the given user type, location and department from data base
+    public List<User> getUsersByUserTypeAndLocationAndDepartment(UserType type, int lId, int dId) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT * FROM users WHERE userType = ? AND locationId = ? AND departmentId = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, type.name()); // set user start study year parameter
+            statement.setInt(2, lId); // set user location id parameter
+            statement.setInt(3, dId); // set user department id parameter
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+    //get all users with the given user type, start study year, location and department from data base
+    public List<User> getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(UserType type, int year, int lId, int dId) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
+                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber " +
+                "FROM ((educations INNER JOIN profiles ON educations.profileId = profiles.id) INNER JOIN users " +
+                "ON profiles.userId = users.id)" +
+                " WHERE school = 'Fontys' AND users.userType = ? AND users.locationId = ? " +
+                "And users.departmentId = ? AND startYear = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, type.name()); // set user start study year parameter
+            statement.setInt(2, lId); // set user location id parameter
+            statement.setInt(3, dId); // set user department id parameter
+            statement.setInt(4, year); // set user start study year parameter
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+    //get all users with the given user type, location and department from data base
+    public List<User> getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(UserType type, int year, int lId, int dId) throws DatabaseException {
+
+        List<User> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
+                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber " +
+                "FROM ((experiences INNER JOIN profiles ON experiences.profileId = profiles.id) INNER JOIN users " +
+                "ON profiles.userId = users.id)" +
+                " WHERE company = 'Fontys' AND users.userType = ? AND users.locationId = ? " +
+                "And users.departmentId = ? AND startDate = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, UserType.FontysStaff.name()); // set user start study year parameter
+            statement.setInt(2, lId); // set user location id parameter
+            statement.setInt(3, dId); // set user department id parameter
+            statement.setInt(4, year); // set user start work year parameter
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                filtered.add(u);
+
+            }
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
 
 }
