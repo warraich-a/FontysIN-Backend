@@ -587,22 +587,6 @@ public class PersistenceController {
     /**
      * Show/print the users of FontysIn Web Application
      */
-    //show all users
-//    public List<User> GetAllUsers(){
-//
-//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-//
-//        try {
-//            List<User> users = profileRepository.getAllUsers();
-//            System.out.println(users);
-//            return users;
-//        }
-//        catch (DatabaseException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-
     public List<UserDTO> GetAllUsers(){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -618,5 +602,29 @@ public class PersistenceController {
         }
     }
 
+    /***********************************Combine filter searching with the input box*************************************/
+    /**
+     * Show/print the users with the given usertype start work year location and department
+     * @param type
+     * @param lId
+     * @param dId
+     * @param chars
+     * of the user to be shown.
+     */
+    //show users by location user type department and start study year
+    public List<UserDTO> UserFilteLocationDepartmentTypeAndName(String chars, int lId, int dId, UserType type ){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<UserDTO> users = profileRepository.getUsersByUserTypeLocationDeoartmentAndName(chars, lId, dId, type);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

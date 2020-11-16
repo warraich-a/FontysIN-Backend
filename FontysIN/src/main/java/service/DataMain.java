@@ -31,7 +31,9 @@ class DataMain {
 
 //        controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType.FontysStaff, 2013, 1,3);
 
-        controller.UserFilteredWithType(UserType.Student);
+//        controller.UserFilteredWithType(UserType.Student);
+
+        controller.UserFilteLocationDepartmentTypeAndName( "ar", 1, 1, UserType.Teacher);
 
     }
 }
