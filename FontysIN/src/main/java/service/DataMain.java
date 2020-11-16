@@ -33,7 +33,9 @@ class DataMain {
 
 //        controller.UserFilteredWithType(UserType.Student);
 
-        controller.UserFilteLocationDepartmentTypeAndName( "ar", 1, 1, UserType.Teacher);
+//        controller.UserFilteLocationDepartmentTypeAndName( "ar", 1, 1, UserType.Teacher);
+
+        controller.UserFilterByFirstNameChars("r");
 
     }
 }

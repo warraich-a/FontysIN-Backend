@@ -620,7 +620,9 @@ public class UsersResources {
 		}
 		else if (uriInfo.getQueryParameters().containsKey("workingYear")){ //filter by start work year at fontys
 			users = controller.UserFilteredWithStartWorkYear(workYear);
-
+		}
+		else if (uriInfo.getQueryParameters().containsKey("firstName")){ //filter by name using chars
+			users = controller.UserFilterByFirstNameChars(name);
 		}
 		else {
 			users = controller.GetAllUsers();
