@@ -1,6 +1,7 @@
 package service;
 
 import service.model.*;
+import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
 import service.repository.JDBCComments;
 import service.repository.JDBCPosts;
@@ -247,20 +248,20 @@ public class PersistenceController {
         return null;
     }
 
-//    public User getUser(int userId){
-//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-//
-//        try {
-//            User user = profileRepository.getUser(userId);
-//
-//            System.out.println("ok");
-//
-//            return user;
-//        } catch (DatabaseException | SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public User getUser(int userId){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            User user = profileRepository.getUser(userId);
+
+            System.out.println("ok");
+
+            return user;
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public boolean addExperience(Experience experience) {
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -415,12 +416,12 @@ public class PersistenceController {
      * @param type of the user to be shown.
      */
     //show users by user type
-    public List<User> UserFilteredWithType(UserType type){
+    public List<UserDTO> UserFilteredWithType(UserType type){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getUsersByType(type);
+            List<UserDTO> users = profileRepository.getUsersByType(type);
             System.out.println(users);
             return users;
         }
@@ -436,12 +437,12 @@ public class PersistenceController {
      * @param id of the user to be shown.
      */
     //show users by user type
-    public List<User> UserFilteredWithLocation(int id){
+    public List<UserDTO> UserFilteredWithLocation(int id){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getUsersByLocation(id);
+            List<UserDTO> users = profileRepository.getUsersByLocation(id);
             System.out.println(users);
             return users;
         }
@@ -455,13 +456,13 @@ public class PersistenceController {
      * Show/print the users with the given department id
      * @param id of the user to be shown.
      */
-    //show usesr by user type
-    public List<User> UserFilteredWithDepartment(int id){
+    //show usesr by user department
+    public List<UserDTO> UserFilteredWithDepartment(int id){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getUsersByDepartment(id);
+            List<UserDTO> users = profileRepository.getUsersByDepartment(id);
             System.out.println(users);
             return users;
         }
@@ -476,12 +477,12 @@ public class PersistenceController {
      * @param year of the user to be shown.
      */
     //show users by start study year
-    public List<User> UserFilteredWithStartStudyYear(int year){
+    public List<UserDTO> UserFilteredWithStartStudyYear(int year){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getUsersByStartStudyYear(year);
+            List<UserDTO> users = profileRepository.getUsersByStartStudyYear(year);
             System.out.println(users);
             return users;
         }
@@ -496,12 +497,12 @@ public class PersistenceController {
      * @param year of the user to be shown.
      */
     //show users by start study year
-    public List<User> UserFilteredWithStartWorkYear(int year){
+    public List<UserDTO> UserFilteredWithStartWorkYear(int year){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getUsersByStartWorkYear(year);
+            List<UserDTO> users = profileRepository.getUsersByStartWorkYear(year);
             System.out.println(users);
             return users;
         }
@@ -519,12 +520,12 @@ public class PersistenceController {
      * of the user to be shown.
      */
     //show users by start study year
-    public List<User> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
+    public List<UserDTO> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
+            List<UserDTO> users = profileRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
             System.out.println(users);
             return users;
         }
@@ -543,12 +544,12 @@ public class PersistenceController {
      * of the user to be shown.
      */
     //show users by location user type department and start study year
-    public List<User> UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType type, int year, int lId, int dId){
+    public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType type, int year, int lId, int dId){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(type, year, lId, dId);
+            List<UserDTO> users = profileRepository.getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(type, year, lId, dId);
             System.out.println(users);
             return users;
         }
@@ -567,12 +568,12 @@ public class PersistenceController {
      * of the user to be shown.
      */
     //show users by location user type department and start study year
-    public List<User> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
+    public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(type, year, lId, dId);
+            List<UserDTO> users = profileRepository.getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(type, year, lId, dId);
             System.out.println(users);
             return users;
         }
@@ -587,12 +588,27 @@ public class PersistenceController {
      * Show/print the users of FontysIn Web Application
      */
     //show all users
-    public List<User> GetAllUsers(){
+//    public List<User> GetAllUsers(){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<User> users = profileRepository.getAllUsers();
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+
+    public List<UserDTO> GetAllUsers(){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            List<User> users = profileRepository.getAllUsers();
+            List<UserDTO> users = profileRepository.getUsersDTO();
             System.out.println(users);
             return users;
         }

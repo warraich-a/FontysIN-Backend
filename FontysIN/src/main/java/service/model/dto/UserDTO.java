@@ -1,5 +1,7 @@
 package service.model.dto;
 
+import service.model.UserType;
+
 public class UserDTO {
 	private int id;
 	private int profileId;
@@ -56,5 +58,16 @@ public class UserDTO {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO{" +
+				"id=" + id +
+				", profileId=" + profileId +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", image='" + image + '\'' +
+				'}';
 	}
 }

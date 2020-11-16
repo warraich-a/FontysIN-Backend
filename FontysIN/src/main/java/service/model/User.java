@@ -21,26 +21,7 @@ public class User {
     private String img; // user's image /* I will add this to the constracture later*/
     private UserType userType; // user's type
     private Education education; // user's education
-    private Work working; // user's work
 
-
-    public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber, Education education,
-                Work work) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.userType = type;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.addressId = addressId;
-        this.departmentId = departmentId;
-        this.locationId = locationId;
-        this.userNumber = userNumber;
-        this.education = education;
-        this.working = work;
-    }
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber) {
         this.id = id;
@@ -54,13 +35,6 @@ public class User {
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
-    }
-
-    public User(int id, String firstName, String lastName, UserType type) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userType = type;
     }
 
 
@@ -180,13 +154,6 @@ public class User {
         this.education = education;
     }
 
-    public Work getWorking() {
-        return working;
-    }
-
-    public void setWorking(Work working) {
-        this.working = working;
-    }
 
     //methods
     @Override

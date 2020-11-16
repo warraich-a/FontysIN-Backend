@@ -588,7 +588,9 @@ public class UsersResources {
 
 		PersistenceController controller = new PersistenceController();
 
-		List<User> users;
+		List<UserDTO> users;
+
+
 		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(type, workYear, locId, depId);
@@ -607,20 +609,20 @@ public class UsersResources {
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
 			users = controller.UserFilteredWithDepartment(depId);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
+		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by fontys location
 			users = controller.UserFilteredWithLocation(locId);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
+		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year at fontys
 			users = controller.UserFilteredWithStartStudyYear(year);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
+		else if (uriInfo.getQueryParameters().containsKey("workingYear")){ //filter by start work year at fontys
 			users = controller.UserFilteredWithStartWorkYear(workYear);
 
 		}
 		else {
 			users = controller.GetAllUsers();
 		}
-		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
+		GenericEntity<List<UserDTO>> entity = new GenericEntity<>(users) {
 		};
 		return Response.ok(entity).build();
 	}
