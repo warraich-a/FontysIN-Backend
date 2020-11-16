@@ -586,6 +586,26 @@ public class PersistenceController {
         }
     }
 
+    /****************************RANIM*****************************Normal searching*********************/
+    /**
+     * Show/print the users of FontysIn Web Application
+     */
+    //show all users
+    public List<User> GetAllUsers(){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<User> users = profileRepository.getAllUsers();
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
     /* ------------------------------------------------- Contacts -----------------------------------------------------------------*/

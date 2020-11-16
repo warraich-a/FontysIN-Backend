@@ -654,7 +654,7 @@ public class UsersResources {
 			users = controller.UserFilteredWithStartWorkYear(workYear);
 		}
 		else {
-			users = fakeDataProfile.getUsers();
+			users = controller.GetAllUsers();
 		}
 		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
 		};
