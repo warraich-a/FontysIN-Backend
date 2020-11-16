@@ -5,6 +5,10 @@ import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
 import service.repository.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -339,6 +343,7 @@ public class PersistenceController {
             return false;
         }
     }
+
 
     /******************RANIM***********************Delete data in the profile page**************************/
 
@@ -979,7 +984,7 @@ public class PersistenceController {
         return false;
     }
 
-    public boolean isIdAndAuthSame(int id, String auth){
+    public boolean isIdAndAuthSame(int id, String auth) {
         String encodedCredentials = auth.replaceFirst("Basic ", "");
         String credentials = new
                 String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
@@ -988,11 +993,76 @@ public class PersistenceController {
         final String email = tokenizer.nextToken();
 
         User user = getUser(id);//studentsRepository.get(stNr);
-        if(!user.getEmail().equals(email)){
+        if (!user.getEmail().equals(email)) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+    public boolean uploadPicture(int userId, String path){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            if(profileRepository.uploadImage(userId, path)) {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        } catch (DatabaseException | SQLException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    public List<Location> getFontysLocations(){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            List<Location> locations = profileRepository.getFontysLocation();
+
+            System.out.println("ok");
+
+            return locations;
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Department> getFontysDepartments(){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            return  profileRepository.getFontysDepartments();
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public int createAddress(Address address) throws DatabaseException, SQLException {
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        int id = profileRepository.createAddress(address);
+        if( id != 0) {
+            return id;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public boolean addUser(User user) {
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            if(profileRepository.createUser(user)) {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

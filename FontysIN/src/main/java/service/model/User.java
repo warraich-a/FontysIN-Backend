@@ -44,7 +44,7 @@ public class User {
         privacy = new Privacy(id);
     }
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                String phoneNumber, int addressId, int locationId, int departmentId, String userNumber) {
+                String phoneNumber, int addressId, int locationId, int departmentId, String userNumber, String image) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,6 +57,7 @@ public class User {
         this.locationId = locationId;
         this.userNumber = userNumber;
         privacy = new Privacy(id);
+        this.img = image;
     }
 
 

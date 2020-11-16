@@ -118,7 +118,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber);
+                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
 
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
@@ -147,7 +147,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber);
+                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber, friendImage);
 
                 Contact contact = new Contact(contactId, user, friend);
 
@@ -276,7 +276,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber);
+                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
 
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
@@ -305,7 +305,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber);
+                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber, friendImage);
 
                 Contact contact = new Contact(contactId, user, friend);
 
@@ -429,7 +429,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber);
+                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
 
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
@@ -458,7 +458,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber);
+                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber, friendImage);
 
                 Contact contact = new Contact(contactId, user, friend);
 
@@ -634,7 +634,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                return new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber);
+                return new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
             }
 
         }
