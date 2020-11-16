@@ -7,7 +7,9 @@ import service.repository.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class PersistenceController {
 
@@ -780,10 +782,10 @@ public class PersistenceController {
         }
         return null;
     }
-    public Privacy getPrivacy(int Id){
+    public Privacy getPrivacy(User u){
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
         try {
-            Privacy exp = (Privacy) profileRepository.getPrivacyById(Id);
+            Privacy exp = (Privacy) profileRepository.getPrivacyByUser(u);
 
             System.out.println("ok");
 
@@ -928,6 +930,49 @@ public class PersistenceController {
     public enum ProfilePart
     {
         EDUCATION, EXPERIENCE, SKILLS
+    }
+    public User getUserByEmail(String email) {
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try{
+            User u = null;
+            List<User> Users = profileRepository.getUsers();
+            for (User p :Users){
+                if(p.getEmail().equals(email)){
+                    return p;
+                }
+            }
+
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+    public boolean login(String email, String password){
+        User u = getUserByEmail(email);
+        if(u.equals(null)){
+            return false;
+        }
+        if(u.getPassword().equals(password)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isIdAndAuthSame(int id, String auth){
+        String encodedCredentials = auth.replaceFirst("Basic ", "");
+        String credentials = new
+                String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
+
+        final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
+        final String email = tokenizer.nextToken();
+
+        User user = getUser(id);//studentsRepository.get(stNr);
+        if(!user.getEmail().equals(email)){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 }

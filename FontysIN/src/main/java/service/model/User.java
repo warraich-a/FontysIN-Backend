@@ -22,6 +22,7 @@ public class User {
     private UserType userType; // user's type
     private Education education; // user's education
     private Work working; // user's work
+    private Privacy privacy;
 
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
@@ -40,6 +41,7 @@ public class User {
         this.userNumber = userNumber;
         this.education = education;
         this.working = work;
+        privacy = new Privacy(id);
     }
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber) {
@@ -54,6 +56,7 @@ public class User {
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
+        privacy = new Privacy(id);
     }
 
 
@@ -179,6 +182,13 @@ public class User {
 
     public void setWorking(Work working) {
         this.working = working;
+    }
+    public Privacy getPrivacy() {
+        return privacy;
+    }
+
+    public void setPrivacy(Privacy privacy) {
+        this.privacy = privacy;
     }
 
     //methods

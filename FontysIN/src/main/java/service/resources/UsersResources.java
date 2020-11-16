@@ -7,12 +7,15 @@ import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
 import service.repository.FakeDataProfile;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.StringTokenizer;
 //import org.json.simple.JSONObject;
 
 
@@ -497,24 +500,33 @@ public class UsersResources {
 	@GET
 	@Path("user/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUserById(@PathParam("id") int id) {
-		User u = persistenceController.getUser(id);
-		if (u == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
-		} else {
-			return Response.ok(u).build();
+	public Response getUserById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+		if(!persistenceController.isIdAndAuthSame(id, auth)){
+			return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Invalid email and/or password.").build();
+		}else {
+
+			User u = persistenceController.getUser(id);
+			if (u == null) {
+				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+			} else {
+				return Response.ok(u).build();
+			}
 		}
 	}
 	@GET
 	@Path("address/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAddressById(@PathParam("id") int id) {
-		Address a = persistenceController.getAddress(id);
-		if (a == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
-		} else {
-			return Response.ok(a).build();
-		}
+	public Response getAddressById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+
+			Address a = persistenceController.getAddress(id);
+			if (a == null) {
+				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+			} else {
+				return Response.ok(a).build();
+			}
+
+
 	}
 
 
@@ -575,10 +587,17 @@ public class UsersResources {
 		}
 	}
 	@GET
-	@Path("privacy/{id}")
+	@Path("privacy/me")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPrivacyById(@PathParam("id") int id) {
-		Privacy a = persistenceController.getPrivacy(id);
+	public Response getPrivacy(@HeaderParam("Authorization") String auth) {
+		String encodedCredentials = auth.replaceFirst("Basic ", "");
+		String credentials = new
+				String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
+		//Split username and password tokens in credentials
+		final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
+		final String email = tokenizer.nextToken();
+		User u = persistenceController.getUserByEmail(email);
+		Privacy a = persistenceController.getPrivacy(u);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -659,5 +678,20 @@ public class UsersResources {
 		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
 		};
 		return Response.ok(entity).build();
+	}
+	@POST //POST at http://localhost:XXXX/users/
+	@Path("login")
+	@PermitAll
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response LoginUser(String body) {
+		final StringTokenizer tokenizer = new StringTokenizer(body, ":");
+		final String email = tokenizer.nextToken();
+		final String password = tokenizer.nextToken();
+		User user =  persistenceController.getUserByEmail(email);
+		if (persistenceController.login(email, password)){
+			return Response.ok(user).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid email.").build();
+		}
 	}
 }

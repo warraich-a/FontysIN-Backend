@@ -231,10 +231,10 @@ public class FakeDataProfile {
         skills.add(s6);
 
 
-        Privacy privacy1 = new Privacy(1,1);
-        Privacy privacy2 = new Privacy(2,2);
-        privacyList.add(privacy1);
-        privacyList.add(privacy2);
+//        Privacy privacy1 = new Privacy(1,1);
+//        Privacy privacy2 = new Privacy(2,2);
+//        privacyList.add(privacy1);
+//        privacyList.add(privacy2);
     }
 
     //searching implementation by filtering

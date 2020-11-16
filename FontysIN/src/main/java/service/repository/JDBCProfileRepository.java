@@ -411,6 +411,9 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         for (User u: getUsers()) {
             if (u.getId() == userId) {
+
+                Privacy privacy = getPrivacyByUser(u);
+                u.setPrivacy(privacy);
                 return u;
             }
         }
@@ -777,16 +780,16 @@ public class JDBCProfileRepository extends JDBCRepository {
         return privacyList;
     }
 
-    public Privacy getPrivacyById(int pId) throws DatabaseException {
+    public Privacy getPrivacyByUser(User user) throws DatabaseException {
         Connection connection = this.getDatabaseConnection();
-        String sql = "SELECT * FROM privacy WHERE id = ?";
+        String sql = "SELECT * FROM privacy WHERE userId = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, pId);
+            statement.setInt(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()){
                 connection.close();
-                throw new DatabaseException("Privacy with id " + pId + " cannot be found");
+                throw new DatabaseException("Privacy with id " + user.getId() + " cannot be found");
             } else {
                 int id = resultSet.getInt("id");
                 int userId = resultSet.getInt("userId");
