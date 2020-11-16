@@ -570,7 +570,7 @@ public class PersistenceController {
      * @param dId
      * of the user to be shown.
      */
-    //show book by location user type department and start study year
+    //show users by location user type department and start study year
     public List<User> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
