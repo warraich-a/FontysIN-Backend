@@ -683,7 +683,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                filtered.add(userDTO);
 
            }
-
+           connection.close();
 
        } catch (SQLException throwable) {
            throw new DatabaseException("Cannot read users from the database.",throwable);
@@ -718,6 +718,8 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             }
 
+            connection.close();
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read users from the database.",throwable);
@@ -751,6 +753,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -787,6 +791,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -825,6 +831,8 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             }
 
+            connection.close();
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read users from the database.",throwable);
@@ -861,6 +869,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -903,6 +913,8 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             }
 
+            connection.close();
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read users from the database.",throwable);
@@ -944,6 +956,8 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             }
 
+            connection.close();
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read users from the database.",throwable);
@@ -984,6 +998,8 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             }
 
+            connection.close();
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read users from the database.",throwable);
@@ -1019,6 +1035,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 users.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -1061,6 +1079,8 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             }
 
+            connection.close();
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read users from the database.",throwable);
@@ -1096,6 +1116,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
