@@ -2,6 +2,9 @@ package service.repository;
 
 import service.model.*;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +30,19 @@ public class JDBCProfileRepository extends JDBCRepository {
                 Profile e = new Profile(id, userId, language);
                 foundProfiles.add(e);
             }
-            connection.close();
+
+            connection.setAutoCommit(false);
+
+            connection.commit();
+//            statement.close();
+//            connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read profiles from the database.",throwable);
         }
         finally {
-            statement.close();
-            connection.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
         }
         return foundProfiles;
     }
@@ -76,14 +84,18 @@ public class JDBCProfileRepository extends JDBCRepository {
                         Experience e = new Experience(id, profileId, title, company, r, location,  startDate, endDate, description);
                         foundExperiences.add(e);
                     }
-                    connection.close();
+                    connection.setAutoCommit(false);
+
+                    connection.commit();
+//                    statement.close();
+//                    connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.",throwable);
                 }
                 finally {
-                    statement.close();
-                    connection.close();
+                    if (statement != null) statement.close();
+                    if (connection != null) connection.close();
                 }
                 return foundExperiences;
             }
@@ -115,13 +127,17 @@ public class JDBCProfileRepository extends JDBCRepository {
                         Education e = new Education(id, profileId, school, startYear, endYear, degree, fieldStudy, description);
                         foundEducations.add(e);
                     }
-                    connection.close();
+                    connection.setAutoCommit(false);
+
+                    connection.commit();
+//                    statement.close();
+//                    connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
                 } finally {
-                    statement.close();
-                    connection.close();
+                    if (statement != null) statement.close();
+                    if (connection != null) connection.close();
                 }
                 return foundEducations;
             }
@@ -148,13 +164,17 @@ public class JDBCProfileRepository extends JDBCRepository {
                         About e = new About(id, profileId, content);
                         foundAbout.add(e);
                     }
-                    connection.close();
+                    connection.setAutoCommit(false);
+
+                    connection.commit();
+//                    statement.close();
+//                    connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
                 } finally {
-                    statement.close();
-                    connection.close();
+                    if (statement != null) statement.close();
+                    if (connection != null) connection.close();
                 }
                 return foundAbout;
             }
@@ -181,13 +201,18 @@ public class JDBCProfileRepository extends JDBCRepository {
                         Skill e = new Skill(id, profileId, name);
                         foundSkill.add(e);
                     }
-                    connection.close();
+                    connection.setAutoCommit(false);
+
+                    connection.commit();
+//                    statement.close();
+//                    connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
                 } finally {
-                    statement.close();
-                    connection.close();
+                    if (statement != null) statement.close();
+                    if (connection != null) connection.close();
+
                 }
                 return foundSkill;
             }
@@ -195,13 +220,14 @@ public class JDBCProfileRepository extends JDBCRepository {
         return null;
     }
 
-    public List<User> getUsers() throws DatabaseException, SQLException {
-        List<User> allUsers = new ArrayList<>();
+    public User getUser(int userId) throws DatabaseException, SQLException {
+        User user = null;
 
         Connection connection = this.getDatabaseConnection();
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM users where id =?";
         PreparedStatement statement = connection.prepareStatement(sql);
         try {
+            statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -230,30 +256,34 @@ public class JDBCProfileRepository extends JDBCRepository {
                     r = UserType.FontysStaff;
                 }
 
-                User u = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                allUsers.add(u);
+                user = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
 
             }
-            connection.close();
+            connection.setAutoCommit(false);
+
+            connection.commit();
+//            statement.close();
+//            connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
         } finally {
-            statement.close();
-            connection.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+
         }
-        return allUsers;
+        return user;
     }
 
-    public User getUser(int userId) throws DatabaseException, SQLException {
-
-        for (User u: getUsers()) {
-            if (u.getId() == userId) {
-                return u;
-            }
-        }
-        return null;
-    }
+//    public User getUser(int userId) throws DatabaseException, SQLException {
+//
+//        for (User u: getUsers()) {
+//            if (u.getId() == userId) {
+//                return u;
+//            }
+//        }
+//        return null;
+//    }
 
     public boolean createExperience(Experience experience) throws DatabaseException, SQLException {
         Connection connection = this.getDatabaseConnection();
@@ -280,17 +310,20 @@ public class JDBCProfileRepository extends JDBCRepository {
                 connection.setAutoCommit(false);
 //                ps.close();
                 connection.commit();
-                connection.close();
+//                preparedStatement.close();
+//                connection.close();
 
-                return true;
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot create new experience.", throwable);
         }
         finally {
-            preparedStatement.close();
-            connection.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+
         }
+        return true;
 
     }
 
@@ -318,27 +351,30 @@ public class JDBCProfileRepository extends JDBCRepository {
             connection.setAutoCommit(false);
 //            ps.close();
             connection.commit();
-            connection.close();
+//            preparedStatement.close();
+//            connection.close();
 
-            return true;
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot create new education.", throwable);
         }
         finally {
-            preparedStatement.close();
-            connection.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
         }
+        return true;
     }
 
     public boolean createSkill(Skill skill, int userId) throws DatabaseException, SQLException {
-        Connection connection = this.getDatabaseConnection();
+
 
         for (Skill p: getSkills(userId, skill.getProfileId())) {
           if (p.getName().equals(skill.getName())) {
               return false;
           }
         }
+        Connection connection = this.getDatabaseConnection();
         String sql = "INSERT INTO skills ( profileId, name) VALUES (?,?) ";
         PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
 
@@ -350,22 +386,23 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             connection.setAutoCommit(false);
             connection.commit();
+            preparedStatement.close();
             connection.close();
-
             return true;
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot create new skill.", throwable);
         }
         finally {
-            preparedStatement.close();
-            connection.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
         }
+
     }
 
 
     public int createProfile(Profile newProfile, int userId) throws DatabaseException, SQLException {
-        Connection connection = this.getDatabaseConnection();
+
         int id = 0;
         boolean exist;
         exist = false;
@@ -378,6 +415,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                 }
             }
         }
+        Connection connection = this.getDatabaseConnection();
         ResultSet rs = null;
         if(!exist) {
             String sql = "INSERT INTO profiles (userId, language) VALUES (?,?) ";
@@ -399,7 +437,9 @@ public class JDBCProfileRepository extends JDBCRepository {
 //                ps.setString(1, "id");
                 connection.setAutoCommit(false);
 //                ps.close();
+
                 connection.commit();
+                preparedStatement.close();
                 connection.close();
                 return id;
 
@@ -407,8 +447,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             } catch (SQLException throwable) {
                 throw new DatabaseException("Cannot create new profile.", throwable);
             } finally {
-                preparedStatement.close();
-                connection.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
             }
         }
         return 0;
@@ -418,7 +458,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "INSERT INTO about ( profileId, content) VALUES (?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         try {
             preparedStatement.setInt(1, about.getProfileId());
@@ -426,22 +466,190 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
 
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, "value");
             connection.setAutoCommit(false);
-            ps.close();
-            connection.commit();
-            connection.close();
 
+
+            connection.commit();
+            preparedStatement.close();
+            connection.close();
             return true;
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot create new about.", throwable);
         }
         finally {
-            preparedStatement.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+        }
+
+    }
+
+
+    public boolean uploadImage(int userId, String path) throws DatabaseException, SQLException, IOException {
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "update users set image=? where id = ? ";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
+
+
+        try {
+            preparedStatement.setString(1, path);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.executeUpdate();
+
+            connection.setAutoCommit(false);
+
+
+            connection.commit();
             connection.close();
+            preparedStatement.close();
+            return true;
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot upload image.", throwable);
+        }
+        finally {
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
         }
     }
 
+    public List<Location> getFontysLocation() throws DatabaseException, SQLException {
+        List<Location> fontysLocations = new ArrayList<>();
+
+            Connection connection = this.getDatabaseConnection();
+            String sql = "SELECT * FROM fontysLocations";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            try {
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String streetName = resultSet.getString("streetName");
+                    String buildingNumber = resultSet.getString("buildingNumber");
+                    String city = resultSet.getString("city");
+                    String zipcode = resultSet.getString("zipcode");
+
+                    Location e = new Location(id, streetName, buildingNumber, city, zipcode);
+                    fontysLocations.add(e);
+                }
+                connection.setAutoCommit(false);
+                connection.commit();
+
+            } catch (SQLException throwable) {
+                throw new DatabaseException("Cannot read students from the database.", throwable);
+            } finally {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            }
+
+        return fontysLocations;
+    }
+
+    public List<Department> getFontysDepartments() throws DatabaseException, SQLException {
+        List<Department> fontysDepartments = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM departments";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        try {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+
+                Department e = new Department(id, name, description);
+                fontysDepartments.add(e);
+            }
+            connection.setAutoCommit(false);
+            connection.commit();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read students from the database.", throwable);
+        } finally {
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+
+        return fontysDepartments;
+    }
+
+
+    public int createAddress(Address address) throws DatabaseException, SQLException {
+        int id = 0;
+        Connection connection = this.getDatabaseConnection();
+        ResultSet rs = null;
+
+        String sql = "INSERT INTO addresses (streetName, houseNumber, city, zipcode) VALUES (?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+        try {
+            preparedStatement.setString(1, address.getStreetName());
+            preparedStatement.setString(2, address.getHouseNumber());
+            preparedStatement.setString(3, address.getCity());
+            preparedStatement.setString(4, address.getZipCode());
+
+            preparedStatement.executeUpdate();
+
+            rs = preparedStatement.getGeneratedKeys();
+            if(rs != null && rs.next()){
+                System.out.println("Generated Emp Id: "+rs.getInt(1));
+                id = rs.getInt(1);
+            }
+            connection.setAutoCommit(false);
+            connection.commit();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot create new experience.", throwable);
+        }
+        finally {
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+
+        }
+        return id;
+    }
+
+    public boolean createUser(User user) throws DatabaseException, SQLException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, phoneNr, addressId, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+        try {
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, String.valueOf(user.getUserType()));
+            preparedStatement.setString(4, user.getEmail());
+            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setString(6, user.getPhoneNumber());
+            preparedStatement.setInt(7, user.getAddressId());
+            preparedStatement.setString(8, user.getImg());
+            preparedStatement.setInt(9, user.getLocationId());
+            preparedStatement.setInt(10, user.getDepartmentId());
+            preparedStatement.setString(11, user.getUserNumber());
+
+            preparedStatement.executeUpdate();
+
+//            rs = preparedStatement.getGeneratedKeys();
+//            if(rs != null && rs.next()){
+//                System.out.println("Generated Emp Id: "+rs.getInt(1));
+//                id = rs.getInt(1);
+//            }
+            connection.setAutoCommit(false);
+            connection.commit();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Something Wrong with query", throwable);
+        }
+        finally {
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+
+        }
+        return true;
+    }
 }

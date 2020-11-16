@@ -1,5 +1,7 @@
 package service.resources;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import service.PersistenceController;
 import service.model.*;
 import service.model.dto.ContactDTO;
@@ -9,6 +11,7 @@ import service.repository.FakeDataProfile;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.*;
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -620,5 +623,76 @@ public class UsersResources {
 		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
 		};
 		return Response.ok(entity).build();
+	}
+
+	@GET
+	@Produces (MediaType.APPLICATION_JSON)
+	@Path("fontysLocations")
+	public Response getFontysLocations (){
+		PersistenceController persistenceController = new PersistenceController();
+		List<Location> locations =persistenceController.getFontysLocations();
+
+		if (locations == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		}
+		else
+			{
+				GenericEntity<List<Location>> entity = new GenericEntity<>(locations) {
+			};
+			return Response.ok(entity).build();
+		}
+	}
+
+	@GET
+	@Produces (MediaType.APPLICATION_JSON)
+	@Path("fontysDepartments")
+	public Response getFontysDepartments (){
+		PersistenceController persistenceController = new PersistenceController();
+		List<Department> departments =persistenceController.getFontysDepartments();
+
+		if (departments == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		}
+		else
+		{
+			GenericEntity<List<Department>> entity = new GenericEntity<>(departments) {
+			};
+			return Response.ok(entity).build();
+		}
+	}
+
+	@POST //POST at http://localhost:XXXX/profile/experience
+	@Path("newAddress")
+	public Response createAddress(Address address) throws DatabaseException, SQLException {
+
+		PersistenceController persistenceController = new PersistenceController();
+		int id = persistenceController.createAddress(address);
+		if (id == 0)
+		{
+			String entity =  "Address Id is zero";
+			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+		} else {
+			return Response.ok(id).build();
+		}
+	}
+
+
+	// to add a new experience
+	@POST //POST at http://localhost:XXXX/profile/experience
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("new")
+	public Response createUser(User e) {
+		PersistenceController persistenceController = new PersistenceController();
+
+		if (!persistenceController.addUser(e))
+		{
+			String entity =  "User is not added";
+			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
+			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+		} else {
+			String url = uriInfo.getAbsolutePath() + "/" + e.getId(); //
+			URI uri = URI.create(url);
+			return Response.created(uri).build();
+		}
 	}
 }

@@ -127,7 +127,7 @@ public class JDBCPosts extends JDBCRepository {
             statement.setBlob(4, post.getImage());
             statement.setInt(5, post.getId());
             statement.executeUpdate();
-
+            connection.close();
 
             return true;
         } catch (SQLException throwables) {
@@ -144,7 +144,7 @@ public class JDBCPosts extends JDBCRepository {
             statement.setInt(1,post.getId());
 
             statement.executeUpdate();
-
+            connection.close();
 
 
             return true;

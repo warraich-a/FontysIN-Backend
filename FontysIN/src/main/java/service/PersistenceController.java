@@ -6,6 +6,10 @@ import service.repository.JDBCComments;
 import service.repository.JDBCPosts;
 import service.repository.JDBCProfileRepository;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -338,5 +342,70 @@ public class PersistenceController {
         }
     }
 
+    public boolean uploadPicture(int userId, String path){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            if(profileRepository.uploadImage(userId, path)) {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        } catch (DatabaseException | SQLException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    public List<Location> getFontysLocations(){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            List<Location> locations = profileRepository.getFontysLocation();
+
+            System.out.println("ok");
+
+            return locations;
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Department> getFontysDepartments(){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            return  profileRepository.getFontysDepartments();
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public int createAddress(Address address) throws DatabaseException, SQLException {
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        int id = profileRepository.createAddress(address);
+        if( id != 0) {
+            return id;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public boolean addUser(User user) {
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        try {
+            if(profileRepository.createUser(user)) {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        } catch (DatabaseException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
