@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class JDBCProfileRepository<user> extends JDBCRepository {
+public class JDBCProfileRepository extends JDBCRepository {
 
 
     public List<Profile> getProfile(int givenUserId) throws DatabaseException, SQLException {
@@ -421,15 +421,15 @@ public class JDBCProfileRepository<user> extends JDBCRepository {
                 allUsers.add(u);
 
             }
-            connection.close();
+//            connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
         }
-//        finally {
-//            statement.close();
-//            connection.close();
-//        }
+        finally {
+            if  (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
         return allUsers;
     }
 
