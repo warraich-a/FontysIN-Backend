@@ -643,7 +643,7 @@ public class UsersResources {
 
 		PersistenceController controller = new PersistenceController();
 
-		List<User> users;
+		List<UserDTO> users;
 		//If query parameter is missing return all users. Otherwise filter users by given user type fontys staff location and department and start work year
 		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
@@ -678,7 +678,7 @@ public class UsersResources {
 		else {
 			users = controller.GetAllUsers();
 		}
-		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
+		GenericEntity<List<UserDTO>> entity = new GenericEntity<>(users) {
 		};
 		return Response.ok(entity).build();
 	}
