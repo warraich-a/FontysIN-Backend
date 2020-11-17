@@ -123,6 +123,20 @@ public class PostResources {
         return Response.ok(entity.size()).build();
     }
 
+    @GET
+    @Path("{id}/likes/user/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPostLikeByUser(@PathParam("id") int stNr, @PathParam("userId") int userId) {
+
+        Like like = persistenceController.getPostLikesByUser(stNr,userId);
+
+        if (like == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("").build();
+        } else {
+            return Response.ok(like).build();
+        }
+    }
+
     @POST
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})

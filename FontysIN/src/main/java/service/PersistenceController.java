@@ -220,6 +220,19 @@ public class PersistenceController {
         return null;
     }
 
+    public Like getPostLikesByUser(int id,int userId){
+        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+
+        try {
+            Like like = (Like) likeRepository.getPostLikeByUSer(id,userId);
+
+            return like;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean addLike (Like like){
         JDBCLikeRepository likeRepository = new JDBCLikeRepository();
 

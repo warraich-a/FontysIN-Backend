@@ -62,6 +62,33 @@ public class JDBCLikeRepository extends JDBCRepository {
         return likes;
     }
 
+    public Like getPostLikeByUSer(int id,int userId) throws DatabaseException {
+        Like like = null;
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM likes WHERE postId = ? AND likerId = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            statement.setInt(2, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                int Id = resultSet.getInt("id");
+                int postId = resultSet.getInt("postId");
+                int likerId = resultSet.getInt("likerId");
+
+
+                like = new Like(Id,postId,likerId);
+
+            }
+            connection.setAutoCommit(false);
+            connection.close();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read products from the database.",throwable);
+        }
+        return like;
+    }
+
     public boolean addLike(Like like) throws DatabaseException{
         Connection connection = this.getDatabaseConnection();
         boolean exist = false;
