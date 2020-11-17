@@ -2,7 +2,7 @@ package service.model;
 
 import service.model.dto.UserDTO;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class Message {
     private int id;
@@ -10,9 +10,10 @@ public class Message {
     private UserDTO sender;
     private UserDTO receiver;
     private String content;
-    private LocalDateTime dataTime;
+//    private LocalDateTime dataTime;
+    private Timestamp dataTime;
 
-    public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, LocalDateTime dataTime) {
+    public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, Timestamp dataTime) {
         this.id = id;
         this.conversationId = conversationId;
         this.sender = sender;
@@ -61,11 +62,11 @@ public class Message {
         this.content = content;
     }
 
-    public LocalDateTime getDataTime() {
+    public Timestamp getDataTime() {
         return dataTime;
     }
 
-    public void setDataTime(LocalDateTime dataTime) {
+    public void setDataTime(Timestamp dataTime) {
         this.dataTime = dataTime;
     }
 

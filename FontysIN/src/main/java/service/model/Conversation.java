@@ -1,6 +1,5 @@
 package service.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Conversation {
@@ -9,7 +8,7 @@ public class Conversation {
 
     public Conversation(int id, List<Message> messages) {
         this.id = id;
-        this.messages = new ArrayList<>();
+        this.messages = messages;
     }
 
     public int getId() {

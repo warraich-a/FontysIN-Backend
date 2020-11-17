@@ -2,6 +2,7 @@ package service.repository;
 
 import service.model.Conversation;
 import service.model.Message;
+import service.model.dto.UserDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -51,22 +52,32 @@ public class MessagesRepository extends JDBCRepository {
             throw new DatabaseException("Cannot create the message");
         }
     }
+    
 
-
-
+    //     public UserConversationDTO(int id, int profileId, String firstName, String lastName, String image) {
+    //     public Conversation(int id, List<Message> messages) {
+    //     public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, LocalDateTime dataTime) {
     public List<Conversation> getConversations(int id) throws DatabaseException {
-        List<Conversation> conversations = new ArrayList<>();
 
         Connection connection = super.getDatabaseConnection();
 
-        //     public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, LocalDateTime dataTime) {
-        //     public Conversation(int id, List<Message> messages) { // db : id, firstUserId, isDeletedFirstUser, secondUserId, isDeletedSecondUser
-        //     public UserConversationDTO(int id, int profileId, String firstName, String lastName, String image) {
-        String sql = "SELECT u.id AS userId, u.firstName, u.lastName, u.image, " +
-                            "m.id AS messageId, m.conversationId, m.senderId, m.receiverId, m.content, m.date FROM users AS u " +
-                            "INNER JOIN conversations AS c ON (u.id = c.firstUserId) OR (u.id = secondUserId) " +
-                            "INNER JOIN messages AS m ON (m.conversationId = c.id) " +
-                            "WHERE u.id = ?";
+        String sql = "SELECT m.id AS messageId, m.conversationId, m.senderId, m.receiverId, m.content, m.dateو " +
+                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
+                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
+                "FROM conversations AS c " +
+                "INNER JOIN messages AS m ON (m.conversationId = c.id) " +
+                "LEFT JOIN users USER ON m.senderId = user.id " +
+                "LEFT JOIN users friend ON m.receiverId = friend.id " +
+                "LEFT JOIN " +
+                "  (SELECT id AS userProfileId, userId " +
+                "   FROM profiles " +
+                "   GROUP BY userId) p1 ON p1.userId = user.id " +
+                "LEFT JOIN " +
+                "  (SELECT id AS friendProfileId, userId " +
+                "   FROM profiles " +
+                "   GROUP BY userId) p2 ON p2.userId = friend.id " +
+                "WHERE (c.firstUserId = ?) OR (c.secondUserId = ?) " +
+                "ORDER BY conversationId";
 
         // 1. Get all messages for a conversation
         // 2. Create a conversation
@@ -77,36 +88,70 @@ public class MessagesRepository extends JDBCRepository {
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
-//            statement.setInt(2, id);
+            statement.setInt(2, id);
 
             ResultSet resultSet = statement.executeQuery();
 
-            while(resultSet.next()) {
-                int userId = resultSet.getInt("userId");
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+            List<Conversation> conversations = new ArrayList<>();
+            List<Message> messages = new ArrayList<>();
+            UserDTO currentUser = null;
 
+            int lastConversationId = -1;
+            while(resultSet.next()) {
+                //  m.id AS messageId, m.conversationId, m.senderId, m.receiverId, m.content, m.dateو
                 int messageId = resultSet.getInt("messageId");
                 int conversationId = resultSet.getInt("conversationId");
-                int senderId = resultSet.getInt("messageId");
+                int senderId = resultSet.getInt("senderId");
                 int receiverId = resultSet.getInt("receiverId");
                 String content = resultSet.getString("content");
                 Timestamp dateTime = resultSet.getTimestamp("date");
 
-//                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber);
+                // user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId,
+                int userId = resultSet.getInt("userId");
+                String firstName = resultSet.getString("userFirstName");
+                String lastName = resultSet.getString("userLastName");
+                String image = resultSet.getString("userImage");
+                int profileId = resultSet.getInt("userProfileId");
 
+                int friendId = resultSet.getInt("friendId");
+                String friendFirstName = resultSet.getString("friendFirstName");
+                String friendLastName = resultSet.getString("friendLastName");
+                String friendImage = resultSet.getString("friendImage");
+                int friendProfileId = resultSet.getInt("friendProfileId");
 
-//                Contact contact = new Contact(contactId, user, friend);
+//                if(currentUser == null && id == senderId) {
+//                    currentUser = new UserDTO(userId, )
+//                }
 
-//                contacts.add(contact);
+               // UserConversationDTO -> container user's details (UserDTO) and list of conversations) NOT NEEDED
+                // Conversation -> contains id and a list of messages
+                // Message -> contains id, conversationId, UserDTO sender, UserDTO receiver, content, dateTime
+
+                // New conversation?
+                if(conversationId != lastConversationId) {
+                    Conversation conversation = new Conversation(conversationId, messages);
+
+                    conversations.add(conversation);
+
+                    lastConversationId = conversationId;
+
+                    messages = new ArrayList<>();
+                }
+
+                // Create message
+                UserDTO sender = new UserDTO(userId, profileId, firstName, lastName, image);
+                UserDTO receiver = new UserDTO(friendId, friendProfileId, friendFirstName, friendLastName, friendImage);
+
+                Message message = new Message(messageId, conversationId, sender, receiver, content, dateTime);
+                messages.add(message);
             }
 
             connection.close();
+
+            return conversations;
         }
         catch (SQLException throwable) {
             throw new DatabaseException("Cannot read contacts from the database.", throwable);
         }
-        return conversations;
     }
 }
