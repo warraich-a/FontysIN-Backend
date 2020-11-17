@@ -120,7 +120,7 @@ public class PersistenceController {
         try {
             List<Comments> comments = (List<Comments>) commentsRepository.getComments();
 
-            System.out.println("ok");
+
 
             return comments;
         } catch (DatabaseException e) {
@@ -135,7 +135,7 @@ public class PersistenceController {
         try {
             List<Comments> comments = (List<Comments>) commentsRepository.getCommentsByPostId(pId);
 
-            System.out.println("ok");
+
 
             return comments;
         } catch (DatabaseException e) {
@@ -150,7 +150,7 @@ public class PersistenceController {
         try {
             Comments comm = (Comments) commentsRepository.getComment(Id);
 
-            System.out.println("ok");
+
 
             return comm;
         } catch (DatabaseException e) {
@@ -193,7 +193,58 @@ public class PersistenceController {
     }
 
     //End of Comment section
+    //Like section
+    public List<Like> getLikes(){
+        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
 
+        try {
+            List<Like> likes = (List<Like>) likeRepository.getLikes();
+
+            return likes;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Like> getLikesByPost(int id){
+        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+
+        try {
+            List<Like> likes = (List<Like>) likeRepository.getLikesByPost(id);
+
+            return likes;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean addLike (Like like){
+        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+
+        try {
+            return likeRepository.addLike(like);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteLike(Like like){
+        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+
+        try {
+            return likeRepository.deleteLike(like);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+
+    //End of Like section
     //Profile
 
     public List<About> getAbout(int userId, int profileId){

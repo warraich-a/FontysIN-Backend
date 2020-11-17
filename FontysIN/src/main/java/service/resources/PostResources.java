@@ -2,6 +2,7 @@ package service.resources;
 
 import service.PersistenceController;
 import service.model.Comments;
+import service.model.Like;
 import service.model.Posts;
 import service.repository.FakeDataPostComm;
 
@@ -102,5 +103,42 @@ public class PostResources {
             return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid post id.").build();
         }
     }
+
+    @GET
+    @Path("{id}/likes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPostLikes(@PathParam("id") int stNr) {
+
+        GenericEntity<List<Like>> entity = new GenericEntity<>(persistenceController.getLikesByPost(stNr)) {  };
+        return Response.ok(entity).build();
+    }
+
+    @GET
+    @Path("{id}/likes/count")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getPostLikesCount(@PathParam("id") int stNr) {
+
+        List<Like> entity = persistenceController.getLikesByPost(stNr);
+
+        return Response.ok(entity.size()).build();
+    }
+
+    @POST
+    @Path("{id}/likes")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN})
+    public Response createLike(Like like) {
+        if (!persistenceController.addLike(like)){
+            String entity =  "Like with same post id " + like.getId() + " already exists.";
+            return Response.status(Response.Status.CONFLICT).entity(entity).build();
+        } else {
+            String url = uriInfo.getAbsolutePath() + "/" + like.getId();
+            URI uri = URI.create(url);
+            return Response.created(uri).build();
+        }
+    }
+
+
+
 
 }
