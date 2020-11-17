@@ -52,12 +52,17 @@ public class MessagesRepository extends JDBCRepository {
             throw new DatabaseException("Cannot create the message");
         }
     }
-    
+
 
     //     public UserConversationDTO(int id, int profileId, String firstName, String lastName, String image) {
     //     public Conversation(int id, List<Message> messages) {
     //     public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, LocalDateTime dataTime) {
     public List<Conversation> getConversations(int id) throws DatabaseException {
+        // 1. Get all messages for a conversation
+        // 2. Create a conversation
+        // 3. Add conversation to conversations list
+        // 4. Repeat
+        //Conversation conversation = new Conversation(id, messages);
 
         Connection connection = super.getDatabaseConnection();
 
@@ -78,12 +83,6 @@ public class MessagesRepository extends JDBCRepository {
                 "   GROUP BY userId) p2 ON p2.userId = friend.id " +
                 "WHERE (c.firstUserId = ?) OR (c.secondUserId = ?) " +
                 "ORDER BY conversationId";
-
-        // 1. Get all messages for a conversation
-        // 2. Create a conversation
-        // 3. Add conversation to conversations list
-        // 4. Repeat
-        //Conversation conversation = new Conversation(id, messages);
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);

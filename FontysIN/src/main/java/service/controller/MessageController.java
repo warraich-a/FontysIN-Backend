@@ -1,14 +1,10 @@
 package service.controller;
 
-import service.model.*;
+import service.model.Conversation;
+import service.model.Message;
 import service.repository.DatabaseException;
 import service.repository.MessagesRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MessageController {
@@ -29,6 +25,25 @@ public class MessageController {
             System.out.println(e.getMessage());
         }
         return messageId;
+    }
+
+    /***
+     *
+     * @param id
+     * @return list of conversations of a specific user
+     */
+    public List<Conversation> getConversations(int id) {
+        MessagesRepository messagesRepository = new MessagesRepository();
+
+        List<Conversation> conversations = null;
+        try {
+            conversations =  messagesRepository.getConversations(id);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        return conversations;
     }
 
 
