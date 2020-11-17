@@ -173,14 +173,22 @@ public class ContactsRepository extends JDBCRepository {
         Connection connection = super.getDatabaseConnection();
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
-                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.* , " +
-                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.* " +
+                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
+                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
                 "FROM contacts " +
-                "LEFT JOIN users user ON contacts.userId = user.id " +
+                "LEFT JOIN users USER ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId FROM profiles LIMIT 1) p1 ON userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId FROM profiles LIMIT 1) p2 ON userId = friend.id " +
-                "WHERE user.id = ? OR friend.id = ?";
+                "LEFT JOIN " +
+                "  (SELECT id AS userProfileId, userId " +
+                "FROM profiles " +
+                "GROUP BY userId) p1 ON p1.userId = user.id " +
+                "LEFT JOIN " +
+                "  (SELECT id AS friendProfileId, userId " +
+                "   FROM profiles " +
+                "   GROUP BY userId) p2 ON p2.userId = friend.id " +
+                "WHERE (user.id = ? " +
+                "       OR friend.id = ?)";
+
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -238,6 +246,7 @@ public class ContactsRepository extends JDBCRepository {
                 "INNER JOIN users ON users.id = contacts.userId " +
                 "INNER JOIN users friend ON friend.id = contacts.friendId " +
                 "WHERE (contacts.userId = ? OR contacts.friendId = ?) AND isAccepted = true";
+
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -332,9 +341,9 @@ public class ContactsRepository extends JDBCRepository {
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId FROM profiles LIMIT 1) p1 ON userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId FROM profiles LIMIT 1) p2 ON userId = friend.id " +
-                "WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true";
+                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId) p1 ON p1.userId = user.id " +
+                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId) p2 ON p2.userId = friend.id " +
+                "   WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -391,7 +400,7 @@ public class ContactsRepository extends JDBCRepository {
                 "FROM contacts " +
                 "INNER JOIN users ON users.id = contacts.userId " +
                 "INNER JOIN users friend ON friend.id = contacts.friendId " +
-                "WHERE contacts.friendId = ? AND isAccepted = false";
+                "   WHERE contacts.friendId = ? AND isAccepted = false";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -486,9 +495,9 @@ public class ContactsRepository extends JDBCRepository {
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId FROM profiles LIMIT 1) p1 ON userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId FROM profiles LIMIT 1) p2 ON userId = friend.id " +
-                "WHERE friend.id = ? AND contacts.isAccepted = false";
+                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId) p1 ON p1.userId = user.id " +
+                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId) p2 ON p2.userId = friend.id " +
+                "   WHERE (friend.id = ?) AND contacts.isAccepted = false";
 
 
         try {

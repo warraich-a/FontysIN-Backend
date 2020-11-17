@@ -1,8 +1,15 @@
 package service.controller;
 
-import service.model.Message;
+import service.model.*;
 import service.repository.DatabaseException;
 import service.repository.MessagesRepository;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageController {
     /**
@@ -23,4 +30,6 @@ public class MessageController {
         }
         return messageId;
     }
+
+
 }
