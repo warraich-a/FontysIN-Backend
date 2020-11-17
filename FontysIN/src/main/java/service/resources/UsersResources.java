@@ -277,12 +277,15 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 
 		PersistenceController persistenceController = new PersistenceController();
+
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
+
 		List<Experience> experienceByProfileId = persistenceController.getExperience(userId, profileId);
 
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.EXPERIENCE);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.EXPERIENCE);
 
 		if(AllowToSee){
 			if (experienceByProfileId == null) {
@@ -301,10 +304,12 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/educations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 		PersistenceController persistenceController = new PersistenceController();
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
+
 		List<Education> educations = persistenceController.getEducations(userId, profileId);
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.EDUCATION);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.EDUCATION);
 		if(AllowToSee){
 		if (educations == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -336,11 +341,12 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/skills")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 		PersistenceController persistenceController = new PersistenceController();
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
 
 		List<Skill> skills = persistenceController.getSkills(userId, profileId);
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.SKILLS);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.SKILLS);
 		if(AllowToSee){
 			if (skills == null) {
 				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();

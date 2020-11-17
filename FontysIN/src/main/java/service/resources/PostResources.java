@@ -1,5 +1,6 @@
 package service.resources;
 
+import service.PersistenceController;
 import service.model.Comments;
 import service.model.Posts;
 import service.repository.FakeDataPostComm;
@@ -14,13 +15,13 @@ public class PostResources {
     @Context
     private UriInfo uriInfo;
 
-    private static final FakeDataPostComm fakeDataStore = new FakeDataPostComm();
+    PersistenceController persistenceController = new PersistenceController();;
 
     @GET
     @Path("")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPosts() {
-        GenericEntity<List<Posts>> entity = new GenericEntity<>(fakeDataStore.getPostsList()) {  };
+        GenericEntity<List<Posts>> entity = new GenericEntity<>(persistenceController.getPosts()) {  };
         return Response.ok(entity).build();
     }
 
@@ -29,12 +30,20 @@ public class PostResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPostPath(@PathParam("id") int stNr) {
 
-        Posts post = fakeDataStore.getPost(stNr);
+        Posts post = persistenceController.getPost(stNr);
         if (post == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid post id.").build();
         } else {
             return Response.ok(post).build();
         }
+    }
+    @GET
+    @Path("newsfeed/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNewsfeed(@PathParam("id") int stNr) {
+
+        GenericEntity<List<Posts>> entity = new GenericEntity<>(persistenceController.getNewsfeed(stNr)) {  };
+        return Response.ok(entity).build();
     }
 
     @GET
@@ -42,7 +51,7 @@ public class PostResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPostByUser(@PathParam("id") int stNr) {
 
-        GenericEntity<List<Posts>> entity = new GenericEntity<>(fakeDataStore.getPostsListbyUserId(stNr)) {  };
+        GenericEntity<List<Posts>> entity = new GenericEntity<>(persistenceController.getPostByUserId(stNr)) {  };
         return Response.ok(entity).build();
     }
 
@@ -51,7 +60,7 @@ public class PostResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPostContent(@PathParam("id") int stNr) {
 
-        Posts post = fakeDataStore.getPost(stNr);
+        Posts post = persistenceController.getPost(stNr);
         if (post == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid post id.").build();
         } else {
@@ -62,7 +71,7 @@ public class PostResources {
     @DELETE
     @Path("{id}")
     public Response deletePost(@PathParam("id") int stNr) {
-        fakeDataStore.deletePost(stNr);
+        persistenceController.deletePost(persistenceController.getPost(stNr));
 
         return Response.noContent().build();
     }
@@ -72,7 +81,7 @@ public class PostResources {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_PLAIN})
     public Response createPost(Posts post) {
-        if (!fakeDataStore.addPost(post)){
+        if (!persistenceController.addPost(post)){
             String entity =  "Post with same post id " + post.getId() + " already exists.";
             return Response.status(Response.Status.CONFLICT).entity(entity).build();
         } else {
@@ -87,7 +96,7 @@ public class PostResources {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.TEXT_PLAIN})
     public Response updatePost(Posts post) {
-        if (fakeDataStore.updatePost(post)) {
+        if (persistenceController.updatePost(post)) {
             return Response.noContent().build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid post id.").build();

@@ -472,13 +472,14 @@ public class JDBCProfileRepository extends JDBCRepository {
                 }
 
                 user = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
-
+                Privacy privacy = getPrivacyByUser(user);
+                user.setPrivacy(privacy);
             }
             connection.setAutoCommit(false);
 
             connection.commit();
 //            statement.close();
-//            connection.close();
+//          connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
@@ -490,29 +491,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return user;
     }
 
-    public User getUser(int userId) throws DatabaseException, SQLException {
 
-        for (User u: getUsers()) {
-            if (u.getId() == userId) {
-
-                Privacy privacy = getPrivacyByUser(u);
-                u.setPrivacy(privacy);
-                return u;
-            }
-        }
-        return null;
-    }
-
-
-//    public User getUser(int userId) throws DatabaseException, SQLException {
-//
-//        for (User u: getUsers()) {
-//            if (u.getId() == userId) {
-//                return u;
-//            }
-//        }
-//        return null;
-//    }
 
     public boolean createExperience(Experience experience) throws DatabaseException, SQLException {
         Connection connection = this.getDatabaseConnection();
