@@ -33,6 +33,22 @@ public class PersistenceController {
         }
         return null;
     }
+    public List<Posts> getNewsfeed(int uId){
+        JDBCPosts postsRepository = new JDBCPosts();
+
+        try {
+            List<Posts> posts = (List<Posts>) postsRepository.getNewsfeed(uId);
+
+            for (Posts post: posts) {
+                System.out.println(post.getId());
+            }
+
+            return posts;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public List<Posts> getPostByUserId(int uId){
         JDBCPosts postsRepository = new JDBCPosts();
 
