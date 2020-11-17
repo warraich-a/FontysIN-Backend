@@ -651,6 +651,28 @@ public class PersistenceController {
         }
     }
 
+    /**
+     * Show/print the users with the given usertype start work year location and department
+     * @param chars
+     * of the user to be shown.
+     */
+    //show users by location user type department and start study year
+    public List<UserDTO> UserFilterByFirstNameChars(String chars){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<UserDTO> users = profileRepository.getUsersByFirstNameChars(chars);
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     /* ------------------------------------------------- Contacts -----------------------------------------------------------------*/
 
     /**

@@ -1526,6 +1526,44 @@ public class JDBCProfileRepository extends JDBCRepository {
         return filtered;
     }
 
+    //get all users with the given first name chars
+    public List<UserDTO> getUsersByFirstNameChars(String chars) throws DatabaseException {
+
+        List<UserDTO> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
+                "INNER JOIN profiles p ON u.id = p.userId WHERE u.firstName " +
+                "LIKE CONCAT ('%', ? ,'%') GROUP BY u.id";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, chars); // set characters
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String image = resultSet.getString("image");
+                int profileId = resultSet.getInt("profileId");
+
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
+
+            }
+
+            connection.close();
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
 
 
     public int createAddress(Address address) throws DatabaseException, SQLException {

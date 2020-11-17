@@ -640,7 +640,7 @@ public class UsersResources {
 		}
 	}
 
-	//filter users by user type department, location, name, start study year and start work year (searching by filter)
+	//filter users by user type department, location, start study year and start work year (searching by filter)
 	@GET //GET at http://localhost:9090/users?type= Or ?department= Or ?location= Or ?studyYear= Or ?workingYear=
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
@@ -673,14 +673,17 @@ public class UsersResources {
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
 			users = controller.UserFilteredWithDepartment(depId);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
+		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by fontys location
 			users = controller.UserFilteredWithLocation(locId);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
+		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year at fontys
 			users = controller.UserFilteredWithStartStudyYear(year);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("workingYear")){ //filter by start work year
+		else if (uriInfo.getQueryParameters().containsKey("workingYear")){ //filter by start work year at fontys
 			users = controller.UserFilteredWithStartWorkYear(workYear);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("firstName")){ //filter by name using chars
+			users = controller.UserFilterByFirstNameChars(name);
 		}
 		else {
 			users = controller.GetAllUsers();
