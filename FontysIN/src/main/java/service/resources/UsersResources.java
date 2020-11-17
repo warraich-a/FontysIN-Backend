@@ -640,32 +640,33 @@ public class UsersResources {
 		}
 	}
 
-	//filter users by user type department, location, start study year and start work year (searching by filter)
+	//filter users by user type department, location, name, start study year and start work year (searching by filter)
 	@GET //GET at http://localhost:9090/users?type= Or ?department= Or ?location= Or ?studyYear= Or ?workingYear=
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
-									 @QueryParam("workingYear") int workYear) {
+									 @QueryParam("workingYear") int workYear, @QueryParam("firstName") String name) {
 
 		PersistenceController controller = new PersistenceController();
 
 		List<UserDTO> users;
-		//If query parameter is missing return all users. Otherwise filter users by given user type fontys staff location and department and start work year
-		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
+
+		if (uriInfo.getQueryParameters().containsKey("firstName") && uriInfo.getQueryParameters().containsKey("location")
+				&& uriInfo.getQueryParameters().containsKey("department") && uriInfo.getQueryParameters().containsKey("type")) { //filter by user type, location and department and name
+			users = controller.UserFilteLocationDepartmentTypeAndName(name,locId, depId, type);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(type, workYear, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type location and department and start study year
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("studyYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start study year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(type, year, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type location and department
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
 				&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
 			users = controller.UserFilterByTypeLocationAndDepartment(type, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type
 		else if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
 			users = controller.UserFilteredWithType(type);
 		}
@@ -678,7 +679,7 @@ public class UsersResources {
 		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
 			users = controller.UserFilteredWithStartStudyYear(year);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
+		else if (uriInfo.getQueryParameters().containsKey("workingYear")){ //filter by start work year
 			users = controller.UserFilteredWithStartWorkYear(workYear);
 		}
 		else {

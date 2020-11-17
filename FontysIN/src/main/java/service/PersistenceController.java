@@ -460,7 +460,7 @@ public class PersistenceController {
      * Show/print the users with the given location id
      * @param id of the user to be shown.
      */
-    //show users by user type
+    //show users by user location
     public List<UserDTO> UserFilteredWithLocation(int id){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -520,7 +520,7 @@ public class PersistenceController {
      * Show/print the users with the given start work year
      * @param year of the user to be shown.
      */
-    //show users by start study year
+    //show users by start work year
     public List<UserDTO> UserFilteredWithStartWorkYear(int year){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -543,7 +543,7 @@ public class PersistenceController {
      * @param dId
      * of the user to be shown.
      */
-    //show users by start study year
+    //show users by loc dep and type
     public List<UserDTO> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -567,7 +567,7 @@ public class PersistenceController {
      * @param dId
      * of the user to be shown.
      */
-    //show users by location user type department and start study year
+    //show users by location user type location  department and start study year
     public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType type, int year, int lId, int dId){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -591,7 +591,7 @@ public class PersistenceController {
      * @param dId
      * of the user to be shown.
      */
-    //show users by location user type department and start study year
+    //show users by location user type  location department and start work year
     public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -617,6 +617,31 @@ public class PersistenceController {
 
         try {
             List<UserDTO> users = profileRepository.getUsersDTO();
+            System.out.println(users);
+            return users;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /***********************************Combine filter searching with the input box*************************************/
+    /**
+     * Show/print the users with the given usertype start work year location and department
+     * @param type
+     * @param lId
+     * @param dId
+     * @param chars
+     * of the user to be shown.
+     */
+    //show users by location user type department and start study year
+    public List<UserDTO> UserFilteLocationDepartmentTypeAndName(String chars, int lId, int dId, UserType type ){
+
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            List<UserDTO> users = profileRepository.getUsersByUserTypeLocationDeoartmentAndName(chars, lId, dId, type);
             System.out.println(users);
             return users;
         }

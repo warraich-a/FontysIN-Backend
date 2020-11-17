@@ -1483,6 +1483,51 @@ public class JDBCProfileRepository extends JDBCRepository {
         return users;
     }
 
+    /****************************************Using search box in the filter page*********************************************************/
+
+    //get all users with the given user type, location, department and user name from data base
+    public List<UserDTO> getUsersByUserTypeLocationDeoartmentAndName(String chars, int lId, int dId, UserType type) throws DatabaseException {
+
+        List<UserDTO> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
+                "INNER JOIN profiles p ON u.id = p.userId WHERE u.firstName " +
+                "LIKE CONCAT ('%', ? ,'%') AND u.locationId = ? AND u.departmentId = ? AND userType = ? GROUP BY u.id";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, chars); // set characters
+            statement.setInt(2, lId); // set user location id parameter
+            statement.setInt(3, dId); // set user department id parameter
+            statement.setString(4, type.name()); // set user type parameter
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String image = resultSet.getString("image");
+                int profileId = resultSet.getInt("profileId");
+
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
+
+            }
+
+            connection.close();
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+
+
     public int createAddress(Address address) throws DatabaseException, SQLException {
         int id = 0;
         Connection connection = this.getDatabaseConnection();
