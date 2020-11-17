@@ -273,7 +273,7 @@ public class PersistenceController {
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
-            User user = profileRepository.getUser(userId);
+            User user = profileRepository.getUserById(userId);
 
             System.out.println("ok");
 
@@ -928,9 +928,21 @@ public class PersistenceController {
         return null;
     }
 
-    public boolean AllowedToSee(int userId, int visitorId, ProfilePart profilePart){
-        User visitor = getUser(visitorId);
-        Privacy settings = GetPrivacySetting(userId);
+    public User getUserFromAuth(String auth){
+        String encodedCredentials = auth.replaceFirst("Basic ", "");
+        String credentials = new
+                String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
+        //Split username and password tokens in credentials
+        final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
+        final String email = tokenizer.nextToken();
+        User u = getUserByEmail(email);
+        return u;
+    }
+
+    public boolean AllowedToSee(int userId, int loggedinId, ProfilePart profilePart){
+        User loggedIn = getUser(loggedinId); // The logged in user
+        Privacy settings = GetPrivacySetting(userId);// Get privacy settings for the user i am visiting
+        User userImVisiting = getUser(userId); // So if im logged in user 3 and visit 5
 
         // If there are no settings everyone is allowed to see
         if(settings == null)
@@ -953,15 +965,15 @@ public class PersistenceController {
             default:
                 throw new IllegalStateException("Unexpected value: " + profilePart);
         }
-        if(userId == visitorId){ // So am i visting my own page
+        if(userImVisiting.getId() == loggedIn.getId()){ // So am i visting my own page
             return true;
         }
         else if(privacySetting == Privacy.Setting.EVERYONE){
             return true;
         }
         else if(privacySetting == Privacy.Setting.CONNECTIONS){
-            List<User> Connections = GetUsersConnections(userId); // Get a user connections
-            if(Connections.contains(visitor)){
+            List<User> Connections = GetUsersConnections(loggedIn.getId()); // Get a user connections
+            if(Connections.contains(userImVisiting)){
                 return true;
             }
         }
@@ -1070,6 +1082,8 @@ public class PersistenceController {
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
         try {
             if(profileRepository.createUser(user)) {
+                Privacy p = new Privacy(user.getId());
+                profileRepository.createPrivacy(p);
                 return true;
             }
             else
