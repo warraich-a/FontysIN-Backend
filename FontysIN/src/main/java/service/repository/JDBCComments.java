@@ -22,7 +22,7 @@ public class JDBCComments extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 int postId = resultSet.getInt("postId");
                 String content = resultSet.getString("content");
-                Date date = resultSet.getDate("date");
+                Timestamp date = resultSet.getTimestamp("date");
 
                 Comments comm = new Comments(Id,userId,postId,content,date);
                 comments.add(comm);
@@ -49,7 +49,7 @@ public class JDBCComments extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 int postId = resultSet.getInt("postId");
                 String content = resultSet.getString("content");
-                Date date = resultSet.getDate("date");
+                Timestamp date = resultSet.getTimestamp("date");
 
                 Comments comm = new Comments(Id,userId,postId,content,date);
                 comments.add(comm);
@@ -77,7 +77,7 @@ public class JDBCComments extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 int postId = resultSet.getInt("postId");
                 String content = resultSet.getString("content");
-                Date date = resultSet.getDate("date");
+                Timestamp date = resultSet.getTimestamp("date");
 
                 Comments comm = new Comments(Id,userId,postId,content,date);
                 connection.close();
@@ -91,7 +91,7 @@ public class JDBCComments extends JDBCRepository {
     public boolean addComm(Comments comm) throws DatabaseException{
         Connection connection = this.getDatabaseConnection();
         boolean exist = false;
-        String sql = "INSERT INTO comments(`userId`,`postId`, `content`, `date`) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO comments(`userId`,`postId`, `content`) VALUES (?,?,?)";
         try {
             if(!exist){
                 PreparedStatement statement = connection.prepareStatement(sql);
@@ -99,7 +99,7 @@ public class JDBCComments extends JDBCRepository {
                 statement.setInt(1, comm.getUserId());
                 statement.setInt(2, comm.getPostId());
                 statement.setString(3,comm.getContent());
-                statement.setDate(4, (Date) comm.getDate());
+
 
 
                 statement.executeUpdate();
@@ -128,7 +128,7 @@ public class JDBCComments extends JDBCRepository {
             statement.setInt(1, comm.getUserId());
             statement.setInt(2, comm.getPostId());
             statement.setString(3,comm.getContent());
-            statement.setDate(4, (Date) comm.getDate());
+            statement.setTimestamp(4, (Timestamp) comm.getDate());
             statement.setInt(5, comm.getId());
             statement.executeUpdate();
 
