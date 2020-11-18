@@ -27,6 +27,7 @@ public class JDBCPosts extends JDBCRepository {
                 posts.add(post);
             }
             connection.setAutoCommit(false);
+            statement.close();
             connection.close();
 
         } catch (SQLException throwable) {
@@ -53,6 +54,7 @@ public class JDBCPosts extends JDBCRepository {
                 posts.add(post);
             }
             connection.setAutoCommit(false);
+            statement.close();
             connection.close();
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read products from the database.",throwable);
@@ -77,6 +79,7 @@ public class JDBCPosts extends JDBCRepository {
                 Date date = resultSet.getDate("date");
                 Blob image = resultSet.getBlob("image");
                 Posts post = new Posts(Id,userId,content,date);
+                statement.close();
                 connection.close();
                 return post;
             }
@@ -104,6 +107,7 @@ public class JDBCPosts extends JDBCRepository {
                 ps.setInt(1,1);
                 connection.setAutoCommit(false);
                 connection.commit();
+                statement.close();
                 connection.close();
                 return true;
             } else  {
@@ -127,6 +131,7 @@ public class JDBCPosts extends JDBCRepository {
             statement.setBlob(4, post.getImage());
             statement.setInt(5, post.getId());
             statement.executeUpdate();
+            statement.close();
             connection.close();
 
             return true;
@@ -144,6 +149,7 @@ public class JDBCPosts extends JDBCRepository {
             statement.setInt(1,post.getId());
 
             statement.executeUpdate();
+            statement.close();
             connection.close();
 
 
