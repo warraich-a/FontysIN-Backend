@@ -33,6 +33,7 @@ public class ContactsRepository extends JDBCRepository {
 
             connection.commit();
             connection.close();
+            statement.close();
 
             return contactId;
         }
@@ -56,6 +57,7 @@ public class ContactsRepository extends JDBCRepository {
             statement.executeUpdate();
 
             connection.commit();
+            statement.close();
             connection.close();
 
             return true;
@@ -153,7 +155,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 contacts.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -214,7 +216,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 allContactsDTO.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -311,7 +313,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 acceptedContacts.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -367,7 +369,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 acceptedContacts.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -466,6 +468,7 @@ public class ContactsRepository extends JDBCRepository {
             }
 
             connection.commit();
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -522,7 +525,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 requests.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -546,6 +549,7 @@ public class ContactsRepository extends JDBCRepository {
             statement.executeUpdate();
 
             connection.commit();
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -577,7 +581,7 @@ public class ContactsRepository extends JDBCRepository {
                 String lastName = resultSet.getString("lastName");
                 String image = resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
-
+                statement.close();
                 connection.close();
 
                 return new UserDTO(id, profileId, firstName, lastName, image);
@@ -618,7 +622,7 @@ public class ContactsRepository extends JDBCRepository {
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
 
-                connection.close();
+
 
                 UserType type = UserType.Teacher;
                 if (userType == "student")
@@ -633,6 +637,9 @@ public class ContactsRepository extends JDBCRepository {
                 {
                     type = UserType.FontysStaff;
                 }
+
+                statement.close();
+                connection.close();
 
                 return new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
             }

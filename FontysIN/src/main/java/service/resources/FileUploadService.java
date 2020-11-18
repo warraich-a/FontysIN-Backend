@@ -7,6 +7,7 @@ import service.PersistenceController;
 
 import java.io.*;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -29,6 +30,7 @@ public class FileUploadService {
     @Context
     private UriInfo uriInfo;
 
+    @PermitAll
     @PUT
     @Path("{userId}/uploadPicture")
     @Consumes(MediaType.MULTIPART_FORM_DATA)

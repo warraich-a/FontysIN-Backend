@@ -37,8 +37,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             connection.setAutoCommit(false);
 
             connection.commit();
-//            statement.close();
-//            connection.close();
+            statement.close();
+            connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read profiles from the database.",throwable);
@@ -90,8 +90,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                     connection.setAutoCommit(false);
 
                     connection.commit();
-//                    statement.close();
-//                    connection.close();
+                    statement.close();
+                    connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.",throwable);
@@ -198,8 +198,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                     connection.setAutoCommit(false);
 
                     connection.commit();
-//                    statement.close();
-//                    connection.close();
+                    statement.close();
+                    connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
@@ -287,8 +287,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                     connection.setAutoCommit(false);
 
                     connection.commit();
-//                    statement.close();
-//                    connection.close();
+                    statement.close();
+                    connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
@@ -367,8 +367,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                     connection.setAutoCommit(false);
 
                     connection.commit();
-//                    statement.close();
-//                    connection.close();
+                    statement.close();
+                    connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
@@ -422,7 +422,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 allUsers.add(u);
 
             }
-//            connection.close();
+            statement.close();
+            connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
@@ -478,8 +479,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             connection.setAutoCommit(false);
 
             connection.commit();
-//            statement.close();
-//          connection.close();
+            statement.close();
+          connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
@@ -518,8 +519,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 connection.setAutoCommit(false);
 //                ps.close();
                 connection.commit();
-//                preparedStatement.close();
-//                connection.close();
+                preparedStatement.close();
+                connection.close();
 
 
 
@@ -559,8 +560,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             connection.setAutoCommit(false);
 //            ps.close();
             connection.commit();
-//            preparedStatement.close();
-//            connection.close();
+            preparedStatement.close();
+            connection.close();
 
 
 
@@ -712,8 +713,6 @@ public class JDBCProfileRepository extends JDBCRepository {
             connection.commit();
             connection.close();
             preparedStatement.close();
-            return true;
-
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot upload image.", throwable);
@@ -722,6 +721,7 @@ public class JDBCProfileRepository extends JDBCRepository {
             if (preparedStatement != null) preparedStatement.close();
             if (connection != null) connection.close();
         }
+        return true;
     }
 
     public List<Location> getFontysLocation() throws DatabaseException, SQLException {
@@ -744,6 +744,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 }
                 connection.setAutoCommit(false);
                 connection.commit();
+                statement.close();
+                connection.close();
 
             } catch (SQLException throwable) {
                 throw new DatabaseException("Cannot read students from the database.", throwable);
@@ -773,6 +775,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             }
             connection.setAutoCommit(false);
             connection.commit();
+            statement.close();
+            connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read students from the database.", throwable);

@@ -138,6 +138,8 @@ public class UsersResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GeUser(@PathParam("userId") int userId) {
 		PersistenceController persistenceController = new PersistenceController();
+
+
 		User u = persistenceController.getUser(userId);
 		System.out.println("User id " + userId);
 		System.out.println("Got user by id " + u);
