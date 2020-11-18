@@ -11,7 +11,7 @@ public class MessageController {
     /**
      *
      * @param message
-     * @return Create new message
+     * @return the id of the created message
      */
     public int createMessage(Message message) {
         MessagesRepository messagesRepository = new MessagesRepository();

@@ -54,9 +54,12 @@ public class MessagesRepository extends JDBCRepository {
     }
 
 
-    //     public UserConversationDTO(int id, int profileId, String firstName, String lastName, String image) {
-    //     public Conversation(int id, List<Message> messages) {
-    //     public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, LocalDateTime dataTime) {
+    /***
+     *
+     * @param id
+     * @return a list of conversations of a specific user
+     * @throws DatabaseException
+     */
     public List<Conversation> getConversations(int id) throws DatabaseException {
         // 1. Get all messages for a conversation
         // 2. Create a conversation
@@ -66,7 +69,7 @@ public class MessagesRepository extends JDBCRepository {
 
         Connection connection = super.getDatabaseConnection();
 
-        String sql = "SELECT m.id AS messageId, m.conversationId, m.senderId, m.receiverId, m.content, m.dateو " +
+        String sql = "SELECT m.id AS messageId, m.conversationId, m.senderId, m.receiverId, m.content, m.date, " +
                 "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
                 "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
                 "FROM conversations AS c " +
@@ -92,12 +95,12 @@ public class MessagesRepository extends JDBCRepository {
             ResultSet resultSet = statement.executeQuery();
 
             List<Conversation> conversations = new ArrayList<>();
-            List<Message> messages = new ArrayList<>();
-            UserDTO currentUser = null;
+//            UserDTO currentUser = null;
+            Conversation conversation = null;
 
             int lastConversationId = -1;
             while(resultSet.next()) {
-                //  m.id AS messageId, m.conversationId, m.senderId, m.receiverId, m.content, m.dateو
+                // Message
                 int messageId = resultSet.getInt("messageId");
                 int conversationId = resultSet.getInt("conversationId");
                 int senderId = resultSet.getInt("senderId");
@@ -105,22 +108,19 @@ public class MessagesRepository extends JDBCRepository {
                 String content = resultSet.getString("content");
                 Timestamp dateTime = resultSet.getTimestamp("date");
 
-                // user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId,
+                // Sender
                 int userId = resultSet.getInt("userId");
                 String firstName = resultSet.getString("userFirstName");
                 String lastName = resultSet.getString("userLastName");
                 String image = resultSet.getString("userImage");
                 int profileId = resultSet.getInt("userProfileId");
 
+                // Receiver
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
                 String friendLastName = resultSet.getString("friendLastName");
                 String friendImage = resultSet.getString("friendImage");
                 int friendProfileId = resultSet.getInt("friendProfileId");
-
-//                if(currentUser == null && id == senderId) {
-//                    currentUser = new UserDTO(userId, )
-//                }
 
                // UserConversationDTO -> container user's details (UserDTO) and list of conversations) NOT NEEDED
                 // Conversation -> contains id and a list of messages
@@ -128,13 +128,11 @@ public class MessagesRepository extends JDBCRepository {
 
                 // New conversation?
                 if(conversationId != lastConversationId) {
-                    Conversation conversation = new Conversation(conversationId, messages);
+                    conversation = new Conversation(conversationId);
 
                     conversations.add(conversation);
 
                     lastConversationId = conversationId;
-
-                    messages = new ArrayList<>();
                 }
 
                 // Create message
@@ -142,7 +140,7 @@ public class MessagesRepository extends JDBCRepository {
                 UserDTO receiver = new UserDTO(friendId, friendProfileId, friendFirstName, friendLastName, friendImage);
 
                 Message message = new Message(messageId, conversationId, sender, receiver, content, dateTime);
-                messages.add(message);
+                conversation.addMessage(message);
             }
 
             connection.close();
