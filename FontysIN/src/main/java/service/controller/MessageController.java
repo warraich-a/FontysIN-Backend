@@ -46,5 +46,24 @@ public class MessageController {
         return conversations;
     }
 
+    /***
+     *
+     * @param id of conversation
+     * @return conversation with specified id
+     */
+    public Conversation getConversation(int id) {
+        MessagesRepository messagesRepository = new MessagesRepository();
+
+        Conversation conversation = null;
+        try {
+            conversation =  messagesRepository.getConversation(id);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        return conversation;
+    }
+
 
 }

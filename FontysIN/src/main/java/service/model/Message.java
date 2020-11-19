@@ -11,15 +11,18 @@ public class Message {
     private UserDTO receiver;
     private String content;
 //    private LocalDateTime dataTime;
-    private Timestamp dataTime;
+    private Timestamp dateTime;
 
-    public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, Timestamp dataTime) {
+    public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, Timestamp dateTime) {
         this.id = id;
         this.conversationId = conversationId;
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
-        this.dataTime = dataTime;
+        this.dateTime = dateTime;
+    }
+
+    public Message() {
     }
 
     public int getId() {
@@ -62,12 +65,12 @@ public class Message {
         this.content = content;
     }
 
-    public Timestamp getDataTime() {
-        return dataTime;
+    public Timestamp getDateTime() {
+        return dateTime;
     }
 
-    public void setDataTime(Timestamp dataTime) {
-        this.dataTime = dataTime;
+    public void setDateTime(Timestamp dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -78,7 +81,7 @@ public class Message {
                 ", sender=" + sender +
                 ", receiver=" + receiver +
                 ", content='" + content + '\'' +
-                ", dataTime=" + dataTime +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

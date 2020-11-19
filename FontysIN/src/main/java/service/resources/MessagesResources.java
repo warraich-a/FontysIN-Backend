@@ -16,12 +16,21 @@ public class MessagesResources {
     private UriInfo uriInfo;
 
     @GET //GET at http://localhost:XXXX/users/1/messages
-    public Response getConversations(@PathParam("id") int id) { // returns users list or contacts list?
+    public Response getConversations(@PathParam("id") int id) { // returns list of conversations
         List<Conversation> conversations = messageController.getConversations(id);
 
         GenericEntity<List<Conversation>> entity = new GenericEntity<>(conversations) { };
 
         return Response.ok(entity).build();
+    }
+
+    @GET //GET at http://localhost:XXXX/users/1/messages/1
+    @Path("{conversationId}")
+    public Response getConversation(@PathParam("id") int id, @PathParam("conversationId") int conversationId) { // returns a conversation
+        Conversation conversations = messageController.getConversation(conversationId);
+
+
+        return Response.ok(conversations).build();
     }
 
     @POST //POST at http://localhost:XXXX/users/1/messages
