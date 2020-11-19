@@ -10,7 +10,6 @@ public class Message {
     private UserDTO sender;
     private UserDTO receiver;
     private String content;
-//    private LocalDateTime dataTime;
     private Timestamp dateTime;
 
     public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, Timestamp dateTime) {

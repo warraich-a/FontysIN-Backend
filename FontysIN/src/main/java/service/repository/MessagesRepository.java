@@ -140,7 +140,6 @@ public class MessagesRepository extends JDBCRepository {
         // 2. Create a conversation
         // 3. Add conversation to conversations list
         // 4. Repeat
-        //Conversation conversation = new Conversation(id, messages);
 
         Connection connection = super.getDatabaseConnection();
 
@@ -170,7 +169,6 @@ public class MessagesRepository extends JDBCRepository {
             ResultSet resultSet = statement.executeQuery();
 
             List<Conversation> conversations = new ArrayList<>();
-//            UserDTO currentUser = null;
             Conversation conversation = null;
 
             int lastConversationId = -1;
@@ -196,10 +194,6 @@ public class MessagesRepository extends JDBCRepository {
                 String friendLastName = resultSet.getString("friendLastName");
                 String friendImage = resultSet.getString("friendImage");
                 int friendProfileId = resultSet.getInt("friendProfileId");
-
-                // UserConversationDTO -> container user's details (UserDTO) and list of conversations) NOT NEEDED
-                // Conversation -> contains id and a list of messages
-                // Message -> contains id, conversationId, UserDTO sender, UserDTO receiver, content, dateTime
 
                 // New conversation?
                 if(conversationId != lastConversationId) {
