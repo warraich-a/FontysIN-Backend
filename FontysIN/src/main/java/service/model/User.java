@@ -21,12 +21,11 @@ public class User {
     private String img; // user's image /* I will add this to the constracture later*/
     private UserType userType; // user's type
     private Education education; // user's education
-    private Work working; // user's work
+    private Privacy privacy;
 
 
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber, Education education,
-                Work work) {
+                 String phoneNumber, int addressId, int locationId, int departmentId, String userNumber, Education education) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,10 +38,10 @@ public class User {
         this.locationId = locationId;
         this.userNumber = userNumber;
         this.education = education;
-        this.working = work;
+        privacy = new Privacy(id);
     }
     public User(int id, String firstName, String lastName, UserType type, String email, String password,
-                String phoneNumber, int addressId, int locationId, int departmentId, String userNumber) {
+                String phoneNumber, int addressId, int locationId, int departmentId, String userNumber, String image) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -54,6 +53,8 @@ public class User {
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
+        privacy = new Privacy(id);
+        this.img = image;
     }
 
 
@@ -173,12 +174,12 @@ public class User {
         this.education = education;
     }
 
-    public Work getWorking() {
-        return working;
+    public Privacy getPrivacy() {
+        return privacy;
     }
 
-    public void setWorking(Work working) {
-        this.working = working;
+    public void setPrivacy(Privacy privacy) {
+        this.privacy = privacy;
     }
 
     //methods
@@ -195,19 +196,19 @@ public class User {
         return Objects.hash(id);
     }
 
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "User ID: " + id +
-//                ", First Name: '" + firstName + '\'' +
-//                ", Last Name: '" + lastName + '\'' +
-//                ", Email: '" + email + '\'' +
-//                ", Password: '" + password + '\'' +
-//                ", Phone Number: " + phoneNumber + '\'' +
-//                ", Address: " + addressId + '\'' +
-//                ", Location: " + locationId + '\'' +
-//                ", Department: " + departmentId + '\'' +
-//                ", User Number: " + userNumber + '\'' +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "User ID: " + id +
+                ", First Name: '" + firstName + '\'' +
+                ", Last Name: '" + lastName + '\'' +
+                ", Email: '" + email + '\'' +
+                ", Password: '" + password + '\'' +
+                ", Phone Number: " + phoneNumber + '\'' +
+                ", Address: " + addressId + '\'' +
+                ", Location: " + locationId + '\'' +
+                ", Department: " + departmentId + '\'' +
+                ", User Number: " + userNumber + '\'' +
+                '}';
+    }
 }

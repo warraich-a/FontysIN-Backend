@@ -1,13 +1,18 @@
 package service.repository;
 
 import service.model.*;
+import service.model.dto.UserDTO;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class JDBCProfileRepository extends JDBCRepository {
+
 
     public List<Profile> getProfile(int givenUserId) throws DatabaseException, SQLException {
         List<Profile> foundProfiles = new ArrayList<>();
@@ -28,14 +33,19 @@ public class JDBCProfileRepository extends JDBCRepository {
                 Profile e = new Profile(id, userId, language);
                 foundProfiles.add(e);
             }
+
+            connection.setAutoCommit(false);
+
+            connection.commit();
+            statement.close();
             connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read profiles from the database.",throwable);
         }
         finally {
-            statement.close();
-            connection.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
         }
         return foundProfiles;
     }
@@ -77,14 +87,18 @@ public class JDBCProfileRepository extends JDBCRepository {
                         Experience e = new Experience(id, profileId, title, company, r, location,  startDate, endDate, description);
                         foundExperiences.add(e);
                     }
+                    connection.setAutoCommit(false);
+
+                    connection.commit();
+                    statement.close();
                     connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.",throwable);
                 }
                 finally {
-                    statement.close();
-                    connection.close();
+                    if (statement != null) statement.close();
+                    if (connection != null) connection.close();
                 }
                 return foundExperiences;
             }
@@ -181,13 +195,17 @@ public class JDBCProfileRepository extends JDBCRepository {
                         Education e = new Education(id, profileId, school, startYear, endYear, degree, fieldStudy, description);
                         foundEducations.add(e);
                     }
+                    connection.setAutoCommit(false);
+
+                    connection.commit();
+                    statement.close();
                     connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
                 } finally {
-                    statement.close();
-                    connection.close();
+                    if (statement != null) statement.close();
+                    if (connection != null) connection.close();
                 }
                 return foundEducations;
             }
@@ -266,13 +284,17 @@ public class JDBCProfileRepository extends JDBCRepository {
                         About e = new About(id, profileId, content);
                         foundAbout.add(e);
                     }
+                    connection.setAutoCommit(false);
+
+                    connection.commit();
+                    statement.close();
                     connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
                 } finally {
-                    statement.close();
-                    connection.close();
+                    if (statement != null) statement.close();
+                    if (connection != null) connection.close();
                 }
                 return foundAbout;
             }
@@ -342,13 +364,18 @@ public class JDBCProfileRepository extends JDBCRepository {
                         Skill e = new Skill(id, profileId, name);
                         foundSkill.add(e);
                     }
+                    connection.setAutoCommit(false);
+
+                    connection.commit();
+                    statement.close();
                     connection.close();
 
                 } catch (SQLException throwable) {
                     throw new DatabaseException("Cannot read students from the database.", throwable);
                 } finally {
-                    statement.close();
-                    connection.close();
+                    if (statement != null) statement.close();
+                    if (connection != null) connection.close();
+
                 }
                 return foundSkill;
             }
@@ -391,31 +418,81 @@ public class JDBCProfileRepository extends JDBCRepository {
                     r = UserType.FontysStaff;
                 }
 
-                User u = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                User u = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
                 allUsers.add(u);
 
             }
+            statement.close();
             connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
         }
-//        finally {
-//            statement.close();
-//            connection.close();
-//        }
+        finally {
+            if  (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
         return allUsers;
     }
 
-    public User getUser(int userId) throws DatabaseException, SQLException {
 
-        for (User u: getUsers()) {
-            if (u.getId() == userId) {
-                return u;
+    public User getUserById(int userId) throws DatabaseException, SQLException {
+        User user = null;
+
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM users where id =?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        try {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String userType = resultSet.getString("userType");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+                String phoneNumber = resultSet.getString("phoneNr");
+                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+                UserType r = UserType.Teacher;
+                if (userType == "student")
+                {
+                    r = UserType.Student;
+                }
+                else if (userType == "employee")
+                {
+                    r = UserType.Teacher;
+                }
+                else  if (userType == "admin")
+                {
+                    r = UserType.FontysStaff;
+                }
+
+                user = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
+                Privacy privacy = getPrivacyByUser(user);
+                user.setPrivacy(privacy);
             }
+            connection.setAutoCommit(false);
+
+            connection.commit();
+            statement.close();
+          connection.close();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read data from the database.", throwable);
         }
-        return null;
+        finally {
+            if  (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+        return user;
     }
+
+
 
     public boolean createExperience(Experience experience) throws DatabaseException, SQLException {
         Connection connection = this.getDatabaseConnection();
@@ -423,35 +500,39 @@ public class JDBCProfileRepository extends JDBCRepository {
         Boolean exist;
         exist = false;
 
-        String sql = "INSERT INTO experiences ( profileId, title, company, location, startDate, endDate, description) VALUES (?,?,?,?,?,?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql = "INSERT INTO experiences ( profileId, title, company, location, employmentType, startDate, endDate, description) VALUES (?,?,?,?,?,?,?,?) ";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         try {
                 preparedStatement.setInt(1, experience.getProfileId());
                 preparedStatement.setString(2, experience.getTitle());
                 preparedStatement.setString(3, experience.getCompany());
                 preparedStatement.setString(4, experience.getLocation());
-                preparedStatement.setInt(5,  experience.getStartDateExperience());
-                preparedStatement.setInt(6,  experience.getEndDateExperience());
-                preparedStatement.setString(7,  experience.getDescriptionExperience());
+                preparedStatement.setString(5, String.valueOf(experience.getEmploymentType()));
+                preparedStatement.setInt(6,  experience.getStartDateExperience());
+                preparedStatement.setInt(7,  experience.getEndDateExperience());
+                preparedStatement.setString(8,  experience.getDescriptionExperience());
                 preparedStatement.executeUpdate();
 
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, "value");
+//                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//                ps.setString(1, "value");
                 connection.setAutoCommit(false);
-                ps.close();
+//                ps.close();
                 connection.commit();
+                preparedStatement.close();
                 connection.close();
 
-                return true;
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot create new experience.", throwable);
         }
         finally {
-            preparedStatement.close();
-            connection.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+
         }
+        return true;
 
     }
 
@@ -462,7 +543,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         exist = false;
 
         String sql = "INSERT INTO educations ( profileId, school, startYear, endYear, degree, fieldStudy, description) VALUES (?,?,?,?,?,?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
 
         try {
             preparedStatement.setInt(1, education.getProfileId());
@@ -474,36 +555,37 @@ public class JDBCProfileRepository extends JDBCRepository {
             preparedStatement.setString(7,  education.getDescriptionEducation());
             preparedStatement.executeUpdate();
 
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, "value");
+//            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//            ps.setString(1, "value");
             connection.setAutoCommit(false);
-            ps.close();
+//            ps.close();
             connection.commit();
-            connection.close();
-
-            return true;
-
-        } catch (SQLException throwable) {
-            throw new DatabaseException("Cannot create new experience.", throwable);
-        }
-        finally {
             preparedStatement.close();
             connection.close();
+
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot create new education.", throwable);
         }
+        finally {
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+        }
+        return true;
     }
 
     public boolean createSkill(Skill skill, int userId) throws DatabaseException, SQLException {
-        Connection connection = this.getDatabaseConnection();
+
 
         for (Skill p: getSkills(userId, skill.getProfileId())) {
-          if(p.getId() == skill.getProfileId()){
-              if (p.getName().equals(skill.getName())) {
-                  return false;
-              }
+          if (p.getName().equals(skill.getName())) {
+              return false;
           }
         }
+        Connection connection = this.getDatabaseConnection();
         String sql = "INSERT INTO skills ( profileId, name) VALUES (?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
 
         try {
             preparedStatement.setInt(1, skill.getProfileId());
@@ -511,31 +593,28 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
 
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, "value");
             connection.setAutoCommit(false);
-            ps.close();
             connection.commit();
+            preparedStatement.close();
             connection.close();
-
             return true;
 
         } catch (SQLException throwable) {
-            throw new DatabaseException("Cannot create new experience.", throwable);
+            throw new DatabaseException("Cannot create new skill.", throwable);
         }
         finally {
-            preparedStatement.close();
-            connection.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
         }
+
     }
 
 
     public int createProfile(Profile newProfile, int userId) throws DatabaseException, SQLException {
-        Connection connection = this.getDatabaseConnection();
+
         int id = 0;
         boolean exist;
         exist = false;
-        String generatedColumns[] = { "ID" };
 
         for (Profile p: getProfile(userId)) {
             if (p.getUserId() == userId) {
@@ -545,6 +624,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                 }
             }
         }
+        Connection connection = this.getDatabaseConnection();
         ResultSet rs = null;
         if(!exist) {
             String sql = "INSERT INTO profiles (userId, language) VALUES (?,?) ";
@@ -561,12 +641,14 @@ public class JDBCProfileRepository extends JDBCRepository {
                     System.out.println("Generated Emp Id: "+rs.getInt(1));
                     id = rs.getInt(1);
                 }
-                
+
 //                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 //                ps.setString(1, "id");
                 connection.setAutoCommit(false);
 //                ps.close();
+
                 connection.commit();
+                preparedStatement.close();
                 connection.close();
                 return id;
 
@@ -574,8 +656,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             } catch (SQLException throwable) {
                 throw new DatabaseException("Cannot create new profile.", throwable);
             } finally {
-                preparedStatement.close();
-                connection.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
             }
         }
         return 0;
@@ -585,7 +667,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "INSERT INTO about ( profileId, content) VALUES (?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         try {
             preparedStatement.setInt(1, about.getProfileId());
@@ -593,22 +675,117 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
 
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, "value");
             connection.setAutoCommit(false);
-            ps.close();
-            connection.commit();
-            connection.close();
 
+
+            connection.commit();
+            preparedStatement.close();
+            connection.close();
             return true;
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot create new about.", throwable);
         }
         finally {
-            preparedStatement.close();
-            connection.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
         }
+
+    }
+
+
+    public boolean uploadImage(int userId, String path) throws DatabaseException, SQLException, IOException {
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "update users set image=? where id = ? ";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
+
+
+        try {
+            preparedStatement.setString(1, path);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.executeUpdate();
+
+            connection.setAutoCommit(false);
+
+
+            connection.commit();
+            connection.close();
+            preparedStatement.close();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot upload image.", throwable);
+        }
+        finally {
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+        }
+        return true;
+    }
+
+    public List<Location> getFontysLocation() throws DatabaseException, SQLException {
+        List<Location> fontysLocations = new ArrayList<>();
+
+            Connection connection = this.getDatabaseConnection();
+            String sql = "SELECT * FROM fontysLocations";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            try {
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String streetName = resultSet.getString("streetName");
+                    String buildingNumber = resultSet.getString("buildingNumber");
+                    String city = resultSet.getString("city");
+                    String zipcode = resultSet.getString("zipcode");
+
+                    Location e = new Location(id, streetName, buildingNumber, city, zipcode);
+                    fontysLocations.add(e);
+                }
+                connection.setAutoCommit(false);
+                connection.commit();
+                statement.close();
+                connection.close();
+
+            } catch (SQLException throwable) {
+                throw new DatabaseException("Cannot read students from the database.", throwable);
+            } finally {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            }
+
+        return fontysLocations;
+    }
+
+    public List<Department> getFontysDepartments() throws DatabaseException, SQLException {
+        List<Department> fontysDepartments = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM departments";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        try {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+
+                Department e = new Department(id, name, description);
+                fontysDepartments.add(e);
+            }
+            connection.setAutoCommit(false);
+            connection.commit();
+            statement.close();
+            connection.close();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read students from the database.", throwable);
+        } finally {
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+
+        return fontysDepartments;
     }
 
     public Address getAddressById(int aId) throws DatabaseException {
@@ -777,16 +954,16 @@ public class JDBCProfileRepository extends JDBCRepository {
         return privacyList;
     }
 
-    public Privacy getPrivacyById(int pId) throws DatabaseException {
+    public Privacy getPrivacyByUser(User user) throws DatabaseException {
         Connection connection = this.getDatabaseConnection();
-        String sql = "SELECT * FROM privacy WHERE id = ?";
+        String sql = "SELECT * FROM privacy WHERE userId = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, pId);
+            statement.setInt(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()){
                 connection.close();
-                throw new DatabaseException("Privacy with id " + pId + " cannot be found");
+                throw new DatabaseException("Privacy with id " + user.getId() + " cannot be found");
             } else {
                 int id = resultSet.getInt("id");
                 int userId = resultSet.getInt("userId");
@@ -926,15 +1103,15 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     /**************Ranim******************************Filter users**************************/
-
     //get all users with the given user type from data base
-    public List<User> getUsersByType(UserType type) throws DatabaseException {
+    public List<UserDTO> getUsersByType(UserType type) throws DatabaseException {
 
-        List<User> filtered = new ArrayList<>();
+        List<UserDTO> filtered = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT * FROM users WHERE userType = ?";
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
+                "LEFT JOIN users u ON u.id = p.userId WHERE u.userType = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, type.name()); // set user type parameter
@@ -944,21 +1121,15 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
-                String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
-                int locationId = resultSet.getInt("locationId");
-                int departmentId = resultSet.getInt("departmentId");
-                String userNumber = resultSet.getString("userNumber");
+                int profileId = resultSet.getInt("profileId");
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                filtered.add(u);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
 
             }
-
+            connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read users from the database.",throwable);
@@ -967,36 +1138,33 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     //get all users with the given location id from data base
-    public List<User> getUsersByLocation(int lId) throws DatabaseException {
+    public List<UserDTO> getUsersByLocation(int lId) throws DatabaseException {
 
-        List<User> filtered = new ArrayList<>();
+        List<UserDTO> filtered = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT * FROM users WHERE locationId = ?";
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
+                "LEFT JOIN users u ON u.id = p.userId WHERE u.locationId = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, lId); // set user fontys location parameter
+            statement.setInt(1, lId); // set location id parameter
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()){
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
-                String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
-                int locationId = resultSet.getInt("locationId");
-                int departmentId = resultSet.getInt("departmentId");
-                String userNumber = resultSet.getString("userNumber");
+                int profileId = resultSet.getInt("profileId");
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                filtered.add(u);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -1006,13 +1174,14 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     //get all users with the given department id from data base
-    public List<User> getUsersByDepartment(int bId) throws DatabaseException {
+    public List<UserDTO> getUsersByDepartment(int bId) throws DatabaseException {
 
-        List<User> filtered = new ArrayList<>();
+        List<UserDTO> filtered = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT * FROM users WHERE departmentId = ?";
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
+                "LEFT JOIN users u ON u.id = p.userId WHERE u.departmentId = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, bId); // set user fontys location parameter
@@ -1022,20 +1191,16 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
-                String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
-                int locationId = resultSet.getInt("locationId");
-                int departmentId = resultSet.getInt("departmentId");
-                String userNumber = resultSet.getString("userNumber");
+                int profileId = resultSet.getInt("profileId");
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                filtered.add(u);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -1045,16 +1210,16 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     //get all users with the given start study year from data base
-    public List<User> getUsersByStartStudyYear(int year) throws DatabaseException {
+    public List<UserDTO> getUsersByStartStudyYear(int year) throws DatabaseException {
 
-        List<User> filtered = new ArrayList<>();
+        List<UserDTO> filtered = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
-                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber FROM ((educations INNER JOIN profiles " +
-                "ON educations.profileId = profiles.id) INNER JOIN users ON profiles.userId = users.id) WHERE school = 'Fontys'" +
-                "AND startYear = ?";
+        String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
+                "FROM ((educations INNER JOIN profiles p ON educations.profileId = p.id) " +
+                "INNER JOIN users u ON p.userId = u.id) WHERE school = 'Fontys'" +
+                "AND u.userType = 'Student' AND startYear = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, year); // set user start study year parameter
@@ -1064,20 +1229,16 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
-                String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
-                int locationId = resultSet.getInt("locationId");
-                int departmentId = resultSet.getInt("departmentId");
-                String userNumber = resultSet.getString("userNumber");
+                int profileId = resultSet.getInt("profileId");
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                filtered.add(u);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -1087,16 +1248,17 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     //get all users with the given start work year from data base
-    public List<User> getUsersByStartWorkYear(int year) throws DatabaseException {
+    public List<UserDTO> getUsersByStartWorkYear(int year) throws DatabaseException {
 
-        List<User> filtered = new ArrayList<>();
+        List<UserDTO> filtered = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
-                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber " +
-                "FROM ((experiences INNER JOIN profiles ON experiences.profileId = profiles.id) INNER JOIN users ON profiles.userId = users.id) " +
-                "WHERE company = 'Fontys' AND users.userType != 'Student' AND startDate = ?";
+
+        String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
+                "FROM ((experiences INNER JOIN profiles p ON experiences.profileId = p.id) " +
+                "INNER JOIN users u ON p.userId = u.id) WHERE company = 'Fontys'" +
+                "AND u.userType != 'Student' AND startDate = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, year); // set user start study year parameter
@@ -1106,20 +1268,16 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
-                String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
-                int locationId = resultSet.getInt("locationId");
-                int departmentId = resultSet.getInt("departmentId");
-                String userNumber = resultSet.getString("userNumber");
+                int profileId = resultSet.getInt("profileId");
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                filtered.add(u);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -1128,16 +1286,16 @@ public class JDBCProfileRepository extends JDBCRepository {
         return filtered;
     }
 
-    /******************RANIM***********************Combined Filter Search**************************/
-
     //get all users with the given user type, location and department from data base
-    public List<User> getUsersByUserTypeAndLocationAndDepartment(UserType type, int lId, int dId) throws DatabaseException {
+    public List<UserDTO> getUsersByUserTypeAndLocationAndDepartment(UserType type, int lId, int dId) throws DatabaseException {
 
-        List<User> filtered = new ArrayList<>();
+        List<UserDTO> filtered = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT * FROM users WHERE userType = ? AND locationId = ? AND departmentId = ?";
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
+                "LEFT JOIN users u ON u.id = p.userId WHERE userType = ? " +
+                "AND locationId = ? AND departmentId = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, type.name()); // set user start study year parameter
@@ -1149,20 +1307,16 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
-                String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
-                int locationId = resultSet.getInt("locationId");
-                int departmentId = resultSet.getInt("departmentId");
-                String userNumber = resultSet.getString("userNumber");
+                int profileId = resultSet.getInt("profileId");
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                filtered.add(u);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -1171,19 +1325,17 @@ public class JDBCProfileRepository extends JDBCRepository {
         return filtered;
     }
 
-    //get all users with the given user type, start study year, location and department from data base
-    public List<User> getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(UserType type, int year, int lId, int dId) throws DatabaseException {
+    //get all users with the given user type, location and department from data base
+    public List<UserDTO> getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(UserType type, int year, int lId, int dId) throws DatabaseException {
 
-        List<User> filtered = new ArrayList<>();
+        List<UserDTO> filtered = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
-                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber " +
-                "FROM ((educations INNER JOIN profiles ON educations.profileId = profiles.id) INNER JOIN users " +
-                "ON profiles.userId = users.id)" +
-                " WHERE school = 'Fontys' AND users.userType = ? AND users.locationId = ? " +
-                "And users.departmentId = ? AND startYear = ?";
+        String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
+                "FROM ((educations INNER JOIN profiles p ON educations.profileId = p.id) " +
+                "INNER JOIN users u ON p.userId = u.id) WHERE school = 'Fontys'" +
+                "AND u.userType = ? AND u.locationId = ? AND u.departmentId = ? AND startYear = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -1198,20 +1350,16 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
-                String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
-                int locationId = resultSet.getInt("locationId");
-                int departmentId = resultSet.getInt("departmentId");
-                String userNumber = resultSet.getString("userNumber");
+                int profileId = resultSet.getInt("profileId");
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                filtered.add(u);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -1221,25 +1369,23 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     //get all users with the given user type, location and department from data base
-    public List<User> getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(UserType type, int year, int lId, int dId) throws DatabaseException {
+    public List<UserDTO> getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(UserType type, int year, int lId, int dId) throws DatabaseException {
 
-        List<User> filtered = new ArrayList<>();
+        List<UserDTO> filtered = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT users.id, users.firstName, users.lastName, users.userType, users.email, users.password," +
-                "users.phoneNr, users.addressId, users.image, users.locationId, users.departmentId, users.userNumber " +
-                "FROM ((experiences INNER JOIN profiles ON experiences.profileId = profiles.id) INNER JOIN users " +
-                "ON profiles.userId = users.id)" +
-                " WHERE company = 'Fontys' AND users.userType = ? AND users.locationId = ? " +
-                "And users.departmentId = ? AND startDate = ?";
+        String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
+                "FROM ((experiences INNER JOIN profiles p ON experiences.profileId = p.id) " +
+                "INNER JOIN users u ON p.userId = u.id) WHERE company = 'Fontys'" +
+                "AND u.userType = ? AND u.locationId = ? AND u.departmentId = ? AND startDate = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            statement.setString(1, type.name()); // set user start work year parameter
+            statement.setString(1, type.name()); // set user start study year parameter
             statement.setInt(2, lId); // set user location id parameter
             statement.setInt(3, dId); // set user department id parameter
-            statement.setInt(4, year); // set user start work year parameter
+            statement.setInt(4, year); // set user start study year parameter
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -1247,20 +1393,16 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String email = resultSet.getString("email");
-                UserType userType = UserType.valueOf(resultSet.getString("userType"));
-                String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
-                int locationId = resultSet.getInt("locationId");
-                int departmentId = resultSet.getInt("departmentId");
-                String userNumber = resultSet.getString("userNumber");
+                int profileId = resultSet.getInt("profileId");
 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
-                filtered.add(u);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
 
             }
+
+            connection.close();
 
 
         } catch (SQLException throwable) {
@@ -1268,7 +1410,6 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
         return filtered;
     }
-
     /***********************RANIM****************************Norrmal searching*******************************/
 
     //get all users withing fontys
@@ -1296,8 +1437,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
-
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber);
+                
+                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
                 filtered.add(u);
 
             }
@@ -1309,5 +1450,200 @@ public class JDBCProfileRepository extends JDBCRepository {
         return filtered;
     }
 
+    /***************************************List User DTO**************************************/
+    //get all users to make use of userdto
+    public List<UserDTO> getUsersDTO() throws DatabaseException {
+
+        List<UserDTO> users = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles AS p " +
+                "LEFT JOIN users u ON u.id = p.userId GROUP BY u.id";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String image = resultSet.getString("image");
+                int profileId = resultSet.getInt("profileId");
+
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                users.add(userDTO);
+
+            }
+
+            connection.close();
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return users;
+    }
+
+    /****************************************Using search box in the filter page*********************************************************/
+
+    //get all users with the given user type, location, department and user name from data base
+    public List<UserDTO> getUsersByUserTypeLocationDeoartmentAndName(String chars, int lId, int dId, UserType type) throws DatabaseException {
+
+        List<UserDTO> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
+                "INNER JOIN profiles p ON u.id = p.userId WHERE u.firstName " +
+                "LIKE CONCAT ('%', ? ,'%') AND u.locationId = ? AND u.departmentId = ? AND userType = ? GROUP BY u.id";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, chars); // set characters
+            statement.setInt(2, lId); // set user location id parameter
+            statement.setInt(3, dId); // set user department id parameter
+            statement.setString(4, type.name()); // set user type parameter
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String image = resultSet.getString("image");
+                int profileId = resultSet.getInt("profileId");
+
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
+
+            }
+
+            connection.close();
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+    //get all users with the given first name chars
+    public List<UserDTO> getUsersByFirstNameChars(String chars) throws DatabaseException {
+
+        List<UserDTO> filtered = new ArrayList<>();
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
+                "INNER JOIN profiles p ON u.id = p.userId WHERE u.firstName " +
+                "LIKE CONCAT ('%', ? ,'%') GROUP BY u.id";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, chars); // set characters
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String image = resultSet.getString("image");
+                int profileId = resultSet.getInt("profileId");
+
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+
+                filtered.add(userDTO);
+
+            }
+
+            connection.close();
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read users from the database.",throwable);
+        }
+        return filtered;
+    }
+
+
+
+    public int createAddress(Address address) throws DatabaseException, SQLException {
+        int id = 0;
+        Connection connection = this.getDatabaseConnection();
+        ResultSet rs = null;
+
+        String sql = "INSERT INTO addresses (streetName, houseNumber, city, zipcode) VALUES (?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+        try {
+            preparedStatement.setString(1, address.getStreetName());
+            preparedStatement.setString(2, address.getHouseNumber());
+            preparedStatement.setString(3, address.getCity());
+            preparedStatement.setString(4, address.getZipCode());
+
+            preparedStatement.executeUpdate();
+
+            rs = preparedStatement.getGeneratedKeys();
+            if(rs != null && rs.next()){
+                System.out.println("Generated Emp Id: "+rs.getInt(1));
+                id = rs.getInt(1);
+            }
+            connection.setAutoCommit(false);
+            connection.commit();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot create new experience.", throwable);
+        }
+        finally {
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+
+        }
+        return id;
+    }
+
+    public boolean createUser(User user) throws DatabaseException, SQLException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, phoneNr, addressId, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+        try {
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, String.valueOf(user.getUserType()));
+            preparedStatement.setString(4, user.getEmail());
+            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setString(6, user.getPhoneNumber());
+            preparedStatement.setInt(7, user.getAddressId());
+            preparedStatement.setString(8, user.getImg());
+            preparedStatement.setInt(9, user.getLocationId());
+            preparedStatement.setInt(10, user.getDepartmentId());
+            preparedStatement.setString(11, user.getUserNumber());
+
+            preparedStatement.executeUpdate();
+
+//            rs = preparedStatement.getGeneratedKeys();
+//            if(rs != null && rs.next()){
+//                System.out.println("Generated Emp Id: "+rs.getInt(1));
+//                id = rs.getInt(1);
+//            }
+            connection.setAutoCommit(false);
+            connection.commit();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Something Wrong with query", throwable);
+        }
+        finally {
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+
+        }
+        return true;
+    }
 
 }

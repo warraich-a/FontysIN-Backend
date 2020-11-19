@@ -1,5 +1,7 @@
 package service.resources;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import service.PersistenceController;
 import service.model.*;
 import service.model.dto.ContactDTO;
@@ -7,12 +9,16 @@ import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
 import service.repository.FakeDataProfile;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.*;
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.StringTokenizer;
 //import org.json.simple.JSONObject;
 
 
@@ -132,6 +138,8 @@ public class UsersResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GeUser(@PathParam("userId") int userId) {
 		PersistenceController persistenceController = new PersistenceController();
+
+
 		User u = persistenceController.getUser(userId);
 		System.out.println("User id " + userId);
 		System.out.println("Got user by id " + u);
@@ -271,12 +279,15 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 
 		PersistenceController persistenceController = new PersistenceController();
+
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
+
 		List<Experience> experienceByProfileId = persistenceController.getExperience(userId, profileId);
 
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.EXPERIENCE);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.EXPERIENCE);
 
 		if(AllowToSee){
 			if (experienceByProfileId == null) {
@@ -295,10 +306,12 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/educations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 		PersistenceController persistenceController = new PersistenceController();
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
+
 		List<Education> educations = persistenceController.getEducations(userId, profileId);
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.EDUCATION);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.EDUCATION);
 		if(AllowToSee){
 		if (educations == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -330,11 +343,12 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/skills")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 		PersistenceController persistenceController = new PersistenceController();
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
 
 		List<Skill> skills = persistenceController.getSkills(userId, profileId);
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, visitorId, PersistenceController.ProfilePart.SKILLS);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.SKILLS);
 		if(AllowToSee){
 			if (skills == null) {
 				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -497,24 +511,33 @@ public class UsersResources {
 	@GET
 	@Path("user/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUserById(@PathParam("id") int id) {
-		User u = persistenceController.getUser(id);
-		if (u == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
-		} else {
-			return Response.ok(u).build();
+	public Response getUserById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+		if(!persistenceController.isIdAndAuthSame(id, auth)){
+			return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Invalid email and/or password.").build();
+		}else {
+
+			User u = persistenceController.getUser(id);
+			if (u == null) {
+				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+			} else {
+				return Response.ok(u).build();
+			}
 		}
 	}
 	@GET
 	@Path("address/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAddressById(@PathParam("id") int id) {
-		Address a = persistenceController.getAddress(id);
-		if (a == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
-		} else {
-			return Response.ok(a).build();
-		}
+	public Response getAddressById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+
+			Address a = persistenceController.getAddress(id);
+			if (a == null) {
+				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+			} else {
+				return Response.ok(a).build();
+			}
+
+
 	}
 
 
@@ -575,10 +598,17 @@ public class UsersResources {
 		}
 	}
 	@GET
-	@Path("privacy/{id}")
+	@Path("privacy/me")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPrivacyById(@PathParam("id") int id) {
-		Privacy a = persistenceController.getPrivacy(id);
+	public Response getPrivacy(@HeaderParam("Authorization") String auth) {
+		String encodedCredentials = auth.replaceFirst("Basic ", "");
+		String credentials = new
+				String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
+		//Split username and password tokens in credentials
+		final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
+		final String email = tokenizer.nextToken();
+		User u = persistenceController.getUserByEmail(email);
+		Privacy a = persistenceController.getPrivacy(u);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -617,47 +647,141 @@ public class UsersResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
-									 @QueryParam("workingYear") int workYear) {
+									 @QueryParam("workingYear") int workYear, @QueryParam("firstName") String name) {
 
 		PersistenceController controller = new PersistenceController();
 
-		List<User> users;
-		//If query parameter is missing return all users. Otherwise filter users by given user type fontys staff location and department and start work year
-		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
+		List<UserDTO> users;
+
+		if (uriInfo.getQueryParameters().containsKey("firstName") && uriInfo.getQueryParameters().containsKey("location")
+				&& uriInfo.getQueryParameters().containsKey("department") && uriInfo.getQueryParameters().containsKey("type")) { //filter by user type, location and department and name
+			users = controller.UserFilteLocationDepartmentTypeAndName(name,locId, depId, type);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(type, workYear, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type location and department and start study year
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("studyYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start study year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(type, year, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type location and department
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
 				&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
 			users = controller.UserFilterByTypeLocationAndDepartment(type, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type
 		else if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
 			users = controller.UserFilteredWithType(type);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
 			users = controller.UserFilteredWithDepartment(depId);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
+		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by fontys location
 			users = controller.UserFilteredWithLocation(locId);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
+		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year at fontys
 			users = controller.UserFilteredWithStartStudyYear(year);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
+		else if (uriInfo.getQueryParameters().containsKey("workingYear")){ //filter by start work year at fontys
 			users = controller.UserFilteredWithStartWorkYear(workYear);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("firstName")){ //filter by name using chars
+			users = controller.UserFilterByFirstNameChars(name);
 		}
 		else {
 			users = controller.GetAllUsers();
 		}
-		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
+		GenericEntity<List<UserDTO>> entity = new GenericEntity<>(users) {
 		};
 		return Response.ok(entity).build();
+	}
+
+	@POST //POST at http://localhost:XXXX/users/
+	@Path("login")
+	@PermitAll
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response LoginUser(String body) {
+		final StringTokenizer tokenizer = new StringTokenizer(body, ":");
+		final String email = tokenizer.nextToken();
+		final String password = tokenizer.nextToken();
+		User user = persistenceController.getUserByEmail(email);
+		if (persistenceController.login(email, password)) {
+			return Response.ok(user).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid email.").build();
+		}
+	}
+	@GET
+	@PermitAll
+	@Produces (MediaType.APPLICATION_JSON)
+	@Path("fontysLocations")
+	public Response getFontysLocations (){
+		PersistenceController persistenceController = new PersistenceController();
+		List<Location> locations =persistenceController.getFontysLocations();
+
+		if (locations == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		}
+		else
+			{
+				GenericEntity<List<Location>> entity = new GenericEntity<>(locations) {
+			};
+			return Response.ok(entity).build();
+		}
+	}
+
+	@GET
+	@PermitAll
+	@Produces (MediaType.APPLICATION_JSON)
+	@Path("fontysDepartments")
+	public Response getFontysDepartments (){
+		PersistenceController persistenceController = new PersistenceController();
+		List<Department> departments =persistenceController.getFontysDepartments();
+
+		if (departments == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		}
+		else
+		{
+			GenericEntity<List<Department>> entity = new GenericEntity<>(departments) {
+			};
+			return Response.ok(entity).build();
+		}
+	}
+
+	@PermitAll
+	@POST //POST at http://localhost:XXXX/profile/experience
+	@Path("newAddress")
+	public Response createAddress(Address address) throws DatabaseException, SQLException {
+
+		PersistenceController persistenceController = new PersistenceController();
+		int id = persistenceController.createAddress(address);
+		if (id == 0)
+		{
+			String entity =  "Address Id is zero";
+			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+		} else {
+			return Response.ok(id).build();
+		}
+	}
+
+
+	// to add a new experience
+	@PermitAll
+	@POST //POST at http://localhost:XXXX/profile/experience
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("new")
+	public Response createUser(User e) {
+		PersistenceController persistenceController = new PersistenceController();
+
+		if (!persistenceController.addUser(e))
+		{
+			String entity =  "User is not added";
+			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
+			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+		} else {
+			String url = uriInfo.getAbsolutePath() + "/" + e.getId(); //
+			URI uri = URI.create(url);
+			return Response.created(uri).build();
+		}
 	}
 }
