@@ -1,5 +1,7 @@
 package service.resources;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import service.PersistenceController;
 import service.model.*;
 import service.model.dto.ContactDTO;
@@ -7,29 +9,36 @@ import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
 import service.repository.FakeDataProfile;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.*;
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.StringTokenizer;
 //import org.json.simple.JSONObject;
 
 
 @Path("users")
 public class UsersResources {
 	private final FakeDataProfile fakeDataProfile = FakeDataProfile.getInstance();
+	PersistenceController persistenceController = new PersistenceController();
 	@Context
 	private UriInfo uriInfo;
 
 	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
-
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
 	public Response getContacts(@PathParam("id") int id) { // returns users list or contacts list?
+		System.out.println("Contacts route");
 
-		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
+//		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> contacts = controller.getAllContactsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -39,8 +48,11 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
 	@Path("{id}/acceptedContacts")
 	public Response getAcceptedContacts(@PathParam("id") int id) { // returns users list or contacts list?
+		System.out.println("Accepted Contacts route");
 
-		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
+//		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> contacts = controller.getAcceptedContactsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -51,7 +63,9 @@ public class UsersResources {
 	@Path("{id}/requests")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContactsRequests(@PathParam("id") int id) { // returns users list or contacts list?
-		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
+//		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
+		PersistenceController controller = new PersistenceController();
+		List<ContactDTO> requests = controller.getContactsRequestsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(requests) { };
 
@@ -63,7 +77,12 @@ public class UsersResources {
 	@Path("{userId}/contacts")
 	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
 
-		int contactId = fakeDataProfile.createContact(contact);
+//		int contactId = fakeDataProfile.createContact(contact);
+		PersistenceController controller = new PersistenceController();
+		int contactId = controller.createContact(contact);
+
+		System.out.println("Contact id route " + contactId);
+
 		if (contactId < 0){ // already friends
 			//String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
 			String entity =  "You and user with id " + contact.getFriend().getId() + " are already connected.";
@@ -79,7 +98,9 @@ public class UsersResources {
 	@DELETE //DELETE at http://localhost:XXXX/users/1/contacts/2
 	@Path("{userId}/contacts/{contactId}")
 	public Response deleteContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId) {
-		fakeDataProfile.deleteContact(userId, contactId);
+//		fakeDataProfile.deleteContact(userId, contactId);
+		PersistenceController controller = new PersistenceController();
+		controller.deleteContact(userId, contactId);
 
 		return Response.noContent().build();
 	}
@@ -89,7 +110,9 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
 	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact) {
-		fakeDataProfile.updateContact(contactId, contact);
+//		fakeDataProfile.updateContact(contactId, contact);
+		PersistenceController controller = new PersistenceController();
+		controller.updateContact(contactId, contact);
 
 		return Response.noContent().build();
 	}
@@ -97,7 +120,9 @@ public class UsersResources {
 	@GET
 	@Path("{userId}")
 	public Response getUser(@PathParam("userId") int userId) {
-		UserDTO user = fakeDataProfile.getUserDTO(userId);
+//		UserDTO user = fakeDataProfile.getUserDTO(userId);
+		PersistenceController controller = new PersistenceController();
+		UserDTO user = controller.getUserDTO(userId);
 
 		if(user != null){
 			return Response.ok(user).build(); // Status ok 200, return user
@@ -107,6 +132,24 @@ public class UsersResources {
 		}
 	}
 	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("p/{userId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GeUser(@PathParam("userId") int userId) {
+		PersistenceController persistenceController = new PersistenceController();
+
+
+		User u = persistenceController.getUser(userId);
+		System.out.println("User id " + userId);
+		System.out.println("Got user by id " + u);
+		if (u == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+		} else {
+			return Response.ok(u).build();
+		}
+	}
+
 
 
 	@GET //GET at http://localhost:XXXX/profile/experiences
@@ -168,8 +211,7 @@ public class UsersResources {
 	public Response GetEducation(@PathParam("userId") int userId, @PathParam("profileId") int profileId
 			, @PathParam("educationId") int educationId) {
 
-		PersistenceController controller = new PersistenceController();
-		List<Education> foundEducations = controller.getEducations(userId, profileId); // getting the education by profile id
+		List<Education> foundEducations = fakeDataProfile.GetEducationsByProfileId(userId ,profileId); // getting the education by profile id
 
 		if(foundEducations == null){
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid profile id.").build();
@@ -178,7 +220,7 @@ public class UsersResources {
 
 			for (Education e: foundEducations){
 				if(e.getId() == educationId){
-					List<Education> educationByProfileId = controller.getEducations(userId,profileId);
+					List<Education> educationByProfileId = fakeDataProfile.GetEducationsByProfileId(userId,profileId);
 
 					// to combine different types of lists into 1
 					List<Object> combined = new ArrayList<>();
@@ -237,12 +279,15 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 
 		PersistenceController persistenceController = new PersistenceController();
+
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
+
 		List<Experience> experienceByProfileId = persistenceController.getExperience(userId, profileId);
 
-		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EXPERIENCE);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.EXPERIENCE);
 
 		if(AllowToSee){
 			if (experienceByProfileId == null) {
@@ -261,10 +306,12 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/educations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 		PersistenceController persistenceController = new PersistenceController();
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
+
 		List<Education> educations = persistenceController.getEducations(userId, profileId);
-		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.EDUCATION);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.EDUCATION);
 		if(AllowToSee){
 		if (educations == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -296,11 +343,12 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/skills")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("visitorId") int visitorId) {
+	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 		PersistenceController persistenceController = new PersistenceController();
+		User loggedInUser = persistenceController.getUserFromAuth(auth);
 
 		List<Skill> skills = persistenceController.getSkills(userId, profileId);
-		boolean AllowToSee = fakeDataProfile.AllowedToSee(userId, visitorId, FakeDataProfile.ProfilePart.SKILLS);
+		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.SKILLS);
 		if(AllowToSee){
 			if (skills == null) {
 				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -356,7 +404,7 @@ public class UsersResources {
 	@DELETE //DELETE at http://localhost:9099/users/1/profiles/1/experiences/1/
 	@Path("{userId}/profiles/{profileID}/experiences/{experinceID}")
 	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-										@PathParam("experinceID") int experinceID) {
+										 @PathParam("experinceID") int experinceID) {
 
 		PersistenceController controller = new PersistenceController();
 		controller.DeleteExperience(userId,profileID,experinceID);
@@ -364,8 +412,7 @@ public class UsersResources {
 		return Response.noContent().build();
 	}
 
-	// DELETE 1//2/3///
-
+	//delete user's education with specific id
 	@DELETE //DELETE at http://localhost:9090/users/3/profiles/2/educations/1
 	@Path("{userId}/profiles/{profileID}/educations/{educationID}")
 	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
@@ -377,11 +424,11 @@ public class UsersResources {
 		return Response.noContent().build();
 	}
 
-
+	//delete user's skill with specific id
 	@DELETE //DELETE at http://localhost:9090/users/1/profiles/1/skills/1
 	@Path("{userId}/profiles/{profileID}/skills/{skillId}")
 	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
-										@PathParam("skillId") int skillId) {
+									@PathParam("skillId") int skillId) {
 
 		PersistenceController controller = new PersistenceController();
 		controller.DeleteSkill(userId,profileID,skillId);
@@ -431,7 +478,7 @@ public class UsersResources {
 	@Path("profile/education/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getEducationById(@PathParam("id") int id) {
-		Education e = fakeDataProfile.getEducationID(id);
+		Education e = persistenceController.getEdu(id);
 		if (e == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid education id.").build();
 		} else {
@@ -442,7 +489,7 @@ public class UsersResources {
 	@Path("profile/experience/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getExperienceById(@PathParam("id") int id) {
-		Experience e = fakeDataProfile.getExperienceID(id);
+		Experience e = persistenceController.getExp(id);
 		if (e == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid experience id.").build();
 		} else {
@@ -453,7 +500,7 @@ public class UsersResources {
 	@Path("profile/about/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAboutById(@PathParam("id") int id) {
-		About a = fakeDataProfile.GetAboutById(id);
+		About a = persistenceController.getAbo(id);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -464,33 +511,42 @@ public class UsersResources {
 	@GET
 	@Path("user/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUserById(@PathParam("id") int id) {
-		User u = fakeDataProfile.GetUserById(id);
-		if (u == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
-		} else {
-			return Response.ok(u).build();
+	public Response getUserById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+		if(!persistenceController.isIdAndAuthSame(id, auth)){
+			return Response.status(Response.Status.UNAUTHORIZED).
+					entity("Invalid email and/or password.").build();
+		}else {
+
+			User u = persistenceController.getUser(id);
+			if (u == null) {
+				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+			} else {
+				return Response.ok(u).build();
+			}
 		}
 	}
 	@GET
 	@Path("address/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAddressById(@PathParam("id") int id) {
-		Address a = fakeDataProfile.GetAddressById(id);
-		if (a == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
-		} else {
-			return Response.ok(a).build();
-		}
+	public Response getAddressById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+
+			Address a = persistenceController.getAddress(id);
+			if (a == null) {
+				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
+			} else {
+				return Response.ok(a).build();
+			}
+
+
 	}
 
 
 	@PUT //PUT at http://localhost:XXXX/users/profile/about/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/about/{id}")
-	public Response updateAbout(@PathParam("id") int id, About a) {
+	public Response updateAbout(About a) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateAbout(id, a)) {
+		if (persistenceController.updateAbo(a)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid about.").build();
@@ -500,9 +556,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:XXXX/users/profile/education/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/education/{id}")
-	public Response updateEducation(@PathParam("id") int id, Education e) {
+	public Response updateEducation(Education e) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateEducation(id, e)) {
+		if (persistenceController.updateEdu(e)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid education.").build();
@@ -511,9 +567,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:XXXX/users/profile/experience/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/profile/experience/{id}")
-	public Response updateExperience(@PathParam("id") int id, Experience e) {
+	public Response updateExperience(Experience e) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateExperience(id, e)) {
+		if (persistenceController.updateExp(e)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
@@ -522,9 +578,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:XXXX/profile/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}")
-	public Response updateUser(@PathParam("userId") int id, User user) {
+	public Response updateUserPhone(User user) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateUser(id, user)) {
+		if (persistenceController.updatePh(user)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
@@ -533,19 +589,26 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:9099/users/address/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/address/{id}")
-	public Response updateAddress(@PathParam("id") int id, Address a) {
+	public Response updateAddress(Address a) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updateAddress(id, a)) {
+		if (persistenceController.updateAd(a)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
 		}
 	}
 	@GET
-	@Path("privacy/{id}")
+	@Path("privacy/me")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPrivacyById(@PathParam("id") int id) {
-		Privacy a = fakeDataProfile.GetPrivacyById(id);
+	public Response getPrivacy(@HeaderParam("Authorization") String auth) {
+		String encodedCredentials = auth.replaceFirst("Basic ", "");
+		String credentials = new
+				String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
+		//Split username and password tokens in credentials
+		final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
+		final String email = tokenizer.nextToken();
+		User u = persistenceController.getUserByEmail(email);
+		Privacy a = persistenceController.getPrivacy(u);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -555,9 +618,9 @@ public class UsersResources {
 	@PUT //PUT at http://localhost:9099/users/address/id
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/privacy/{id}")
-	public Response updatePrivacy(@PathParam("id") int id, Privacy p) {
+	public Response updatePrivacy(Privacy p) {
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (fakeDataProfile.updatePrivacy(id, p)) {
+		if (persistenceController.updatePri(p)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
@@ -594,7 +657,7 @@ public class UsersResources {
 				&& uriInfo.getQueryParameters().containsKey("department") && uriInfo.getQueryParameters().containsKey("type")) { //filter by user type, location and department and name
 			users = controller.UserFilteLocationDepartmentTypeAndName(name,locId, depId, type);
 		}
-		 else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(type, workYear, locId, depId);
 		}
@@ -603,7 +666,7 @@ public class UsersResources {
 			users = controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(type, year, locId, depId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
-		&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
+				&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
 			users = controller.UserFilterByTypeLocationAndDepartment(type, locId, depId);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
@@ -630,5 +693,95 @@ public class UsersResources {
 		GenericEntity<List<UserDTO>> entity = new GenericEntity<>(users) {
 		};
 		return Response.ok(entity).build();
+	}
+
+	@POST //POST at http://localhost:XXXX/users/
+	@Path("login")
+	@PermitAll
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response LoginUser(String body) {
+		final StringTokenizer tokenizer = new StringTokenizer(body, ":");
+		final String email = tokenizer.nextToken();
+		final String password = tokenizer.nextToken();
+		User user = persistenceController.getUserByEmail(email);
+		if (persistenceController.login(email, password)) {
+			return Response.ok(user).build();
+		} else {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid email.").build();
+		}
+	}
+	@GET
+	@PermitAll
+	@Produces (MediaType.APPLICATION_JSON)
+	@Path("fontysLocations")
+	public Response getFontysLocations (){
+		PersistenceController persistenceController = new PersistenceController();
+		List<Location> locations =persistenceController.getFontysLocations();
+
+		if (locations == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		}
+		else
+			{
+				GenericEntity<List<Location>> entity = new GenericEntity<>(locations) {
+			};
+			return Response.ok(entity).build();
+		}
+	}
+
+	@GET
+	@PermitAll
+	@Produces (MediaType.APPLICATION_JSON)
+	@Path("fontysDepartments")
+	public Response getFontysDepartments (){
+		PersistenceController persistenceController = new PersistenceController();
+		List<Department> departments =persistenceController.getFontysDepartments();
+
+		if (departments == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		}
+		else
+		{
+			GenericEntity<List<Department>> entity = new GenericEntity<>(departments) {
+			};
+			return Response.ok(entity).build();
+		}
+	}
+
+	@PermitAll
+	@POST //POST at http://localhost:XXXX/profile/experience
+	@Path("newAddress")
+	public Response createAddress(Address address) throws DatabaseException, SQLException {
+
+		PersistenceController persistenceController = new PersistenceController();
+		int id = persistenceController.createAddress(address);
+		if (id == 0)
+		{
+			String entity =  "Address Id is zero";
+			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+		} else {
+			return Response.ok(id).build();
+		}
+	}
+
+
+	// to add a new experience
+	@PermitAll
+	@POST //POST at http://localhost:XXXX/profile/experience
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("new")
+	public Response createUser(User e) {
+		PersistenceController persistenceController = new PersistenceController();
+
+		if (!persistenceController.addUser(e))
+		{
+			String entity =  "User is not added";
+			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
+			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+		} else {
+			String url = uriInfo.getAbsolutePath() + "/" + e.getId(); //
+			URI uri = URI.create(url);
+			return Response.created(uri).build();
+		}
 	}
 }

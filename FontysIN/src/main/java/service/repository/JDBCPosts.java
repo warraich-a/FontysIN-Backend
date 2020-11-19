@@ -1,6 +1,10 @@
 package service.repository;
 
+import service.PersistenceController;
+import service.model.Contact;
 import service.model.Posts;
+import service.model.User;
+import service.model.dto.ContactDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,7 +25,40 @@ public class JDBCPosts extends JDBCRepository {
                 int Id = resultSet.getInt("id");
                 int userId = resultSet.getInt("userId");
                 String content = resultSet.getString("content");
-                Date date = resultSet.getDate("date");
+                Timestamp date = resultSet.getTimestamp("date");
+                Blob image = resultSet.getBlob("image");
+                Posts post = new Posts(Id,userId,content,date);
+                posts.add(post);
+            }
+            connection.setAutoCommit(false);
+            connection.close();
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read students from the database.",throwable);
+        }
+        return posts;
+    }
+
+    public Collection<Posts> getNewsfeed(int id) throws DatabaseException {
+        List<Posts> posts = new ArrayList<>();
+        List<ContactDTO> friends = new ArrayList<>();
+        PersistenceController persistenceController = new PersistenceController();
+        String sql = "SELECT * FROM posts WHERE userId IN (";
+        friends = persistenceController.getAllContactsDTO(id);
+        for (ContactDTO f: friends) {
+            sql += (Integer.toString(f.getFriend().getId()) + ", ");
+        }
+        sql += (Integer.toString(id)+") ORDER BY date DESC");
+        Connection connection = this.getDatabaseConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                int Id = resultSet.getInt("id");
+                int userId = resultSet.getInt("userId");
+                String content = resultSet.getString("content");
+                Timestamp date = resultSet.getTimestamp("date");
                 Blob image = resultSet.getBlob("image");
                 Posts post = new Posts(Id,userId,content,date);
                 posts.add(post);
@@ -47,7 +84,7 @@ public class JDBCPosts extends JDBCRepository {
                 int Id = resultSet.getInt("id");
                 int userId = resultSet.getInt("userId");
                 String content = resultSet.getString("content");
-                Date date = resultSet.getDate("date");
+                Timestamp date = resultSet.getTimestamp("date");
                 Blob image = resultSet.getBlob("image");
                 Posts post = new Posts(Id,userId,content,date);
                 posts.add(post);
@@ -74,7 +111,7 @@ public class JDBCPosts extends JDBCRepository {
                 int Id = resultSet.getInt("id");
                 int userId = resultSet.getInt("userId");
                 String content = resultSet.getString("content");
-                Date date = resultSet.getDate("date");
+                Timestamp date = resultSet.getTimestamp("date");
                 Blob image = resultSet.getBlob("image");
                 Posts post = new Posts(Id,userId,content,date);
                 connection.close();
@@ -88,15 +125,14 @@ public class JDBCPosts extends JDBCRepository {
     public boolean addPosts(Posts post) throws DatabaseException{
         Connection connection = this.getDatabaseConnection();
         boolean exist = false;
-        String sql = "INSERT INTO posts(`userId`, `content`, `date`, `image`) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO posts(`userId`, `content`, `image`) VALUES (?,?,?)";
         try {
             if(!exist){
                 PreparedStatement statement = connection.prepareStatement(sql);
 
                 statement.setInt(1, post.getUserId());
                 statement.setString(2,post.getContent());
-                statement.setDate(3, (Date) post.getDate());
-                statement.setBlob(4,post.getImage());
+                statement.setBlob(3,post.getImage());
 
                 statement.executeUpdate();
 
@@ -123,10 +159,17 @@ public class JDBCPosts extends JDBCRepository {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, post.getUserId());
             statement.setString(2, post.getContent());
-            statement.setDate(3, (Date) post.getDate());
+            statement.setTimestamp(3, (Timestamp) post.getDate());
             statement.setBlob(4, post.getImage());
             statement.setInt(5, post.getId());
             statement.executeUpdate();
+
+            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setInt(1,1);
+            statement.executeUpdate();
+            connection.setAutoCommit(false);
+            connection.commit();
+            connection.close();
 
 
             return true;
@@ -143,8 +186,12 @@ public class JDBCPosts extends JDBCRepository {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1,post.getId());
 
+            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setInt(1,1);
             statement.executeUpdate();
-
+            connection.setAutoCommit(false);
+            connection.commit();
+            connection.close();
 
 
             return true;

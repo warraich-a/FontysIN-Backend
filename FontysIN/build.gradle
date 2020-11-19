@@ -36,6 +36,16 @@ dependencies {
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.+'
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.+'
 
+
+    // https://mvnrepository.com/artifact/org.glassfish.jersey.media/jersey-media-multipart
+    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: '2.32'
+
+    // https://mvnrepository.com/artifact/org.jvnet.mimepull/mimepull
+    compile group: 'org.jvnet.mimepull', name: 'mimepull', version: '1.9.13'
+
+
+
+
     compile 'mysql:mysql-connector-java:5.1.23'
     runtime 'mysql:mysql-connector-java:5.1.23'
 }

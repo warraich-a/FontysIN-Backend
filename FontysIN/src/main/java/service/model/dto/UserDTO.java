@@ -1,7 +1,5 @@
 package service.model.dto;
 
-import service.model.UserType;
-
 public class UserDTO {
 	private int id;
 	private int profileId;
