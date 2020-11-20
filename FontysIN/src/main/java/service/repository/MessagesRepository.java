@@ -78,7 +78,7 @@ public class MessagesRepository extends JDBCRepository {
                 "  (SELECT id AS friendProfileId, userId " +
                 "   FROM profiles " +
                 "   GROUP BY userId) p2 ON p2.userId = friend.id " +
-                "WHERE conversationId = ?";
+                "WHERE conversationId = ? AND (isDeletedFirstUser = 0 AND isDeletedSecondUser = 0)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -149,7 +149,7 @@ public class MessagesRepository extends JDBCRepository {
                 "FROM conversations AS c " +
                 "INNER JOIN messages AS m ON (m.conversationId = c.id) " +
                 "LEFT JOIN users USER ON m.senderId = user.id " +
-                "LEFrT JOIN uses friend ON m.receiverId = friend.id " +
+                "LEFT JOIN users friend ON m.receiverId = friend.id " +
                 "LEFT JOIN " +
                 "  (SELECT id AS userProfileId, userId " +
                 "   FROM profiles " +
@@ -158,7 +158,8 @@ public class MessagesRepository extends JDBCRepository {
                 "  (SELECT id AS friendProfileId, userId " +
                 "   FROM profiles " +
                 "   GROUP BY userId) p2 ON p2.userId = friend.id " +
-                "WHERE (c.firstUserId = ?) OR (c.secondUserId = ?) " +
+                "WHERE ((c.firstUserId = ?) AND (isDeletedFirstUser = 0)) OR ((c.secondUserId = ?) AND (isDeletedSecondUser = 0)) " +
+//                "AND isDeletedFirstUser = 0 AND isDeletedSecondUser = 0" +
                 "ORDER BY conversationId";
 
         try {
@@ -221,7 +222,7 @@ public class MessagesRepository extends JDBCRepository {
         }
     }
 
-    // Delete conversation in profile page
+    // Delete conversation in messaging page
     public boolean deleteConversation(int userId, int conversationId) throws DatabaseException {
 
         Connection connection = this.getDatabaseConnection();
@@ -231,19 +232,20 @@ public class MessagesRepository extends JDBCRepository {
                 "isDeletedSecondUser = (CASE WHEN secondUserId = ? THEN 1 ELSE isDeletedSecondUser end) where id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,userId);
-            preparedStatement.setInt(2,userId);
-            preparedStatement.setInt(3,conversationId);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, conversationId);
 
             preparedStatement.executeUpdate();
             connection.commit();
             connection.close();
 
             return true;
-        }
-        catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return false;
     }
+
+
 }
