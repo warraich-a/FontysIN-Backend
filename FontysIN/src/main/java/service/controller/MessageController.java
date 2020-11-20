@@ -2,7 +2,9 @@ package service.controller;
 
 import service.model.Conversation;
 import service.model.Message;
+import service.model.Privacy;
 import service.repository.DatabaseException;
+import service.repository.JDBCProfileRepository;
 import service.repository.MessagesRepository;
 
 import java.util.List;
@@ -63,6 +65,26 @@ public class MessageController {
             System.out.println(e.getMessage());
         }
         return conversation;
+    }
+
+
+    /***
+     *
+     * @param userId of user
+     * @param conversationId of conversation
+     * @return true when the raw in db is updated
+     */
+    public boolean DeleteConversation(int userId, int conversationId){
+
+        MessagesRepository messagesRepository = new MessagesRepository();
+
+        try {
+            return messagesRepository.deleteConversation(userId, conversationId);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
