@@ -4,6 +4,7 @@ import service.controller.MessageController;
 import service.model.Conversation;
 import service.model.Message;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -41,5 +42,15 @@ public class MessagesResources {
         String url = uriInfo.getAbsolutePath() + "/" + messageId; // url of the created message
         URI uri = URI.create(url);
         return Response.created(uri).build();
+    }
+
+    @DELETE //DELETE at http://localhost:XXXX/users/1/conversation/1
+    @Path("user/{userId}/conversation/{conversationId}")
+    @PermitAll
+    public Response deleteConversation(@PathParam("userId") int userId, @PathParam("conversationId") int conversationId) {
+
+        messageController.DeleteConversation(userId, conversationId);
+
+        return Response.noContent().build();
     }
 }

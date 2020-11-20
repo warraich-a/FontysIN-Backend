@@ -220,4 +220,29 @@ public class MessagesRepository extends JDBCRepository {
             throw new DatabaseException("Cannot read contacts from the database.", throwable);
         }
     }
+
+    // Delete conversation in messaging page
+    public boolean deleteConversation(int userId, int conversationId) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "UPDATE conversations SET " +
+                "isDeletedFirstUser = (CASE WHEN firstUserId = ? THEN 1 ELSE isDeletedFirstUser end)," +
+                "isDeletedSecondUser = (CASE WHEN secondUserId = ? THEN 1 ELSE isDeletedSecondUser end) where id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, conversationId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            connection.close();
+
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
 }

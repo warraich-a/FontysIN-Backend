@@ -65,5 +65,24 @@ public class MessageController {
         return conversation;
     }
 
+    /***
+     *
+     * @param userId of user
+     * @param conversationId of conversation
+     * @return true when the raw in db is updated
+     */
+    public boolean DeleteConversation(int userId, int conversationId){
+
+        MessagesRepository messagesRepository = new MessagesRepository();
+
+        try {
+            return messagesRepository.deleteConversation(userId, conversationId);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
 }
