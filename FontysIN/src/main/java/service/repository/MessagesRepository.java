@@ -78,7 +78,7 @@ public class MessagesRepository extends JDBCRepository {
                 "  (SELECT id AS friendProfileId, userId " +
                 "   FROM profiles " +
                 "   GROUP BY userId) p2 ON p2.userId = friend.id " +
-                "WHERE conversationId = ?";
+                "WHERE conversationId = ? AND (isDeletedFirstUser = 0 AND isDeletedSecondUser = 0)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -158,7 +158,8 @@ public class MessagesRepository extends JDBCRepository {
                 "  (SELECT id AS friendProfileId, userId " +
                 "   FROM profiles " +
                 "   GROUP BY userId) p2 ON p2.userId = friend.id " +
-                "WHERE (c.firstUserId = ?) OR (c.secondUserId = ?) " +
+                "WHERE ((c.firstUserId = ?) AND (isDeletedFirstUser = 0)) OR ((c.secondUserId = ?) AND (isDeletedSecondUser = 0)) " +
+//                "AND isDeletedFirstUser = 0 AND isDeletedSecondUser = 0" +
                 "ORDER BY conversationId";
 
         try {
