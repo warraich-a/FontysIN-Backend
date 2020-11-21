@@ -3,6 +3,7 @@ package service;
 import service.controller.MessageController;
 import service.model.User;
 import service.model.UserType;
+import service.model.dto.ConversationDTO;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -16,7 +17,9 @@ public class DataMain {
 
         MessageController messageController = new MessageController();
 
-        messageController.DeleteConversation(1,1);
+        ConversationDTO c = new ConversationDTO(0, 1 , 13);
+
+        messageController.startConversation(c);
     }
 
 }

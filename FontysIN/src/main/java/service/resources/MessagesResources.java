@@ -4,6 +4,7 @@ import service.PersistenceController;
 import service.controller.MessageController;
 import service.model.Conversation;
 import service.model.Message;
+import service.model.dto.ConversationDTO;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
@@ -54,4 +55,24 @@ public class MessagesResources {
 
         return Response.noContent().build();
     }
+
+    //add conversation with conversation object
+    @POST //POST at http://localhost:XXXX/users/1/messages
+    @Consumes(MediaType.APPLICATION_JSON)
+    @PermitAll
+    public Response StartNewConversation(ConversationDTO conversationDTO) {
+
+        MessageController messageController = new MessageController();
+
+        if (!messageController.startConversation(conversationDTO)){
+            String entity =  "Conversation with this id is " + conversationDTO.getId() + " already exists.";
+            return Response.status(Response.Status.CONFLICT).entity(entity).build();
+        }
+        else {
+            String url = uriInfo.getAbsolutePath() + "/" + conversationDTO.getId(); // url of the posted conversation
+            URI uri = URI.create(url);
+            return Response.created(uri).build();
+        }
+    }
+
 }

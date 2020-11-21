@@ -2,6 +2,8 @@ package service.repository;
 
 import service.model.Conversation;
 import service.model.Message;
+import service.model.dto.ContactDTO;
+import service.model.dto.ConversationDTO;
 import service.model.dto.UserDTO;
 
 import java.sql.*;
@@ -246,6 +248,40 @@ public class MessagesRepository extends JDBCRepository {
         }
         return false;
     }
+
+
+    // add new conversation
+    public void startConversation(ConversationDTO conversation) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "INSERT INTO conversations (firstUserId, secondUserId) SELECT * FROM (SELECT ?,?) AS tmp " +
+                "WHERE NOT EXISTS (SELECT secondUserId FROM conversations WHERE secondUserId = ?) LIMIT 1";
+        try {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, conversation.getFirstUserId());
+            preparedStatement.setInt(2, conversation.getSecondUserId());
+            preparedStatement.setInt(3, conversation.getSecondUserId());
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+
+            String sqlID = "SELECT max(id) ID FROM conversations";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlID);
+            if (resultSet.next()){
+                connection.commit();
+                connection.close();
+            } else {
+                throw  new DatabaseException("Cannot get the id of the new conversation.");
+            }
+
+        } catch (SQLException throwable) {
+            throw  new DatabaseException("Cannot create new conversation.", throwable);
+        }
+    }
+
 
 
 }

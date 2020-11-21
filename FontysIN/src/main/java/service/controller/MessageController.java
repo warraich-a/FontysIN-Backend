@@ -3,6 +3,7 @@ package service.controller;
 import service.model.Conversation;
 import service.model.Message;
 import service.model.Privacy;
+import service.model.dto.ConversationDTO;
 import service.repository.DatabaseException;
 import service.repository.JDBCProfileRepository;
 import service.repository.MessagesRepository;
@@ -86,6 +87,27 @@ public class MessageController {
         }
         return false;
     }
+
+    /**
+     *
+     * @param conversationDTO
+     * @return the id of the created conversation
+     */
+    public boolean startConversation(ConversationDTO conversationDTO){
+
+        MessagesRepository messagesRepository = new MessagesRepository();
+
+        try {
+            messagesRepository.startConversation(conversationDTO);
+            return true;
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
 
 }

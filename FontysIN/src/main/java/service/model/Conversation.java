@@ -5,16 +5,25 @@ import java.util.List;
 
 public class Conversation {
     private int id;
+    private Message message;
     private List<Message> messages;
 
     public Conversation(int id, List<Message> messages) {
         this.id = id;
         this.messages = messages;
+        this.message = new Message();
     }
 
     public Conversation(int id) {
         this.id = id;
         this.messages = new ArrayList<>();
+        this.message = new Message();
+    }
+
+    public Conversation(int id, Message message) {
+        this.id = id;
+        this.messages = new ArrayList<>();
+        this.message = new Message();
     }
 
     public int getId() {
@@ -35,6 +44,14 @@ public class Conversation {
 
     public void addMessage(Message message) {
         messages.add(message);
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
     }
 
     @Override
