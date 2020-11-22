@@ -25,7 +25,7 @@ public class PersistenceController {
         try {
             List<Posts> posts = (List<Posts>) postsRepository.getPosts();
 
-                System.out.println("ok");
+            System.out.println("ok");
 
             return posts;
         } catch (DatabaseException e) {
@@ -33,6 +33,22 @@ public class PersistenceController {
         }
         return null;
     }
+
+    public List<Posts> getPostsByDate(){
+        JDBCPosts postsRepository = new JDBCPosts();
+
+        try {
+            List<Posts> posts = (List<Posts>) postsRepository.getPostsByDate();
+
+            System.out.println("ok");
+
+            return posts;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Posts> getNewsfeed(int uId){
         JDBCPosts postsRepository = new JDBCPosts();
 
