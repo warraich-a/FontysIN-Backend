@@ -130,7 +130,10 @@ public class JDBCPosts extends JDBCRepository {
         for (ContactDTO f: friends) {
             friendsId.add(f.getFriend().getId());
         }
-        friendsId.add(id);
+        if(!friendsId.contains(id)){
+            friendsId.add(id);
+        }
+
         for(Posts post: allPosts){
             for(Integer i: friendsId){
                 if (post.getUserId() == i){
