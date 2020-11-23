@@ -1204,8 +1204,7 @@ public class PersistenceController {
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
         try {
             if(profileRepository.createUser(user)) {
-                Privacy p = new Privacy(user.getId());
-                profileRepository.createPrivacy(p);
+
                 return true;
             }
             else
