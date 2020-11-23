@@ -1055,6 +1055,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
             connection.commit();
+            connection.close();
         }
         catch (SQLException throwable){
             throw  new DatabaseException("Cannot delete education.", throwable);
@@ -1075,6 +1076,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
             connection.commit();
+            connection.close();
         }
         catch (SQLException throwable){
             throw  new DatabaseException("Cannot delete experience.", throwable);
@@ -1095,6 +1097,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
             connection.commit();
+            connection.close();
         }
         catch (SQLException throwable){
             throw  new DatabaseException("Cannot delete skill.", throwable);
