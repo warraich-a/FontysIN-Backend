@@ -2,6 +2,7 @@ package service.controller;
 
 import service.model.Conversation;
 import service.model.Message;
+import service.model.dto.ConversationDTO;
 import service.repository.DatabaseException;
 import service.repository.MessagesRepository;
 
@@ -63,6 +64,45 @@ public class MessageController {
             System.out.println(e.getMessage());
         }
         return conversation;
+    }
+
+    /***
+     *
+     * @param userId of user
+     * @param conversationId of conversation
+     * @return true when the raw in db is updated
+     */
+    public boolean DeleteConversation(int userId, int conversationId){
+
+        MessagesRepository messagesRepository = new MessagesRepository();
+
+        try {
+            return messagesRepository.deleteConversation(userId, conversationId);
+        }
+        catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param conversationDTO
+     * @return the id of the created conversation
+     */
+    public boolean startConversation(ConversationDTO conversationDTO) {
+
+        MessagesRepository messagesRepository = new MessagesRepository();
+
+        try {
+            messagesRepository.startConversation(conversationDTO);
+            System.out.println("return true if correct");
+
+            return true;
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 

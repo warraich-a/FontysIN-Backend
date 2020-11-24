@@ -2,6 +2,7 @@ package service.repository;
 
 import service.model.Conversation;
 import service.model.Message;
+import service.model.dto.ConversationDTO;
 import service.model.dto.UserDTO;
 
 import java.sql.*;
@@ -21,6 +22,10 @@ public class MessagesRepository extends JDBCRepository {
         // 1. Get conversation id
         // 2. Add message to db
         Connection connection = super.getDatabaseConnection();
+
+        System.out.println("message from front end");
+
+        System.out.println(message);
 
         String sql = "INSERT INTO messages (conversationId, senderId, receiverId, content, date) VALUES (?, ?, ?, ?, ?)";
 
@@ -69,16 +74,16 @@ public class MessagesRepository extends JDBCRepository {
                 "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
                 "FROM conversations AS c " +
                 "LEFT JOIN messages AS m ON (m.conversationId = c.id)" +
-                "LEFT JOIN users USER ON m.senderId = user.id OR c.firstUserId = user.id " +
-                "LEFT JOIN users friend ON m.receiverId = friend.id OR c.secondUserId = friend.id " +
+                "LEFT JOIN users USER ON m.senderId = user.id " +
+                "LEFT JOIN users friend ON m.receiverId = friend.id " +
                 "LEFT JOIN " +
-                "  (SELECT id AS userProfileId, userId " +
-                "   FROM profiles " +
-                "   GROUP BY userId) p1 ON p1.userId = user.id " +
+                " (SELECT id AS userProfileId, userId " +
+                " FROM profiles " +
+                " GROUP BY userId) p1 ON p1.userId = user.id " +
                 "LEFT JOIN " +
-                "  (SELECT id AS friendProfileId, userId " +
-                "   FROM profiles " +
-                "   GROUP BY userId) p2 ON p2.userId = friend.id " +
+                " (SELECT id AS friendProfileId, userId " +
+                " FROM profiles " +
+                " GROUP BY userId) p2 ON p2.userId = friend.id " +
                 "WHERE c.id = ?";
 
         try {
@@ -158,19 +163,19 @@ public class MessagesRepository extends JDBCRepository {
                 "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
                 "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
                 "FROM conversations AS c " +
-                "   LEFT JOIN messages AS m ON (m.conversationId = c.id) " +
-                "   LEFT JOIN users user ON m.senderId = user.id OR c.firstUserId = user.id " +
-                "   LEFT JOIN users friend ON m.receiverId = friend.id OR c.secondUserId = friend.id " +
-                "   LEFT JOIN " +
-                "     (SELECT id AS userProfileId, userId " +
-                "      FROM profiles " +
-                "      GROUP BY userId) p1 ON p1.userId = user.id " +
-                "   LEFT JOIN " +
-                "     (SELECT id AS friendProfileId, userId " +
-                "      FROM profiles " +
-                "       GROUP BY userId) p2 ON p2.userId = friend.id " +
+                " LEFT JOIN messages AS m ON (m.conversationId = c.id) " +
+                " LEFT JOIN users user ON m.senderId = user.id OR c.firstUserId = user.id " +
+                " LEFT JOIN users friend ON m.receiverId = friend.id OR c.secondUserId = friend.id " +
+                " LEFT JOIN " +
+                " (SELECT id AS userProfileId, userId " +
+                " FROM profiles " +
+                " GROUP BY userId) p1 ON p1.userId = user.id " +
+                " LEFT JOIN " +
+                " (SELECT id AS friendProfileId, userId " +
+                " FROM profiles " +
+                " GROUP BY userId) p2 ON p2.userId = friend.id " +
                 "WHERE (c.firstUserId = ? AND c.isDeletedFirstUser = 0) " +
-                "   OR (c.secondUserId = ? AND c.isDeletedSecondUser = 0) " +
+                " OR (c.secondUserId = ? AND c.isDeletedSecondUser = 0) " +
                 "ORDER BY conversationId";
 
         try {
@@ -234,6 +239,60 @@ public class MessagesRepository extends JDBCRepository {
         }
         catch (SQLException throwable) {
             throw new DatabaseException("Cannot read contacts from the database.", throwable);
+        }
+    }
+
+    // Delete conversation in messaging page
+    public boolean deleteConversation(int userId, int conversationId) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "UPDATE conversations SET " +
+                "isDeletedFirstUser = (CASE WHEN firstUserId = ? THEN 1 ELSE isDeletedFirstUser end)," +
+                "isDeletedSecondUser = (CASE WHEN secondUserId = ? THEN 1 ELSE isDeletedSecondUser end) where id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, conversationId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            connection.close();
+
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    // start new conversation with new user
+    public void startConversation(ConversationDTO conversation) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "INSERT INTO conversations (firstUserId, secondUserId) SELECT * FROM (SELECT ?,?) AS tmp " +
+                "WHERE NOT EXISTS (SELECT secondUserId FROM conversations WHERE secondUserId = ? AND firstUserId = ?) LIMIT 1";
+        try {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, conversation.getFirstUserId());
+            preparedStatement.setInt(2, conversation.getSecondUserId());
+            preparedStatement.setInt(3, conversation.getSecondUserId());
+            preparedStatement.setInt(4, conversation.getFirstUserId());
+
+            System.out.println("before prepared startemnet");
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            connection.close();
+
+            System.out.println("after prepared startemnet");
+
+
+        } catch (SQLException throwable) {
+            throw  new DatabaseException("Cannot create new conversation.", throwable);
         }
     }
 }
