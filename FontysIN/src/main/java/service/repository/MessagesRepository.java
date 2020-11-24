@@ -56,7 +56,7 @@ public class MessagesRepository extends JDBCRepository {
 
     /***
      *
-     * @param id
+     * @param id conversationId
      * @return a conversation with a specific id
      * @throws DatabaseException
      */
@@ -141,7 +141,7 @@ public class MessagesRepository extends JDBCRepository {
 
     /***
      *
-     * @param id
+     * @param id userId
      * @return a list of conversations of a specific user
      * @throws DatabaseException
      */
@@ -169,7 +169,8 @@ public class MessagesRepository extends JDBCRepository {
                 "     (SELECT id AS friendProfileId, userId " +
                 "      FROM profiles " +
                 "       GROUP BY userId) p2 ON p2.userId = friend.id " +
-                "WHERE (c.firstUserId = ?) OR (c.secondUserId = ?) " +
+                "WHERE (c.firstUserId = ? AND c.isDeletedFirstUser = 0) " +
+                "   OR (c.secondUserId = ? AND c.isDeletedSecondUser = 0) " +
                 "ORDER BY conversationId";
 
         try {
