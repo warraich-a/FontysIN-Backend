@@ -74,8 +74,8 @@ public class MessagesRepository extends JDBCRepository {
                 "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
                 "FROM conversations AS c " +
                 "LEFT JOIN messages AS m ON (m.conversationId = c.id)" +
-                "LEFT JOIN users USER ON m.senderId = user.id " +
-                "LEFT JOIN users friend ON m.receiverId = friend.id " +
+                "LEFT JOIN users user ON m.senderId = user.id  OR c.firstUserId = user.id " +
+                "LEFT JOIN users friend ON m.receiverId = friend.id  OR c.secondUserId = friend.id " +
                 "LEFT JOIN " +
                 " (SELECT id AS userProfileId, userId " +
                 " FROM profiles " +
