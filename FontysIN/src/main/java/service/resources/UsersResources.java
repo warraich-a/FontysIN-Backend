@@ -1,7 +1,5 @@
 package service.resources;
 
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import service.PersistenceController;
 import service.model.*;
 import service.model.dto.ContactDTO;
@@ -12,7 +10,6 @@ import service.repository.FakeDataProfile;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.*;
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -76,7 +73,6 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts")
 	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
-
 //		int contactId = fakeDataProfile.createContact(contact);
 		PersistenceController controller = new PersistenceController();
 		int contactId = controller.createContact(contact);

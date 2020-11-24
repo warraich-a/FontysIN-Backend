@@ -39,18 +39,11 @@ public class JDBCPosts extends JDBCRepository {
         return posts;
     }
 
-    public Collection<Posts> getNewsfeed(int id) throws DatabaseException {
+    public Collection<Posts> getPostsByDate() throws DatabaseException {
         List<Posts> posts = new ArrayList<>();
-        List<ContactDTO> friends = new ArrayList<>();
-        PersistenceController persistenceController = new PersistenceController();
-        String sql = "SELECT * FROM posts WHERE userId IN (";
-        friends = persistenceController.getAllContactsDTO(id);
-        for (ContactDTO f: friends) {
-            sql += (Integer.toString(f.getFriend().getId()) + ", ");
-        }
-        sql += (Integer.toString(id)+") ORDER BY date DESC");
-        Connection connection = this.getDatabaseConnection();
 
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM posts ORDER BY date DESC";
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -69,6 +62,88 @@ public class JDBCPosts extends JDBCRepository {
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read students from the database.",throwable);
         }
+        return posts;
+    }
+
+//    public Collection<Posts> getNewsfeed(int id) throws DatabaseException {
+//        List<Posts> posts = new ArrayList<>();
+//
+////        List<Posts> allPosts = new ArrayList<>();
+//        List<ContactDTO> friends = new ArrayList<>();
+//        PersistenceController persistenceController = new PersistenceController();
+//
+////        String sql = "SELECT * FROM posts WHERE userId IN (";
+//        friends = persistenceController.getAllContactsDTO(id);
+//////        allPosts = persistenceController.getPosts();
+//////        for (ContactDTO f: friends) {
+//////            for(Posts post: allPosts){
+//////                if(post.getUserId() == f.getFriend().getId()){
+//////                    posts.add(post);
+//////                }
+//////            }
+//////        }
+//////        for(Posts post: allPosts){
+//////            if(post.getUserId() == id){
+//////                posts.add(post);
+//////            }
+//////        }
+////
+////
+//        Connection connection = this.getDatabaseConnection();
+//        String sql = "SELECT * FROM posts WHERE userId IN (";
+//        for (ContactDTO f: friends) {
+//            sql += (Integer.toString(f.getFriend().getId()) + ", ");
+//        }
+//        sql += (Integer.toString(id)+") ORDER BY date DESC");
+//        System.out.println(sql);
+//
+//        try {
+//            Statement statement = connection.createStatement();
+//            ResultSet resultSet = statement.executeQuery(sql);
+//            while (resultSet.next()) {
+//                int Id = resultSet.getInt("id");
+//                int userId = resultSet.getInt("userId");
+//                String content = resultSet.getString("content");
+//                Timestamp date = resultSet.getTimestamp("date");
+//                Blob image = resultSet.getBlob("image");
+//                Posts post = new Posts(Id,userId,content,date);
+//                posts.add(post);
+//            }
+//            connection.setAutoCommit(false);
+//            connection.close();
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read students from the database.",throwable);
+//        }
+//        return posts;
+//    }
+
+    public Collection<Posts> getNewsfeed(int id) throws DatabaseException {
+        List<Posts> posts = new ArrayList<>();
+
+        List<Posts> allPosts = new ArrayList<>();
+        List<ContactDTO> friends = new ArrayList<>();
+        PersistenceController persistenceController = new PersistenceController();
+        List<Integer> friendsId = new ArrayList<>();
+        friends = persistenceController.getAllContactsDTO(id);
+        allPosts = persistenceController.getPostsByDate();
+        for (ContactDTO f: friends) {
+            friendsId.add(f.getFriend().getId());
+        }
+        if(!friendsId.contains(id)){
+            friendsId.add(id);
+        }
+
+        for(Posts post: allPosts){
+            for(Integer i: friendsId){
+                if (post.getUserId() == i){
+                    posts.add(post);
+                }
+            }
+        }
+
+
+
         return posts;
     }
 
@@ -154,14 +229,13 @@ public class JDBCPosts extends JDBCRepository {
 
     public boolean updatePost(Posts post) throws DatabaseException {
         Connection connection = this.getDatabaseConnection();
-        String sql = "UPDATE `posts` SET `userId`=?,`content`=?,`date`=?,`image`=? WHERE id=?";
+        String sql = "UPDATE `posts` SET `userId`=?,`content`=?,`image`=? WHERE id=?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, post.getUserId());
             statement.setString(2, post.getContent());
-            statement.setTimestamp(3, (Timestamp) post.getDate());
-            statement.setBlob(4, post.getImage());
-            statement.setInt(5, post.getId());
+            statement.setBlob(3, post.getImage());
+            statement.setInt(4, post.getId());
             statement.executeUpdate();
 
             PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -181,17 +255,50 @@ public class JDBCPosts extends JDBCRepository {
 
     public boolean deletePost(Posts post) throws DatabaseException{
         Connection connection = this.getDatabaseConnection();
-        String sql = "DELETE FROM posts WHERE id=?";
+        String sql = "DELETE FROM likes WHERE postId = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1,post.getId());
 
-            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setInt(1,1);
+
             statement.executeUpdate();
-            connection.setAutoCommit(false);
+
             connection.commit();
-            connection.close();
+
+
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        sql = "DELETE FROM comments WHERE postId = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,post.getId());
+
+
+            statement.executeUpdate();
+
+            connection.commit();
+
+
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        sql = "DELETE FROM posts WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,post.getId());
+
+
+            statement.executeUpdate();
+
+            connection.commit();
+
 
 
             return true;

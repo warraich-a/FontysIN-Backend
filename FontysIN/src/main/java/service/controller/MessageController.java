@@ -2,10 +2,8 @@ package service.controller;
 
 import service.model.Conversation;
 import service.model.Message;
-import service.model.Privacy;
 import service.model.dto.ConversationDTO;
 import service.repository.DatabaseException;
-import service.repository.JDBCProfileRepository;
 import service.repository.MessagesRepository;
 
 import java.util.List;
@@ -68,7 +66,6 @@ public class MessageController {
         return conversation;
     }
 
-
     /***
      *
      * @param userId of user
@@ -93,21 +90,20 @@ public class MessageController {
      * @param conversationDTO
      * @return the id of the created conversation
      */
-    public boolean startConversation(ConversationDTO conversationDTO){
+    public boolean startConversation(ConversationDTO conversationDTO) {
 
         MessagesRepository messagesRepository = new MessagesRepository();
 
         try {
             messagesRepository.startConversation(conversationDTO);
+            System.out.println("return true if correct");
+
             return true;
-        }
-        catch (DatabaseException e) {
+        } catch (DatabaseException e) {
             e.printStackTrace();
             return false;
         }
     }
-
-
 
 
 }

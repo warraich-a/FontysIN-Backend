@@ -1,29 +1,26 @@
 package service.model;
 
+import service.model.dto.UserDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Conversation {
     private int id;
-    private Message message;
+    private UserDTO firstUser;
+    private UserDTO secondUser;
     private List<Message> messages;
 
     public Conversation(int id, List<Message> messages) {
         this.id = id;
         this.messages = messages;
-        this.message = new Message();
     }
 
-    public Conversation(int id) {
+    public Conversation(int id, UserDTO firstUser, UserDTO secondUser) {
         this.id = id;
+        this.firstUser = firstUser;
+        this.secondUser = secondUser;
         this.messages = new ArrayList<>();
-        this.message = new Message();
-    }
-
-    public Conversation(int id, Message message) {
-        this.id = id;
-        this.messages = new ArrayList<>();
-        this.message = new Message();
     }
 
     public int getId() {
@@ -32,6 +29,22 @@ public class Conversation {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public UserDTO getFirstUser() {
+        return firstUser;
+    }
+
+    public void setFirstUser(UserDTO firstUser) {
+        this.firstUser = firstUser;
+    }
+
+    public UserDTO getSecondUser() {
+        return secondUser;
+    }
+
+    public void setSecondUser(UserDTO secondUser) {
+        this.secondUser = secondUser;
     }
 
     public List<Message> getMessages() {
@@ -46,18 +59,12 @@ public class Conversation {
         messages.add(message);
     }
 
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
-    }
-
     @Override
     public String toString() {
         return "Conversation{" +
                 "id=" + id +
+                ", firstUser=" + firstUser +
+                ", secondUser=" + secondUser +
                 ", messages=" + messages +
                 '}';
     }

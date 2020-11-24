@@ -7,9 +7,8 @@ public class ConversationDTO {
     private int firstUserId;
     private int secondUserId;
 
-    //constracture
-    public ConversationDTO(int id, int firstUserId, int secondUserId) {
-        this.id = id;
+    //constrauctures
+    public ConversationDTO(int firstUserId, int secondUserId) {
         this.firstUserId = firstUserId;
         this.secondUserId = secondUserId;
     }
@@ -42,8 +41,8 @@ public class ConversationDTO {
         this.secondUserId = secondUserId;
     }
 
-    //to string
 
+    //to string
     @Override
     public String toString() {
         return "ConversationDTO{" +
@@ -52,5 +51,4 @@ public class ConversationDTO {
                 ", secondUserId=" + secondUserId +
                 '}';
     }
-
 }
