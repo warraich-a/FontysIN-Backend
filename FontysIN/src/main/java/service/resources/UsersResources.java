@@ -779,9 +779,11 @@ public class UsersResources {
 			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
 			return Response.status(Response.Status.CONFLICT).entity(entity).build();
 		} else {
+
+//			LoginUser(e.getEmail());
 			String url = uriInfo.getAbsolutePath() + "/" + e.getId(); //
 			URI uri = URI.create(url);
-			return Response.created(uri).build();
+			return Response.ok(e).build();
 		}
 	}
 }

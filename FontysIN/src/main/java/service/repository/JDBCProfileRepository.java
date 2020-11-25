@@ -438,7 +438,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
     public User getUserById(int userId) throws DatabaseException, SQLException {
         User user = null;
-
+        String project_path =System.getProperty("user.dir");
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM users where id =?";
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -454,7 +454,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String password = resultSet.getString("password");
                 String phoneNumber = resultSet.getString("phoneNr");
                 int addressId = resultSet.getInt("addressId");
-                String image = resultSet.getString("image");
+                String image = project_path + resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
@@ -1095,6 +1095,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
             connection.commit();
+
         }
         catch (SQLException throwable){
             throw  new DatabaseException("Cannot delete skill.", throwable);
@@ -1607,43 +1608,59 @@ public class JDBCProfileRepository extends JDBCRepository {
 
     public boolean createUser(User user) throws DatabaseException, SQLException {
 
+        boolean exist;
+        exist = false;
+        for (User u: getUsers()) {
+            if(u.getEmail().equals(user.getEmail())){
+                exist = true;
+//                deleteAdrress(u.getAddressId());
+            } else if(u.getFirstName().equals(user.getFirstName())
+                    && u.getUserNumber().equals(user.getUserNumber())){
+                exist = true;
+            }
+        }
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, phoneNr, addressId, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        if(!exist) {
 
-        try {
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, String.valueOf(user.getUserType()));
-            preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setString(6, user.getPhoneNumber());
-            preparedStatement.setInt(7, user.getAddressId());
-            preparedStatement.setString(8, user.getImg());
-            preparedStatement.setInt(9, user.getLocationId());
-            preparedStatement.setInt(10, user.getDepartmentId());
-            preparedStatement.setString(11, user.getUserNumber());
+            String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, phoneNr, addressId, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            preparedStatement.executeUpdate();
+            try {
+                preparedStatement.setString(1, user.getFirstName());
+                preparedStatement.setString(2, user.getLastName());
+                preparedStatement.setString(3, String.valueOf(user.getUserType()));
+                preparedStatement.setString(4, user.getEmail());
+                preparedStatement.setString(5, user.getPassword());
+                preparedStatement.setString(6, user.getPhoneNumber());
+                preparedStatement.setInt(7, user.getAddressId());
+                preparedStatement.setString(8, user.getImg());
+                preparedStatement.setInt(9, user.getLocationId());
+                preparedStatement.setInt(10, user.getDepartmentId());
+                preparedStatement.setString(11, user.getUserNumber());
+
+                preparedStatement.executeUpdate();
 
 //            rs = preparedStatement.getGeneratedKeys();
 //            if(rs != null && rs.next()){
 //                System.out.println("Generated Emp Id: "+rs.getInt(1));
 //                id = rs.getInt(1);
 //            }
-            connection.setAutoCommit(false);
-            connection.commit();
+                connection.setAutoCommit(false);
+                connection.commit();
+                preparedStatement.close();
+                connection.close();
+                return true;
+            } catch (SQLException throwable) {
+                throw new DatabaseException("Something Wrong with query", throwable);
+            } finally {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
 
-        } catch (SQLException throwable) {
-            throw new DatabaseException("Something Wrong with query", throwable);
+            }
         }
-        finally {
-            if (preparedStatement != null) preparedStatement.close();
-            if (connection != null) connection.close();
+        return false;
 
-        }
-        return true;
     }
 
 }
