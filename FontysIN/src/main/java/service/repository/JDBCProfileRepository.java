@@ -1648,27 +1648,27 @@ public class JDBCProfileRepository extends JDBCRepository {
 //                id = rs.getInt(1);
 //            }
 
-                connection.setAutoCommit(false);
-                connection.commit();
+//                connection.setAutoCommit(false);
+//                connection.commit();
 //                preparedStatement.close();
 //                connection.close();
+                rs = preparedStatement.getGeneratedKeys();
+                if(rs != null && rs.next()){
+                    System.out.println("Generated Emp Id: "+rs.getInt(1));
+                    userId = rs.getInt(1);
+                }
+                connection.setAutoCommit(false);
+                connection.commit();
+                preparedStatement.close();
+                connection.close();
+
+                Privacy p = new Privacy(userId);
+                createPrivacy(p);
+
                 return true;
             } catch (SQLException throwable) {
                 throw new DatabaseException("Something Wrong with query", throwable);
             } finally {
-
-
-            rs = preparedStatement.getGeneratedKeys();
-            if(rs != null && rs.next()){
-                System.out.println("Generated Emp Id: "+rs.getInt(1));
-                userId = rs.getInt(1);
-            }
-
-
-            connection.setAutoCommit(false);
-            connection.commit();
-            Privacy p = new Privacy(userId);
-            createPrivacy(p);
 
                 if (preparedStatement != null) preparedStatement.close();
                 if (connection != null) connection.close();
