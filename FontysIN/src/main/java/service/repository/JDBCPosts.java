@@ -253,7 +253,7 @@ public class JDBCPosts extends JDBCRepository {
         return false;
     }
 
-    public boolean deletePost(Posts post) throws DatabaseException{
+    public boolean deletePost(Posts post) throws DatabaseException, SQLException {
         Connection connection = this.getDatabaseConnection();
         String sql = "DELETE FROM likes WHERE postId = ?";
         try {
@@ -300,11 +300,12 @@ public class JDBCPosts extends JDBCRepository {
             connection.commit();
 
 
-
+            connection.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        connection.close();
         return false;
     }
 }

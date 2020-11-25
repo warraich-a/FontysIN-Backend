@@ -132,6 +132,9 @@ public class JDBCComments extends JDBCRepository {
             statement.setInt(5, comm.getId());
             statement.executeUpdate();
 
+            connection.setAutoCommit(false);
+            connection.commit();
+            connection.close();
 
             return true;
         } catch (SQLException throwables) {
@@ -149,6 +152,9 @@ public class JDBCComments extends JDBCRepository {
 
             statement.executeUpdate();
 
+            connection.setAutoCommit(false);
+            connection.commit();
+            connection.close();
 
 
             return true;
