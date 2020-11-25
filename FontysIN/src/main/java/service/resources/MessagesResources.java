@@ -3,6 +3,7 @@ package service.resources;
 import service.controller.MessageController;
 import service.model.Conversation;
 import service.model.Message;
+import service.model.dto.ConversationDTO;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
@@ -44,6 +45,7 @@ public class MessagesResources {
         return Response.created(uri).build();
     }
 
+    // delete conversation
     @DELETE //DELETE at http://localhost:XXXX/users/1/conversation/1
     @Path("user/{userId}/conversation/{conversationId}")
     @PermitAll
@@ -52,5 +54,26 @@ public class MessagesResources {
         messageController.DeleteConversation(userId, conversationId);
 
         return Response.noContent().build();
+    }
+
+    //add conversation with conversationdto object
+    @POST //POST at http://localhost:XXXX/users/1/messages/newConversation
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("newConversation")
+    @PermitAll
+    public Response StartNewConversation(ConversationDTO conversationDTO) {
+
+        MessageController messageController = new MessageController();
+
+        if (!messageController.startConversation(conversationDTO)){
+            System.out.println("in con resources");
+            String entity =  "Conversation with this id is "  + conversationDTO.getId() + " already exists.";
+            return Response.status(Response.Status.CONFLICT).entity(entity).build();
+        }
+        else {
+            String url = uriInfo.getAbsolutePath() + "/"; // url of the posted conversation
+            URI uri = URI.create(url);
+            return Response.created(uri).build();
+        }
     }
 }

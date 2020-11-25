@@ -61,11 +61,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         //Check if username and password are valid (e.g., database)
         //If not valid: abort with UNAUTHORIED and stop
         if (!isValidUser(email, password)) {
+            System.out.println("Invalid user");
             Response response = Response.status(Response.Status.UNAUTHORIZED).
                     entity("Invalid email and/or password.").build();
             requestContext.abortWith(response);
             return;
         }
+
+        System.out.println("VALID USER");
     }
    private boolean isValidUser(String email, String password) {
        PersistenceController controller = new PersistenceController();

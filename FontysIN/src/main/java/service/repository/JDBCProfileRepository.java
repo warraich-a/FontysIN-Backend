@@ -870,10 +870,6 @@ public class JDBCProfileRepository extends JDBCRepository {
                 statement.setString(4,p.getSkillSetting().toString());
 
                 statement.executeUpdate();
-
-                PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-                ps.setInt(1,1);
-                connection.setAutoCommit(false);
                 connection.commit();
                 connection.close();
                 return true;
@@ -1055,6 +1051,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
             connection.commit();
+            connection.close();
         }
         catch (SQLException throwable){
             throw  new DatabaseException("Cannot delete education.", throwable);
@@ -1075,6 +1072,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
             connection.commit();
+            connection.close();
         }
         catch (SQLException throwable){
             throw  new DatabaseException("Cannot delete experience.", throwable);
@@ -1095,7 +1093,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
             preparedStatement.executeUpdate();
             connection.commit();
-
+            connection.close();
         }
         catch (SQLException throwable){
             throw  new DatabaseException("Cannot delete skill.", throwable);
@@ -1623,6 +1621,9 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         if(!exist) {
 
+        ResultSet rs = null;
+        int userId = 9999;
+
             String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, phoneNr, addressId, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
@@ -1641,23 +1642,38 @@ public class JDBCProfileRepository extends JDBCRepository {
 
                 preparedStatement.executeUpdate();
 
-//            rs = preparedStatement.getGeneratedKeys();
+
 //            if(rs != null && rs.next()){
 //                System.out.println("Generated Emp Id: "+rs.getInt(1));
 //                id = rs.getInt(1);
 //            }
+
                 connection.setAutoCommit(false);
                 connection.commit();
-                preparedStatement.close();
-                connection.close();
+//                preparedStatement.close();
+//                connection.close();
                 return true;
             } catch (SQLException throwable) {
                 throw new DatabaseException("Something Wrong with query", throwable);
             } finally {
+
+
+            rs = preparedStatement.getGeneratedKeys();
+            if(rs != null && rs.next()){
+                System.out.println("Generated Emp Id: "+rs.getInt(1));
+                userId = rs.getInt(1);
+            }
+
+
+            connection.setAutoCommit(false);
+            connection.commit();
+            Privacy p = new Privacy(userId);
+            createPrivacy(p);
+
                 if (preparedStatement != null) preparedStatement.close();
                 if (connection != null) connection.close();
-
             }
+
         }
         return false;
 
