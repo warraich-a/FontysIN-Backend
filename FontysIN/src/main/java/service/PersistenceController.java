@@ -121,7 +121,7 @@ public class PersistenceController {
 
         try {
             return postsRepository.deletePost(post);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | SQLException e) {
             e.printStackTrace();
         }
         return false;
