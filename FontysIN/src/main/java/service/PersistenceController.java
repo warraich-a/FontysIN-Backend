@@ -1065,7 +1065,12 @@ public class PersistenceController {
         User loggedIn = getUser(loggedinId); // The logged in user
         Privacy settings = GetPrivacySetting(userId);// Get privacy settings for the user i am visiting
         User userImVisiting = getUser(userId); // So if im logged in user 3 and visit 5
-
+        List<ContactDTO> friends = new ArrayList<>();
+        friends = getAllContactsDTO(loggedIn.getId());
+        List<Integer> friendsId = new ArrayList<>();
+        for (ContactDTO f: friends) { // Same as Denys :D
+            friendsId.add(f.getFriend().getId());
+        }
         // If there are no settings everyone is allowed to see
         if(settings == null)
         {
@@ -1094,8 +1099,8 @@ public class PersistenceController {
             return true;
         }
         else if(privacySetting == Privacy.Setting.CONNECTIONS){
-            List<User> Connections = GetUsersConnections(loggedIn.getId()); // Get a user connections
-            if(Connections.contains(userImVisiting)){
+
+            if(friendsId.contains(loggedIn.getId())){
                 return true;
             }
         }

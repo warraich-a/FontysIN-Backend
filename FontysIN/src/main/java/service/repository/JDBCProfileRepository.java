@@ -945,10 +945,10 @@ public class JDBCProfileRepository extends JDBCRepository {
                 {
                     ski = Privacy.Setting.ONLYME;
                 }
-                if(hideFromSearch == 1){
-                    search = true;
+                if(hideFromSearch == 1){// So 1 is true, yes hide me from search
+                    search = true; // Yes hide me
                 }else{
-                    search = false;
+                    search = false; // no dont hide me
                 }
 
                 Privacy a = new Privacy(id, userId, edu, exp, ski,search);
@@ -1020,10 +1020,10 @@ public class JDBCProfileRepository extends JDBCRepository {
                 {
                     ski = Privacy.Setting.ONLYME;
                 }
-                if(hideFromSearch == 1){
-                    search = true;
+                if(hideFromSearch == 1){ // So 1 is true, yes hide me from search
+                    search = true; // Yes hide me
                 }else{
-                    search = false;
+                    search = false; // No do not hide me
                 }
 
                 Privacy a = new Privacy(id, userId, edu, exp, ski,search);
