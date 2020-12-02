@@ -2,7 +2,7 @@ package service.model;
 
 import service.model.dto.UserDTO;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class Message {
     private int id;
@@ -10,15 +10,18 @@ public class Message {
     private UserDTO sender;
     private UserDTO receiver;
     private String content;
-    private LocalDateTime dataTime;
+    private Timestamp dateTime;
 
-    public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, LocalDateTime dataTime) {
+    public Message(int id, int conversationId, UserDTO sender, UserDTO receiver, String content, Timestamp dateTime) {
         this.id = id;
         this.conversationId = conversationId;
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
-        this.dataTime = dataTime;
+        this.dateTime = dateTime;
+    }
+
+    public Message() {
     }
 
     public int getId() {
@@ -61,12 +64,12 @@ public class Message {
         this.content = content;
     }
 
-    public LocalDateTime getDataTime() {
-        return dataTime;
+    public Timestamp getDateTime() {
+        return dateTime;
     }
 
-    public void setDataTime(LocalDateTime dataTime) {
-        this.dataTime = dataTime;
+    public void setDateTime(Timestamp dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -77,7 +80,7 @@ public class Message {
                 ", sender=" + sender +
                 ", receiver=" + receiver +
                 ", content='" + content + '\'' +
-                ", dataTime=" + dataTime +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

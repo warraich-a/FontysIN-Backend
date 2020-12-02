@@ -33,6 +33,7 @@ public class ContactsRepository extends JDBCRepository {
 
             connection.commit();
             connection.close();
+            statement.close();
 
             return contactId;
         }
@@ -56,6 +57,7 @@ public class ContactsRepository extends JDBCRepository {
             statement.executeUpdate();
 
             connection.commit();
+            statement.close();
             connection.close();
 
             return true;
@@ -153,7 +155,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 contacts.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -173,14 +175,22 @@ public class ContactsRepository extends JDBCRepository {
         Connection connection = super.getDatabaseConnection();
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
-                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.* , " +
-                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.* " +
+                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
+                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
                 "FROM contacts " +
-                "LEFT JOIN users user ON contacts.userId = user.id " +
+                "LEFT JOIN users USER ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId FROM profiles LIMIT 1) p1 ON userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId FROM profiles LIMIT 1) p2 ON userId = friend.id " +
-                "WHERE user.id = ? OR friend.id = ?";
+                "LEFT JOIN " +
+                "  (SELECT id AS userProfileId, userId " +
+                "FROM profiles " +
+                "GROUP BY userId) p1 ON p1.userId = user.id " +
+                "LEFT JOIN " +
+                "  (SELECT id AS friendProfileId, userId " +
+                "   FROM profiles " +
+                "   GROUP BY userId) p2 ON p2.userId = friend.id " +
+                "WHERE (user.id = ? " +
+                "       OR friend.id = ?)";
+
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -214,7 +224,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 allContactsDTO.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -239,6 +249,7 @@ public class ContactsRepository extends JDBCRepository {
                 "INNER JOIN users friend ON friend.id = contacts.friendId " +
                 "WHERE (contacts.userId = ? OR contacts.friendId = ?) AND isAccepted = true";
 
+
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
@@ -311,7 +322,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 acceptedContacts.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -332,9 +343,9 @@ public class ContactsRepository extends JDBCRepository {
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId FROM profiles LIMIT 1) p1 ON userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId FROM profiles LIMIT 1) p2 ON userId = friend.id " +
-                "WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true";
+                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId) p1 ON p1.userId = user.id " +
+                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId) p2 ON p2.userId = friend.id " +
+                "   WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -367,7 +378,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 acceptedContacts.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -391,7 +402,7 @@ public class ContactsRepository extends JDBCRepository {
                 "FROM contacts " +
                 "INNER JOIN users ON users.id = contacts.userId " +
                 "INNER JOIN users friend ON friend.id = contacts.friendId " +
-                "WHERE contacts.friendId = ? AND isAccepted = false";
+                "   WHERE contacts.friendId = ? AND isAccepted = false";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -466,6 +477,7 @@ public class ContactsRepository extends JDBCRepository {
             }
 
             connection.commit();
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -486,9 +498,9 @@ public class ContactsRepository extends JDBCRepository {
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId FROM profiles LIMIT 1) p1 ON userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId FROM profiles LIMIT 1) p2 ON userId = friend.id " +
-                "WHERE friend.id = ? AND contacts.isAccepted = false";
+                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId) p1 ON p1.userId = user.id " +
+                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId) p2 ON p2.userId = friend.id " +
+                "   WHERE (friend.id = ?) AND contacts.isAccepted = false";
 
 
         try {
@@ -522,7 +534,7 @@ public class ContactsRepository extends JDBCRepository {
 
                 requests.add(contact);
             }
-
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -546,6 +558,7 @@ public class ContactsRepository extends JDBCRepository {
             statement.executeUpdate();
 
             connection.commit();
+            statement.close();
             connection.close();
         }
         catch (SQLException throwable) {
@@ -555,6 +568,7 @@ public class ContactsRepository extends JDBCRepository {
 
 
     public UserDTO getUserDTO(int id) throws DatabaseException {
+        String project_path =System.getProperty("user.dir");
         Connection connection = super.getDatabaseConnection();
 
         String sql = "SELECT u.id, u.firstName, u.lastName, p.id AS profileId, image FROM users AS u " +
@@ -577,7 +591,7 @@ public class ContactsRepository extends JDBCRepository {
                 String lastName = resultSet.getString("lastName");
                 String image = resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
-
+                statement.close();
                 connection.close();
 
                 return new UserDTO(id, profileId, firstName, lastName, image);
@@ -618,7 +632,7 @@ public class ContactsRepository extends JDBCRepository {
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
 
-                connection.close();
+
 
                 UserType type = UserType.Teacher;
                 if (userType == "student")
@@ -633,6 +647,9 @@ public class ContactsRepository extends JDBCRepository {
                 {
                     type = UserType.FontysStaff;
                 }
+
+                statement.close();
+                connection.close();
 
                 return new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
             }

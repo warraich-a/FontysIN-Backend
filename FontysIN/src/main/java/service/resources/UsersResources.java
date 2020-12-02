@@ -1,7 +1,5 @@
 package service.resources;
 
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import service.PersistenceController;
 import service.model.*;
 import service.model.dto.ContactDTO;
@@ -12,7 +10,6 @@ import service.repository.FakeDataProfile;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.*;
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -76,7 +73,6 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts")
 	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
-
 //		int contactId = fakeDataProfile.createContact(contact);
 		PersistenceController controller = new PersistenceController();
 		int contactId = controller.createContact(contact);
@@ -138,6 +134,8 @@ public class UsersResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GeUser(@PathParam("userId") int userId) {
 		PersistenceController persistenceController = new PersistenceController();
+
+
 		User u = persistenceController.getUser(userId);
 		System.out.println("User id " + userId);
 		System.out.println("Got user by id " + u);
@@ -645,46 +643,50 @@ public class UsersResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
-									 @QueryParam("workingYear") int workYear) {
+									 @QueryParam("workingYear") int workYear, @QueryParam("firstName") String name) {
 
 		PersistenceController controller = new PersistenceController();
 
-		List<User> users;
-		//If query parameter is missing return all users. Otherwise filter users by given user type fontys staff location and department and start work year
-		if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
+		List<UserDTO> users;
+
+		if (uriInfo.getQueryParameters().containsKey("firstName") && uriInfo.getQueryParameters().containsKey("location")
+				&& uriInfo.getQueryParameters().containsKey("department") && uriInfo.getQueryParameters().containsKey("type")) { //filter by user type, location and department and name
+			users = controller.UserFilteLocationDepartmentTypeAndName(name,locId, depId, type);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("workingYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start work year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(type, workYear, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type location and department and start study year
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("studyYear")
 				&& uriInfo.getQueryParameters().containsKey("location") && uriInfo.getQueryParameters().containsKey("department") ) { //filter by user type, location, department and start study year
 			users = controller.UserFilterByTypeLocationDepartmentAndStartSudyYear(type, year, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type location and department
 		else if (uriInfo.getQueryParameters().containsKey("type") && uriInfo.getQueryParameters().containsKey("location")
 				&& uriInfo.getQueryParameters().containsKey("department")) { //filter by user type, location and department
 			users = controller.UserFilterByTypeLocationAndDepartment(type, locId, depId);
 		}
-		//If query parameter is missing return all users. Otherwise filter users by given user type
 		else if (uriInfo.getQueryParameters().containsKey("type")) { //filter by user type
 			users = controller.UserFilteredWithType(type);
 		}
 		else if (uriInfo.getQueryParameters().containsKey("department")){ //filter by department
 			users = controller.UserFilteredWithDepartment(depId);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by location
+		else if (uriInfo.getQueryParameters().containsKey("location")){  //filter by fontys location
 			users = controller.UserFilteredWithLocation(locId);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year
+		else if (uriInfo.getQueryParameters().containsKey("studyYear")){  //filter by start study year at fontys
 			users = controller.UserFilteredWithStartStudyYear(year);
 		}
-		else if (uriInfo.getQueryParameters().containsKey("workingYear")){
+		else if (uriInfo.getQueryParameters().containsKey("workingYear")){ //filter by start work year at fontys
 			users = controller.UserFilteredWithStartWorkYear(workYear);
+		}
+		else if (uriInfo.getQueryParameters().containsKey("firstName")){ //filter by name using chars
+			users = controller.UserFilterByFirstNameChars(name);
 		}
 		else {
 			users = controller.GetAllUsers();
 		}
-		GenericEntity<List<User>> entity = new GenericEntity<>(users) {
+		GenericEntity<List<UserDTO>> entity = new GenericEntity<>(users) {
 		};
 		return Response.ok(entity).build();
 	}
@@ -773,9 +775,11 @@ public class UsersResources {
 			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
 			return Response.status(Response.Status.CONFLICT).entity(entity).build();
 		} else {
+
+//			LoginUser(e.getEmail());
 			String url = uriInfo.getAbsolutePath() + "/" + e.getId(); //
 			URI uri = URI.create(url);
-			return Response.created(uri).build();
+			return Response.ok(e).build();
 		}
 	}
 }

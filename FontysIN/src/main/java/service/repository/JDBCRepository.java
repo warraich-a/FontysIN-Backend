@@ -11,7 +11,7 @@ class JDBCRepository {
         String username = "dbi431685";
         String password = "password";
 
-//        String url = "jdbc:mysql://localhost:3306/fontysIn";
+//        String url = "jdbc:mysql://localhost:3306/fontysin2";
 //        String username = "root";
 //        String password = "";
 
