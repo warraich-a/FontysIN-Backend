@@ -1531,9 +1531,10 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
-                "INNER JOIN profiles p ON u.id = p.userId WHERE u.firstName " +
-                "LIKE CONCAT ('%', ? ,'%') AND u.locationId = ? AND u.departmentId = ? AND userType = ? GROUP BY u.id";
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId " +
+                "FROM users u INNER JOIN profiles p ON u.id = p.userId " +
+                "LEFT JOIN privacy pr ON pr.userId = u.id WHERE u.firstName LIKE CONCAT ('%', ? ,'%') " +
+                "AND u.locationId = ? AND u.departmentId = ? AND userType = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, chars); // set characters
@@ -1573,8 +1574,8 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
-                "INNER JOIN profiles p ON u.id = p.userId WHERE u.firstName " +
-                "LIKE CONCAT ('%', ? ,'%') GROUP BY u.id";
+                "INNER JOIN profiles p ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
+                "WHERE pr.hideFromSearch = 0 AND u.firstName LIKE CONCAT ('%', ? ,'%') GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, chars); // set characters
