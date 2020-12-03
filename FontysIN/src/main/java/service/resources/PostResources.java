@@ -1,13 +1,20 @@
 package service.resources;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import service.PersistenceController;
 import service.model.Comments;
 import service.model.Like;
 import service.model.Posts;
 import service.repository.FakeDataPostComm;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.List;
 
@@ -150,6 +157,37 @@ public class PostResources {
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }
+    }
+
+    @PermitAll
+    @PUT
+    @Path("{userId}/uploadPicture")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String uploadPdfFile(  @FormDataParam("file") InputStream fileInputStream,
+                                  @FormDataParam("file") FormDataContentDisposition fileMetaData,
+                                  @PathParam("userId") int id) throws Exception {
+        PersistenceController persistenceController = new PersistenceController();
+        String UPLOAD_PATH = "src/images/";
+        String project_path =System.getProperty("user.dir");
+
+        System.out.println("Present Project Directory : "+ System.getProperty("user.dir"));
+
+        int read = 0;
+        byte[] bytes = new byte[1024];
+        String completePath = new File(UPLOAD_PATH + id+ fileMetaData.getFileName()).toString();
+        OutputStream out = new FileOutputStream(completePath);
+
+        while ((read = fileInputStream.read(bytes)) != -1)
+        {
+            out.write(bytes, 0, read);
+        }
+
+            out.flush();
+            out.close();
+
+            return id+fileMetaData.getFileName();
+
     }
 
 

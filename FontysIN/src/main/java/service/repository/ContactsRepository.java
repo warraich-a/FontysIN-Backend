@@ -568,6 +568,7 @@ public class ContactsRepository extends JDBCRepository {
 
 
     public UserDTO getUserDTO(int id) throws DatabaseException {
+        String project_path =System.getProperty("user.dir");
         Connection connection = super.getDatabaseConnection();
 
         String sql = "SELECT u.id, u.firstName, u.lastName, p.id AS profileId, image FROM users AS u " +
