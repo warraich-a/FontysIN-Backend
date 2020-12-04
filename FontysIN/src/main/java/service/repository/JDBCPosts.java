@@ -26,8 +26,8 @@ public class JDBCPosts extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 String content = resultSet.getString("content");
                 Timestamp date = resultSet.getTimestamp("date");
-                Blob image = resultSet.getBlob("image");
-                Posts post = new Posts(Id,userId,content,date);
+                String image = resultSet.getString("image");
+                Posts post = new Posts(Id,userId,content,date,image);
                 posts.add(post);
             }
             connection.setAutoCommit(false);
@@ -52,8 +52,8 @@ public class JDBCPosts extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 String content = resultSet.getString("content");
                 Timestamp date = resultSet.getTimestamp("date");
-                Blob image = resultSet.getBlob("image");
-                Posts post = new Posts(Id,userId,content,date);
+                String image = resultSet.getString("image");
+                Posts post = new Posts(Id,userId,content,date,image);
                 posts.add(post);
             }
             connection.setAutoCommit(false);
@@ -160,8 +160,8 @@ public class JDBCPosts extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 String content = resultSet.getString("content");
                 Timestamp date = resultSet.getTimestamp("date");
-                Blob image = resultSet.getBlob("image");
-                Posts post = new Posts(Id,userId,content,date);
+                String image = resultSet.getString("image");
+                Posts post = new Posts(Id,userId,content,date,image);
                 posts.add(post);
             }
             connection.setAutoCommit(false);
@@ -187,8 +187,8 @@ public class JDBCPosts extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 String content = resultSet.getString("content");
                 Timestamp date = resultSet.getTimestamp("date");
-                Blob image = resultSet.getBlob("image");
-                Posts post = new Posts(Id,userId,content,date);
+                String image = resultSet.getString("image");
+                Posts post = new Posts(Id,userId,content,date,image);
                 connection.close();
                 return post;
             }
@@ -207,7 +207,7 @@ public class JDBCPosts extends JDBCRepository {
 
                 statement.setInt(1, post.getUserId());
                 statement.setString(2,post.getContent());
-                statement.setBlob(3,post.getImage());
+                statement.setString(3,post.getImage());
 
                 statement.executeUpdate();
 
@@ -234,7 +234,7 @@ public class JDBCPosts extends JDBCRepository {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, post.getUserId());
             statement.setString(2, post.getContent());
-            statement.setBlob(3, post.getImage());
+            statement.setString(3, post.getImage());
             statement.setInt(4, post.getId());
             statement.executeUpdate();
 
@@ -253,7 +253,7 @@ public class JDBCPosts extends JDBCRepository {
         return false;
     }
 
-    public boolean deletePost(Posts post) throws DatabaseException{
+    public boolean deletePost(Posts post) throws DatabaseException, SQLException {
         Connection connection = this.getDatabaseConnection();
         String sql = "DELETE FROM likes WHERE postId = ?";
         try {
@@ -300,11 +300,12 @@ public class JDBCPosts extends JDBCRepository {
             connection.commit();
 
 
-
+            connection.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        connection.close();
         return false;
     }
 }

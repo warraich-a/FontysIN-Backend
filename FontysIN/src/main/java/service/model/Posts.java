@@ -14,14 +14,14 @@ public class Posts {
     private int userId;
     private String content;
     private Timestamp date;
-    private Blob image;
+    private String image;
 
 
     public Posts(){
 
     }
 
-    public Posts(int id, int userId, String content, Timestamp date, Blob image){
+    public Posts(int id, int userId, String content, Timestamp date, String image){
         setId(id);
         setUserId(userId);
         setContent(content);
@@ -29,13 +29,7 @@ public class Posts {
         setImage(image);
 
     }
-    public Posts(int id, int userId, String content, Timestamp date){
-        setId(id);
-        setUserId(userId);
-        setContent(content);
-        setDate(date);
 
-    }
 
     public int getId() {
         return id;
@@ -65,10 +59,10 @@ public class Posts {
         this.date = date;
     }
 
-    public Blob getImage() {
+    public String getImage() {
         return image;
     }
-    public void setImage(Blob image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

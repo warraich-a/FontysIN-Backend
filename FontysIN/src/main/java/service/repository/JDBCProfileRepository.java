@@ -862,7 +862,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     public boolean createPrivacy(Privacy p) throws DatabaseException{
         Connection connection = this.getDatabaseConnection();
         boolean exist = false;
-        String sql = "INSERT INTO privacy(`userId`,`educationSetting`, `experienceSetting`, `skillSetting`) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO privacy(`userId`,`educationSetting`, `experienceSetting`, `skillSetting`,`hideFromSearch`) VALUES (?,?,?,?,?)";
         try {
             if(!exist){
                 PreparedStatement statement = connection.prepareStatement(sql);
@@ -871,7 +871,14 @@ public class JDBCProfileRepository extends JDBCRepository {
                 statement.setString(2,p.getEducationSetting().toString());
                 statement.setString(3,p.getExperienceSetting().toString());
                 statement.setString(4,p.getSkillSetting().toString());
-
+                Boolean hideFromSearch = p.getHideFromSearch();
+                int search;
+                if(hideFromSearch){
+                    search = 1;
+                }else{
+                    search = 0;
+                }
+                statement.setInt(5, search);
                 statement.executeUpdate();
                 connection.commit();
                 connection.close();
@@ -900,8 +907,9 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String educationSetting = resultSet.getString("educationSetting");
                 String experienceSetting = resultSet.getString("experienceSetting");
                 String skillSetting = resultSet.getString("skillSetting");
-
+                int hideFromSearch = resultSet.getInt("hideFromSearch");
                 Privacy.Setting edu = Privacy.Setting.EVERYONE;
+                Boolean search = false;
                 if (educationSetting.equals("EVERYONE"))
                 {
                     edu = Privacy.Setting.EVERYONE;
@@ -940,8 +948,13 @@ public class JDBCProfileRepository extends JDBCRepository {
                 {
                     ski = Privacy.Setting.ONLYME;
                 }
+                if(hideFromSearch == 1){// So 1 is true, yes hide me from search
+                    search = true; // Yes hide me
+                }else{
+                    search = false; // no dont hide me
+                }
 
-                Privacy a = new Privacy(id, userId, edu, exp, ski);
+                Privacy a = new Privacy(id, userId, edu, exp, ski,search);
                 privacyList.add(a);
             }
             connection.setAutoCommit(false);
@@ -969,8 +982,9 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String educationSetting = resultSet.getString("educationSetting");
                 String experienceSetting = resultSet.getString("experienceSetting");
                 String skillSetting = resultSet.getString("skillSetting");
-
+                int hideFromSearch = resultSet.getInt("hideFromSearch");
                 Privacy.Setting edu = Privacy.Setting.EVERYONE;
+                Boolean search = false;
                 if (educationSetting.equals("EVERYONE"))
                 {
                     edu = Privacy.Setting.EVERYONE;
@@ -1009,8 +1023,13 @@ public class JDBCProfileRepository extends JDBCRepository {
                 {
                     ski = Privacy.Setting.ONLYME;
                 }
+                if(hideFromSearch == 1){ // So 1 is true, yes hide me from search
+                    search = true; // Yes hide me
+                }else{
+                    search = false; // No do not hide me
+                }
 
-                Privacy a = new Privacy(id, userId, edu, exp, ski);
+                Privacy a = new Privacy(id, userId, edu, exp, ski,search);
                 connection.close();
                 return a;
             }
@@ -1020,15 +1039,21 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
     public boolean updatePrivacy(Privacy a) throws DatabaseException {
         Connection connection = this.getDatabaseConnection();
-        String sql = "UPDATE `privacy` SET `educationSetting`=?,`experienceSetting`=?,`skillSetting`=? WHERE id=?";
+        String sql = "UPDATE `privacy` SET `educationSetting`=?,`experienceSetting`=?,`skillSetting`=?,`hideFromSearch`=? WHERE id=?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-
-            statement.setInt(4, a.getId());
+            Boolean hideFromSearch = a.getHideFromSearch();
+            int search;
+            if(hideFromSearch){
+                search = 1;
+            }else{
+                search = 0;
+            }
+            statement.setInt(5, a.getId());
             statement.setString(1, String.valueOf(a.getEducationSetting()));
             statement.setString(2, String.valueOf(a.getExperienceSetting()));
             statement.setString(3, String.valueOf(a.getSkillSetting()));
-
+            statement.setInt(4, search);
             statement.executeUpdate();
             connection.commit();
             connection.close();
