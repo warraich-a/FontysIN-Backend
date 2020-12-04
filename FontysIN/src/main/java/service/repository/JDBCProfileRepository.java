@@ -398,8 +398,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
+//                String phoneNumber = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
@@ -418,7 +418,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                     r = UserType.FontysStaff;
                 }
 
-                User u = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
+                User u = new User(id, firstName, lastName, r, email, password, locationId, departmentId,  userNumber, image);
                 allUsers.add(u);
 
             }
@@ -438,7 +438,6 @@ public class JDBCProfileRepository extends JDBCRepository {
 
     public User getUserById(int userId) throws DatabaseException, SQLException {
         User user = null;
-        String project_path =System.getProperty("user.dir");
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM users where id =?";
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -452,9 +451,9 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
-                String image = project_path + resultSet.getString("image");
+//                String phoneNumber = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
@@ -472,7 +471,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                     r = UserType.FontysStaff;
                 }
 
-                user = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
+                user = new User(id, firstName, lastName, r, email, password, locationId, departmentId,  userNumber, image);
                 Privacy privacy = getPrivacyByUser(user);
                 user.setPrivacy(privacy);
             }
@@ -699,20 +698,24 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "update users set image=? where id = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
 
         try {
             preparedStatement.setString(1, path);
             preparedStatement.setInt(2, userId);
+
             preparedStatement.executeUpdate();
 
             connection.setAutoCommit(false);
 
 
             connection.commit();
-            connection.close();
             preparedStatement.close();
+
+            connection.close();
+            return true;
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot upload image.", throwable);
@@ -721,7 +724,7 @@ public class JDBCProfileRepository extends JDBCRepository {
             if (preparedStatement != null) preparedStatement.close();
             if (connection != null) connection.close();
         }
-        return true;
+
     }
 
     public List<Location> getFontysLocation() throws DatabaseException, SQLException {
@@ -1430,14 +1433,14 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String email = resultSet.getString("email");
                 UserType userType = UserType.valueOf(resultSet.getString("userType"));
                 String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
+//                String phoneNumber = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
                 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
+                User u = new User(id, firstName, lastName, userType, email, password,  locationId, departmentId,  userNumber, image);
                 filtered.add(u);
 
             }
@@ -1624,7 +1627,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         ResultSet rs = null;
         int userId = 9999;
 
-            String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, phoneNr, addressId, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             try {
@@ -1633,12 +1636,12 @@ public class JDBCProfileRepository extends JDBCRepository {
                 preparedStatement.setString(3, String.valueOf(user.getUserType()));
                 preparedStatement.setString(4, user.getEmail());
                 preparedStatement.setString(5, user.getPassword());
-                preparedStatement.setString(6, user.getPhoneNumber());
-                preparedStatement.setInt(7, user.getAddressId());
-                preparedStatement.setString(8, user.getImg());
-                preparedStatement.setInt(9, user.getLocationId());
-                preparedStatement.setInt(10, user.getDepartmentId());
-                preparedStatement.setString(11, user.getUserNumber());
+//                preparedStatement.setString(6, user.getPhoneNumber());
+//                preparedStatement.setInt(7, user.getAddressId());
+                preparedStatement.setString(6, user.getImg());
+                preparedStatement.setInt(7, user.getLocationId());
+                preparedStatement.setInt(8, user.getDepartmentId());
+                preparedStatement.setString(9, user.getUserNumber());
 
                 preparedStatement.executeUpdate();
 
