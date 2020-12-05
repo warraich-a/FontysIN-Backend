@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -1133,7 +1135,8 @@ public class PersistenceController {
         if(u.equals(null)){
             return false;
         }
-        if(u.getPassword().equals(password)){
+        String encryptedPassword = doHashing(password);
+        if(u.getPassword().equals(encryptedPassword)){
             return true;
         }
         return false;
@@ -1208,6 +1211,8 @@ public class PersistenceController {
     public boolean addUser(User user) {
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
         try {
+            String encryptedPassword = doHashing(user.getPassword());
+            user.setPassword(encryptedPassword);
             if(profileRepository.createUser(user)) {
 
                 return true;
@@ -1220,5 +1225,30 @@ public class PersistenceController {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    //To encrypt the password
+    public static String doHashing (String password) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+
+            messageDigest.update(password.getBytes());
+
+            byte[] resultByteArray = messageDigest.digest();
+
+            StringBuilder sb = new StringBuilder();
+
+            for (byte b : resultByteArray) {
+                sb.append(String.format("%02x", b));
+            }
+
+            return sb.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 }
