@@ -16,10 +16,10 @@ public class Comments {
     private Timestamp date;
     private String username;
 
-    public Comments(){
+    public Comments() {
 
     }
-    public Comments(int id, int userId, int postId, String content, Timestamp date){
+    public Comments(int id, int userId, int postId, String content, Timestamp date) {
         setId(id);
         setUserId(userId);
         setContent(content);
