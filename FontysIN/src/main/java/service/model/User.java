@@ -32,8 +32,8 @@ public class User {
         this.email = email;
         this.userType = type;
         this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.addressId = addressId;
+//        this.phoneNumber = phoneNumber;
+//        this.addressId = addressId;
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
@@ -48,8 +48,8 @@ public class User {
         this.email = email;
         this.userType = type;
         this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.addressId = addressId;
+//        this.phoneNumber = phoneNumber;
+//        this.addressId = addressId;
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
