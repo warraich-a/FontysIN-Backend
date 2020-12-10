@@ -897,7 +897,8 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
-                "LEFT JOIN users u ON u.id = p.userId WHERE u.userType = ? GROUP BY u.id";
+                "LEFT JOIN users u ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
+                "WHERE u.userType = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, type.name()); // set user type parameter
@@ -931,7 +932,8 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
-                "LEFT JOIN users u ON u.id = p.userId WHERE u.locationId = ? GROUP BY u.id";
+                "LEFT JOIN users u ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
+                "WHERE u.locationId = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, lId); // set location id parameter
@@ -967,7 +969,8 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
-                "LEFT JOIN users u ON u.id = p.userId WHERE u.departmentId = ? GROUP BY u.id";
+                "LEFT JOIN users u ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
+                "WHERE u.departmentId = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, bId); // set user fontys location parameter
@@ -1004,8 +1007,10 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
                 "FROM ((educations INNER JOIN profiles p ON educations.profileId = p.id) " +
-                "INNER JOIN users u ON p.userId = u.id) WHERE school = 'Fontys'" +
-                "AND u.userType = 'Student' AND startYear = ? GROUP BY u.id";
+                "INNER JOIN users u ON p.userId = u.id) " +
+                "LEFT JOIN privacy pr ON pr.userId = u.id " +
+                "WHERE school = 'Fontys' AND u.userType = 'Student' " +
+                "AND startYear = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, year); // set user start study year parameter
@@ -1043,8 +1048,9 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
                 "FROM ((experiences INNER JOIN profiles p ON experiences.profileId = p.id) " +
-                "INNER JOIN users u ON p.userId = u.id) WHERE company = 'Fontys'" +
-                "AND u.userType != 'Student' AND startDate = ? GROUP BY u.id";
+                "INNER JOIN users u ON p.userId = u.id) LEFT JOIN privacy pr ON pr.userId = u.id " +
+                "WHERE company = 'Fontys' AND u.userType != 'Student' AND startDate = ? " +
+                "AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, year); // set user start study year parameter
@@ -1079,9 +1085,11 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
-                "LEFT JOIN users u ON u.id = p.userId WHERE userType = ? " +
-                "AND locationId = ? AND departmentId = ? GROUP BY u.id";
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId " +
+                "FROM profiles p LEFT JOIN users u ON u.id = p.userId " +
+                "LEFT JOIN privacy pr ON pr.userId = u.id " +
+                "WHERE userType = ? AND locationId = ? " +
+                "AND departmentId = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, type.name()); // set user start study year parameter
@@ -1120,8 +1128,10 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
                 "FROM ((educations INNER JOIN profiles p ON educations.profileId = p.id) " +
-                "INNER JOIN users u ON p.userId = u.id) WHERE school = 'Fontys'" +
-                "AND u.userType = ? AND u.locationId = ? AND u.departmentId = ? AND startYear = ? GROUP BY u.id";
+                "INNER JOIN users u ON p.userId = u.id) " +
+                "LEFT JOIN privacy pr ON pr.userId = u.id WHERE school = 'Fontys' " +
+                "AND u.userType = ? AND u.locationId = ? AND u.departmentId = ? " +
+                "AND startYear = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -1163,8 +1173,9 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
                 "FROM ((experiences INNER JOIN profiles p ON experiences.profileId = p.id) " +
-                "INNER JOIN users u ON p.userId = u.id) WHERE company = 'Fontys'" +
-                "AND u.userType = ? AND u.locationId = ? AND u.departmentId = ? AND startDate = ? GROUP BY u.id";
+                "INNER JOIN users u ON p.userId = u.id) LEFT JOIN privacy pr ON pr.userId = u.id " +
+                "WHERE company = 'Fontys' AND u.userType = ? AND u.locationId = ? " +
+                "AND u.departmentId = ? AND startDate = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
