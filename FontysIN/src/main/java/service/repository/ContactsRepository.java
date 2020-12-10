@@ -80,9 +80,9 @@ public class ContactsRepository extends JDBCRepository {
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
                 "users.id AS userId, users.firstName AS userFirstName, users.lastName AS userLastName, users.userType, users.email AS userEmail, users.password AS userPassword, " +
-                "users.phoneNr AS userPhoneNr, users.addressId AS userAddressId, users.image AS userImage, users.locationId AS userLocationId, users.departmentId AS userDepartmentId, users.userNumber " +
+                "users.image AS userImage, users.locationId AS userLocationId, users.departmentId AS userDepartmentId, users.userNumber " +
                 ", friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.userType AS friendType, friend.email AS friendEmail, friend.password AS friendPassword, " +
-                "friend.phoneNr AS friendPhoneNr, friend.addressId AS friendAddressId, friend.image AS friendImage, friend.locationId AS friendLocationId, friend.departmentId AS friendDepartmentId, friend.userNumber AS friendNumber " +
+                "friend.image AS friendImage, friend.locationId AS friendLocationId, friend.departmentId AS friendDepartmentId, friend.userNumber AS friendNumber " +
                 "FROM contacts " +
                 "INNER JOIN users ON users.id = contacts.userId " +
                 "INNER JOIN users friend ON friend.id = contacts.friendId " +
@@ -104,8 +104,8 @@ public class ContactsRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("userEmail");
                 String password = resultSet.getString("userPassword");
-                String phoneNr = resultSet.getString("userPhoneNr");
-                int addressId = resultSet.getInt("userAddressId");
+//                String phoneNr = resultSet.getString("userPhoneNr");
+//                int addressId = resultSet.getInt("userAddressId");
                 String image = resultSet.getString("userImage");
                 int locationId = resultSet.getInt("userLocationId");
                 int departmentId = resultSet.getInt("userDepartmentId");
@@ -125,7 +125,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
+                User user = new User(id, firstName, lastName, type, email, password, locationId, departmentId, userNumber, image);
 
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
@@ -133,8 +133,8 @@ public class ContactsRepository extends JDBCRepository {
                 String friendType = resultSet.getString("friendType");
                 String friendEmail = resultSet.getString("friendEmail");
                 String friendPassword = resultSet.getString("friendPassword");
-                String friendPhoneNr = resultSet.getString("friendPhoneNr");
-                int friendAddressId = resultSet.getInt("friendAddressId");
+//                String friendPhoneNr = resultSet.getString("friendPhoneNr");
+//                int friendAddressId = resultSet.getInt("friendAddressId");
                 String friendImage = resultSet.getString("friendImage");
                 int friendLocationId = resultSet.getInt("friendLocationId");
                 int friendDepartmentId = resultSet.getInt("friendDepartmentId");
@@ -154,7 +154,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber, friendImage);
+                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword,friendLocationId, friendDepartmentId, friendNumber, friendImage);
 
                 Contact contact = new Contact(contactId, user, friend);
 
@@ -246,9 +246,9 @@ public class ContactsRepository extends JDBCRepository {
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
                 "users.id AS userId, users.firstName AS userFirstName, users.lastName AS userLastName, users.userType, users.email AS userEmail, users.password AS userPassword, " +
-                "users.phoneNr AS userPhoneNr, users.addressId AS userAddressId, users.image AS userImage, users.locationId AS userLocationId, users.departmentId AS userDepartmentId, users.userNumber " +
+                "users.image AS userImage, users.locationId AS userLocationId, users.departmentId AS userDepartmentId, users.userNumber " +
                 ", friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.userType AS friendType, friend.email AS friendEmail, friend.password AS friendPassword, " +
-                "friend.phoneNr AS friendPhoneNr, friend.addressId AS friendAddressId, friend.image AS friendImage, friend.locationId AS friendLocationId, friend.departmentId AS friendDepartmentId, friend.userNumber AS friendNumber " +
+                "friend.image AS friendImage, friend.locationId AS friendLocationId, friend.departmentId AS friendDepartmentId, friend.userNumber AS friendNumber " +
                 "FROM contacts " +
                 "INNER JOIN users ON users.id = contacts.userId " +
                 "INNER JOIN users friend ON friend.id = contacts.friendId " +
@@ -271,8 +271,8 @@ public class ContactsRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("userEmail");
                 String password = resultSet.getString("userPassword");
-                String phoneNr = resultSet.getString("userPhoneNr");
-                int addressId = resultSet.getInt("userAddressId");
+//                String phoneNr = resultSet.getString("userPhoneNr");
+//                int addressId = resultSet.getInt("userAddressId");
                 String image = resultSet.getString("userImage");
                 int locationId = resultSet.getInt("userLocationId");
                 int departmentId = resultSet.getInt("userDepartmentId");
@@ -292,7 +292,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
+                User user = new User(id, firstName, lastName, type, email, password, locationId, departmentId, userNumber, image);
 
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
@@ -300,8 +300,8 @@ public class ContactsRepository extends JDBCRepository {
                 String friendType = resultSet.getString("friendType");
                 String friendEmail = resultSet.getString("friendEmail");
                 String friendPassword = resultSet.getString("friendPassword");
-                String friendPhoneNr = resultSet.getString("friendPhoneNr");
-                int friendAddressId = resultSet.getInt("friendAddressId");
+//                String friendPhoneNr = resultSet.getString("friendPhoneNr");
+//                int friendAddressId = resultSet.getInt("friendAddressId");
                 String friendImage = resultSet.getString("friendImage");
                 int friendLocationId = resultSet.getInt("friendLocationId");
                 int friendDepartmentId = resultSet.getInt("friendDepartmentId");
@@ -321,7 +321,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber, friendImage);
+                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendLocationId, friendDepartmentId, friendNumber, friendImage);
 
                 Contact contact = new Contact(contactId, user, friend);
 
@@ -401,9 +401,9 @@ public class ContactsRepository extends JDBCRepository {
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
                 "users.id AS userId, users.firstName AS userFirstName, users.lastName AS userLastName, users.userType, users.email AS userEmail, users.password AS userPassword, " +
-                "users.phoneNr AS userPhoneNr, users.addressId AS userAddressId, users.image AS userImage, users.locationId AS userLocationId, users.departmentId AS userDepartmentId, users.userNumber " +
+                "users.image AS userImage, users.locationId AS userLocationId, users.departmentId AS userDepartmentId, users.userNumber " +
                 ", friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.userType AS friendType, friend.email AS friendEmail, friend.password AS friendPassword, " +
-                "friend.phoneNr AS friendPhoneNr, friend.addressId AS friendAddressId, friend.image AS friendImage, friend.locationId AS friendLocationId, friend.departmentId AS friendDepartmentId, friend.userNumber AS friendNumber " +
+                "friend.image AS friendImage, friend.locationId AS friendLocationId, friend.departmentId AS friendDepartmentId, friend.userNumber AS friendNumber " +
                 "FROM contacts " +
                 "INNER JOIN users ON users.id = contacts.userId " +
                 "INNER JOIN users friend ON friend.id = contacts.friendId " +
@@ -424,8 +424,8 @@ public class ContactsRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("userEmail");
                 String password = resultSet.getString("userPassword");
-                String phoneNr = resultSet.getString("userPhoneNr");
-                int addressId = resultSet.getInt("userAddressId");
+//                String phoneNr = resultSet.getString("userPhoneNr");
+//                int addressId = resultSet.getInt("userAddressId");
                 String image = resultSet.getString("userImage");
                 int locationId = resultSet.getInt("userLocationId");
                 int departmentId = resultSet.getInt("userDepartmentId");
@@ -445,7 +445,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User user = new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
+                User user = new User(id, firstName, lastName, type, email, password, locationId, departmentId, userNumber, image);
 
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
@@ -453,8 +453,8 @@ public class ContactsRepository extends JDBCRepository {
                 String friendType = resultSet.getString("friendType");
                 String friendEmail = resultSet.getString("friendEmail");
                 String friendPassword = resultSet.getString("friendPassword");
-                String friendPhoneNr = resultSet.getString("friendPhoneNr");
-                int friendAddressId = resultSet.getInt("friendAddressId");
+//                String friendPhoneNr = resultSet.getString("friendPhoneNr");
+//                int friendAddressId = resultSet.getInt("friendAddressId");
                 String friendImage = resultSet.getString("friendImage");
                 int friendLocationId = resultSet.getInt("friendLocationId");
                 int friendDepartmentId = resultSet.getInt("friendDepartmentId");
@@ -474,7 +474,7 @@ public class ContactsRepository extends JDBCRepository {
                     type = UserType.FontysStaff;
                 }
 
-                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendPhoneNr, friendAddressId, friendLocationId, friendDepartmentId, friendNumber, friendImage);
+                User friend = new User(friendId, friendFirstName, friendLastName, type, friendEmail, friendPassword, friendLocationId, friendDepartmentId, friendNumber, friendImage);
 
                 Contact contact = new Contact(contactId, user, friend);
 
@@ -573,6 +573,7 @@ public class ContactsRepository extends JDBCRepository {
 
 
     public UserDTO getUserDTO(int id) throws DatabaseException {
+        String project_path =System.getProperty("user.dir");
         Connection connection = super.getDatabaseConnection();
 
         String sql = "SELECT u.id, u.firstName, u.lastName, p.id AS profileId, image FROM users AS u " +
@@ -629,8 +630,8 @@ public class ContactsRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String phoneNr = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
+//                String phoneNr = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
@@ -655,7 +656,7 @@ public class ContactsRepository extends JDBCRepository {
                 statement.close();
                 connection.close();
 
-                return new User(id, firstName, lastName, type, email, password, phoneNr, addressId, locationId, departmentId, userNumber, image);
+                return new User(id, firstName, lastName, type, email, password,  locationId, departmentId, userNumber, image);
             }
 
         }

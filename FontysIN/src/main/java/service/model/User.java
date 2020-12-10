@@ -32,8 +32,8 @@ public class User {
         this.email = email;
         this.userType = type;
         this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.addressId = addressId;
+//        this.phoneNumber = phoneNumber;
+//        this.addressId = addressId;
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
@@ -48,15 +48,28 @@ public class User {
         this.email = email;
         this.userType = type;
         this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.addressId = addressId;
+//        this.phoneNumber = phoneNumber;
+//        this.addressId = addressId;
         this.departmentId = departmentId;
         this.locationId = locationId;
         this.userNumber = userNumber;
         privacy = new Privacy(id);
         this.img = image;
     }
-
+    public User(int id, String firstName, String lastName, UserType type, String email, String password,
+                int locationId, int departmentId, String userNumber, String image) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userType = type;
+        this.password = password;
+        this.departmentId = departmentId;
+        this.locationId = locationId;
+        this.userNumber = userNumber;
+        privacy = new Privacy(id);
+        this.img = image;
+    }
 
     public User() {
     }

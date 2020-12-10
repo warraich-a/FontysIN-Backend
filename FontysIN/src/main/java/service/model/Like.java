@@ -14,11 +14,11 @@ public class Like {
 
 
 
-    public Like(){
+    public Like() {
 
     }
 
-    public Like(int id, int postId, int likerId){
+    public Like(int id, int postId, int likerId) {
         setId(id);
         setPostId(postId);
         setLikerId(likerId);

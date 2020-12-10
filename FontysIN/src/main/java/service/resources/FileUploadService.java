@@ -39,9 +39,10 @@ public class FileUploadService {
                                     @FormDataParam("file") FormDataContentDisposition fileMetaData,
                                   @PathParam("userId") int id) throws Exception {
         PersistenceController persistenceController = new PersistenceController();
-//        String UPLOAD_PATH = "src/images/";
-        String UPLOAD_PATH = "C:/Users/anasw/fontysin-semester-3-client/FontyIN-Client/src/assets/";
-
+        String UPLOAD_PATH = "src/images/";
+        String project_path =System.getProperty("user.dir");
+//        String UPLOAD_PATH = "C:/Users/anasw/fontysin-semester-3-client/FontyIN-Client/src/assets/";
+        System.out.println("Present Project Directory : "+ System.getProperty("user.dir"));
 
 //        try
 //        {
@@ -54,11 +55,11 @@ public class FileUploadService {
             {
                 out.write(bytes, 0, read);
             }
-            if(persistenceController.uploadPicture(id, "assets/"+fileMetaData.getFileName()+id)){
+            if(persistenceController.uploadPicture(id, fileMetaData.getFileName()+id)){
                 out.flush();
                 out.close();
 
-                return "assets/"+fileMetaData.getFileName();
+                return fileMetaData.getFileName()+id;
             }
             else {
                 return "Error";
@@ -69,4 +70,13 @@ public class FileUploadService {
 //        }
     }
 
+//    @GET
+//    @Path("picture")
+//    @Produces("image/jpg")
+//    public Response getProfilePicture() throws Exception {
+//       File file  = new File("C:\\Users\\anasw\\fontysin-semester-3\\FontysIN\\src\\images\\IMG_20160827_163306.jpg");
+//        Response.ResponseBuilder response = Response.ok(file);
+//        response.header("Content-Disposition", "attachment; filename=DisplayName-IMG_20160827_163306.jpg");
+//        return response.build();
+//    }
 }

@@ -2,6 +2,7 @@ package service.resources;
 
 
 import service.PersistenceController;
+import service.controller.UserController;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -71,7 +72,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         System.out.println("VALID USER");
     }
    private boolean isValidUser(String email, String password) {
-       PersistenceController controller = new PersistenceController();
+       UserController controller = new UserController();
        boolean valid;
       valid = controller.login(email, password);
       return valid;

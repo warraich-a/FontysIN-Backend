@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -18,258 +20,258 @@ import java.util.StringTokenizer;
 public class PersistenceController {
 
     // Post section
-
-    public List<Posts> getPosts(){
-        JDBCPosts postsRepository = new JDBCPosts();
-
-        try {
-            List<Posts> posts = (List<Posts>) postsRepository.getPosts();
-
-            System.out.println("ok");
-
-            return posts;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<Posts> getPostsByDate(){
-        JDBCPosts postsRepository = new JDBCPosts();
-
-        try {
-            List<Posts> posts = (List<Posts>) postsRepository.getPostsByDate();
-
-            System.out.println("ok");
-
-            return posts;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<Posts> getNewsfeed(int uId){
-        JDBCPosts postsRepository = new JDBCPosts();
-
-        try {
-            List<Posts> posts = (List<Posts>) postsRepository.getNewsfeed(uId);
-
-            for (Posts post: posts) {
-                System.out.println(post.getId());
-            }
-
-            return posts;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public List<Posts> getPostByUserId(int uId){
-        JDBCPosts postsRepository = new JDBCPosts();
-
-        try {
-            List<Posts> posts = (List<Posts>) postsRepository.getPostsByUserId(uId);
-
-            System.out.println("ok");
-
-            return posts;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public Posts getPost(int Id){
-        JDBCPosts postsRepository = new JDBCPosts();
-
-        try {
-            Posts post = (Posts) postsRepository.getPost(Id);
-
-            System.out.println("ok");
-
-            return post;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public boolean addPost(Posts post){
-        JDBCPosts postsRepository = new JDBCPosts();
-
-        try {
-            return postsRepository.addPosts(post);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean updatePost(Posts post){
-        JDBCPosts postsRepository = new JDBCPosts();
-
-        try {
-            return postsRepository.updatePost(post);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean deletePost(Posts post){
-        JDBCPosts postsRepository = new JDBCPosts();
-
-        try {
-            return postsRepository.deletePost(post);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // End of Post section
-    // Comment section
-
-    public List<Comments> getCommets(){
-        JDBCComments commentsRepository = new JDBCComments();
-
-        try {
-            List<Comments> comments = (List<Comments>) commentsRepository.getComments();
-
-
-
-            return comments;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<Comments> getCommetsByPostId(int pId){
-        JDBCComments commentsRepository = new JDBCComments();
-
-        try {
-            List<Comments> comments = (List<Comments>) commentsRepository.getCommentsByPostId(pId);
-
-
-
-            return comments;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Comments getCommet(int Id){
-        JDBCComments commentsRepository = new JDBCComments();
-
-        try {
-            Comments comm = (Comments) commentsRepository.getComment(Id);
-
-
-
-            return comm;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public boolean addComment(Comments comm){
-        JDBCComments commentsRepository = new JDBCComments();
-
-        try {
-            return commentsRepository.addComm(comm);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean updateComment(Comments comm){
-        JDBCComments commentsRepository = new JDBCComments();
-
-        try {
-            return commentsRepository.updateComm(comm);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean deleteComment(Comments comm){
-        JDBCComments commentsRepository = new JDBCComments();
-
-        try {
-            return commentsRepository.deleteComment(comm);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    //End of Comment section
-    //Like section
-    public List<Like> getLikes(){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
-
-        try {
-            List<Like> likes = (List<Like>) likeRepository.getLikes();
-
-            return likes;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<Like> getLikesByPost(int id){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
-
-        try {
-            List<Like> likes = (List<Like>) likeRepository.getLikesByPost(id);
-
-            return likes;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Like getPostLikesByUser(int id,int userId){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
-
-        try {
-            Like like = (Like) likeRepository.getPostLikeByUSer(id,userId);
-
-            return like;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public boolean addLike (Like like){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
-
-        try {
-            return likeRepository.addLike(like);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean deleteLike(Like like){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
-
-        try {
-            return likeRepository.deleteLike(like);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+//
+//    public List<Posts> getPosts(){
+//        JDBCPosts postsRepository = new JDBCPosts();
+//
+//        try {
+//            List<Posts> posts = (List<Posts>) postsRepository.getPosts();
+//
+//            System.out.println("ok");
+//
+//            return posts;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public List<Posts> getPostsByDate(){
+//        JDBCPosts postsRepository = new JDBCPosts();
+//
+//        try {
+//            List<Posts> posts = (List<Posts>) postsRepository.getPostsByDate();
+//
+//            System.out.println("ok");
+//
+//            return posts;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public List<Posts> getNewsfeed(int uId){
+//        JDBCPosts postsRepository = new JDBCPosts();
+//
+//        try {
+//            List<Posts> posts = (List<Posts>) postsRepository.getNewsfeed(uId);
+//
+//            for (Posts post: posts) {
+//                System.out.println(post.getId());
+//            }
+//
+//            return posts;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//    public List<Posts> getPostByUserId(int uId){
+//        JDBCPosts postsRepository = new JDBCPosts();
+//
+//        try {
+//            List<Posts> posts = (List<Posts>) postsRepository.getPostsByUserId(uId);
+//
+//            System.out.println("ok");
+//
+//            return posts;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//    public Posts getPost(int Id){
+//        JDBCPosts postsRepository = new JDBCPosts();
+//
+//        try {
+//            Posts post = (Posts) postsRepository.getPost(Id);
+//
+//            System.out.println("ok");
+//
+//            return post;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public boolean addPost(Posts post){
+//        JDBCPosts postsRepository = new JDBCPosts();
+//
+//        try {
+//            return postsRepository.addPosts(post);
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+//
+//    public boolean updatePost(Posts post){
+//        JDBCPosts postsRepository = new JDBCPosts();
+//
+//        try {
+//            return postsRepository.updatePost(post);
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+//
+//    public boolean deletePost(Posts post){
+//        JDBCPosts postsRepository = new JDBCPosts();
+//
+//        try {
+//            return postsRepository.deletePost(post);
+//        } catch (DatabaseException | SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+//
+//    // End of Post section
+//    // Comment section
+//
+//    public List<Comments> getCommets(){
+//        JDBCComments commentsRepository = new JDBCComments();
+//
+//        try {
+//            List<Comments> comments = (List<Comments>) commentsRepository.getComments();
+//
+//
+//
+//            return comments;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public List<Comments> getCommetsByPostId(int pId){
+//        JDBCComments commentsRepository = new JDBCComments();
+//
+//        try {
+//            List<Comments> comments = (List<Comments>) commentsRepository.getCommentsByPostId(pId);
+//
+//
+//
+//            return comments;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public Comments getCommet(int Id){
+//        JDBCComments commentsRepository = new JDBCComments();
+//
+//        try {
+//            Comments comm = (Comments) commentsRepository.getComment(Id);
+//
+//
+//
+//            return comm;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public boolean addComment(Comments comm){
+//        JDBCComments commentsRepository = new JDBCComments();
+//
+//        try {
+//            return commentsRepository.addComm(comm);
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+//
+//    public boolean updateComment(Comments comm){
+//        JDBCComments commentsRepository = new JDBCComments();
+//
+//        try {
+//            return commentsRepository.updateComm(comm);
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+//
+//    public boolean deleteComment(Comments comm){
+//        JDBCComments commentsRepository = new JDBCComments();
+//
+//        try {
+//            return commentsRepository.deleteComment(comm);
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+//
+//    //End of Comment section
+//    //Like section
+//    public List<Like> getLikes(){
+//        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+//
+//        try {
+//            List<Like> likes = (List<Like>) likeRepository.getLikes();
+//
+//            return likes;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public List<Like> getLikesByPost(int id){
+//        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+//
+//        try {
+//            List<Like> likes = (List<Like>) likeRepository.getLikesByPost(id);
+//
+//            return likes;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public Like getPostLikesByUser(int id,int userId){
+//        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+//
+//        try {
+//            Like like = (Like) likeRepository.getPostLikeByUSer(id,userId);
+//
+//            return like;
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public boolean addLike (Like like){
+//        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+//
+//        try {
+//            return likeRepository.addLike(like);
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+//
+//    public boolean deleteLike(Like like){
+//        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+//
+//        try {
+//            return likeRepository.deleteLike(like);
+//        } catch (DatabaseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
 
 
@@ -512,245 +514,245 @@ public class PersistenceController {
         }
     }
 
-    /******************RANIM***********************Filter Search One bu One**************************/
-
-
-    /**
-     * Show/print the users with the given type
-     * @param type of the user to be shown.
-     */
-    //show users by user type
-    public List<UserDTO> UserFilteredWithType(UserType type){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByType(type);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-    /**
-     * Show/print the users with the given location id
-     * @param id of the user to be shown.
-     */
-    //show users by user location
-    public List<UserDTO> UserFilteredWithLocation(int id){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByLocation(id);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Show/print the users with the given department id
-     * @param id of the user to be shown.
-     */
-    //show usesr by user department
-    public List<UserDTO> UserFilteredWithDepartment(int id){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByDepartment(id);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Show/print the users with the given start study year
-     * @param year of the user to be shown.
-     */
-    //show users by start study year
-    public List<UserDTO> UserFilteredWithStartStudyYear(int year){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByStartStudyYear(year);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Show/print the users with the given start work year
-     * @param year of the user to be shown.
-     */
-    //show users by start work year
-    public List<UserDTO> UserFilteredWithStartWorkYear(int year){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByStartWorkYear(year);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Show/print the users with the given usertype location and department
-     * @param type
-     * @param lId
-     * @param dId
-     * of the user to be shown.
-     */
-    //show users by loc dep and type
-    public List<UserDTO> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Show/print the users with the given usertype start study year location and department
-     * @param type
-     * @param year
-     * @param lId
-     * @param dId
-     * of the user to be shown.
-     */
-    //show users by location user type location  department and start study year
-    public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType type, int year, int lId, int dId){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(type, year, lId, dId);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Show/print the users with the given usertype start work year location and department
-     * @param type
-     * @param year
-     * @param lId
-     * @param dId
-     * of the user to be shown.
-     */
-    //show users by location user type  location department and start work year
-    public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(type, year, lId, dId);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /****************************RANIM*****************************Normal searching*********************/
-    /**
-     * Show/print the users of FontysIn Web Application
-     */
-    public List<UserDTO> GetAllUsers(){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersDTO();
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /***********************************Combine filter searching with the input box*************************************/
-    /**
-     * Show/print the users with the given usertype start work year location and department
-     * @param type
-     * @param lId
-     * @param dId
-     * @param chars
-     * of the user to be shown.
-     */
-    //show users by location user type department and start study year
-    public List<UserDTO> UserFilteLocationDepartmentTypeAndName(String chars, int lId, int dId, UserType type ){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByUserTypeLocationDeoartmentAndName(chars, lId, dId, type);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Show/print the users with the given usertype start work year location and department
-     * @param chars
-     * of the user to be shown.
-     */
-    //show users by location user type department and start study year
-    public List<UserDTO> UserFilterByFirstNameChars(String chars){
-
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-
-        try {
-            List<UserDTO> users = profileRepository.getUsersByFirstNameChars(chars);
-            System.out.println(users);
-            return users;
-        }
-        catch (DatabaseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    /******************RANIM***********************Filter Search One bu One**************************/
+//
+//
+//    /**
+//     * Show/print the users with the given type
+//     * @param type of the user to be shown.
+//     */
+//    //show users by user type
+//    public List<UserDTO> UserFilteredWithType(UserType type){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByType(type);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//
+//    /**
+//     * Show/print the users with the given location id
+//     * @param id of the user to be shown.
+//     */
+//    //show users by user location
+//    public List<UserDTO> UserFilteredWithLocation(int id){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByLocation(id);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /**
+//     * Show/print the users with the given department id
+//     * @param id of the user to be shown.
+//     */
+//    //show usesr by user department
+//    public List<UserDTO> UserFilteredWithDepartment(int id){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByDepartment(id);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /**
+//     * Show/print the users with the given start study year
+//     * @param year of the user to be shown.
+//     */
+//    //show users by start study year
+//    public List<UserDTO> UserFilteredWithStartStudyYear(int year){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByStartStudyYear(year);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /**
+//     * Show/print the users with the given start work year
+//     * @param year of the user to be shown.
+//     */
+//    //show users by start work year
+//    public List<UserDTO> UserFilteredWithStartWorkYear(int year){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByStartWorkYear(year);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /**
+//     * Show/print the users with the given usertype location and department
+//     * @param type
+//     * @param lId
+//     * @param dId
+//     * of the user to be shown.
+//     */
+//    //show users by loc dep and type
+//    public List<UserDTO> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /**
+//     * Show/print the users with the given usertype start study year location and department
+//     * @param type
+//     * @param year
+//     * @param lId
+//     * @param dId
+//     * of the user to be shown.
+//     */
+//    //show users by location user type location  department and start study year
+//    public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType type, int year, int lId, int dId){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(type, year, lId, dId);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /**
+//     * Show/print the users with the given usertype start work year location and department
+//     * @param type
+//     * @param year
+//     * @param lId
+//     * @param dId
+//     * of the user to be shown.
+//     */
+//    //show users by location user type  location department and start work year
+//    public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(type, year, lId, dId);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /****************************RANIM*****************************Normal searching*********************/
+//    /**
+//     * Show/print the users of FontysIn Web Application
+//     */
+//    public List<UserDTO> GetAllUsers(){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersDTO();
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /***********************************Combine filter searching with the input box*************************************/
+//    /**
+//     * Show/print the users with the given usertype start work year location and department
+//     * @param type
+//     * @param lId
+//     * @param dId
+//     * @param chars
+//     * of the user to be shown.
+//     */
+//    //show users by location user type department and start study year
+//    public List<UserDTO> UserFilteLocationDepartmentTypeAndName(String chars, int lId, int dId, UserType type ){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByUserTypeLocationDeoartmentAndName(chars, lId, dId, type);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    /**
+//     * Show/print the users with the given usertype start work year location and department
+//     * @param chars
+//     * of the user to be shown.
+//     */
+//    //show users by location user type department and start study year
+//    public List<UserDTO> UserFilterByFirstNameChars(String chars){
+//
+//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//
+//        try {
+//            List<UserDTO> users = profileRepository.getUsersByFirstNameChars(chars);
+//            System.out.println(users);
+//            return users;
+//        }
+//        catch (DatabaseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
 
     /* ------------------------------------------------- Contacts -----------------------------------------------------------------*/
@@ -932,32 +934,8 @@ public class PersistenceController {
         }
         return null;
     }
-    public Address getAddress(int Id){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-        try {
-            Address exp = (Address) profileRepository.getAddressById(Id);
 
-            System.out.println("ok");
 
-            return exp;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public Privacy getPrivacy(User u){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-        try {
-            Privacy exp = (Privacy) profileRepository.getPrivacyByUser(u);
-
-            System.out.println("ok");
-
-            return exp;
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
     public boolean updateEdu(Education edu){
 
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -986,169 +964,9 @@ public class PersistenceController {
         }
         return false;
     }
-    public boolean updateAd(Address edu){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-        try {
-            return profileRepository.updateAddress(edu);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    public boolean updatePri(Privacy edu){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-        try {
-            return profileRepository.updatePrivacy(edu);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    public boolean updatePh(User edu){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-        try {
-            return profileRepository.updatePhone(edu);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    public Privacy GetPrivacySetting(int id){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-        try{
-            List<Privacy> privacyList = profileRepository.getPrivacyList();
-            for (Privacy p :privacyList){
-                if(p.getUserId() == id){
-                    return p;
-                }
-            }
-        } catch (DatabaseException e) {
-        e.printStackTrace();
-    }
-        return null;
 
-    }
 
-    private List<User> GetUsersConnections(int userId){
-        ContactsRepository contactsRepository = new ContactsRepository();
-        try{
-            List<Contact> contactList = contactsRepository.getAllContacts(userId);
-            List<User> connections = new ArrayList<>();
-            for (Contact c :contactList) {
-                if(c.getUser().getId() == userId){
-                    if(c.getIsAccepted()){
-                        User u = c.getFriend();
-                        connections.add(u);
-                    }
-                }
-            }
 
-            return connections;
-        } catch (DatabaseException e) {
-                e.printStackTrace();
-            }
-        return null;
-    }
-
-    public User getUserFromAuth(String auth){
-        String encodedCredentials = auth.replaceFirst("Basic ", "");
-        String credentials = new
-                String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
-        //Split username and password tokens in credentials
-        final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
-        final String email = tokenizer.nextToken();
-        User u = getUserByEmail(email);
-        return u;
-    }
-
-    public boolean AllowedToSee(int userId, int loggedinId, ProfilePart profilePart){
-        User loggedIn = getUser(loggedinId); // The logged in user
-        Privacy settings = GetPrivacySetting(userId);// Get privacy settings for the user i am visiting
-        User userImVisiting = getUser(userId); // So if im logged in user 3 and visit 5
-
-        // If there are no settings everyone is allowed to see
-        if(settings == null)
-        {
-            return true;
-        }
-
-        Privacy.Setting privacySetting;
-        switch(profilePart)
-        {
-            case EDUCATION:
-                privacySetting = settings.getEducationSetting();
-                break;
-            case EXPERIENCE:
-                privacySetting = settings.getExperienceSetting();
-                break;
-            case SKILLS:
-                privacySetting = settings.getSkillSetting();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + profilePart);
-        }
-        if(userImVisiting.getId() == loggedIn.getId()){ // So am i visting my own page
-            return true;
-        }
-        else if(privacySetting == Privacy.Setting.EVERYONE){
-            return true;
-        }
-        else if(privacySetting == Privacy.Setting.CONNECTIONS){
-            List<User> Connections = GetUsersConnections(loggedIn.getId()); // Get a user connections
-            if(Connections.contains(userImVisiting)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public enum ProfilePart
-    {
-        EDUCATION, EXPERIENCE, SKILLS
-    }
-    public User getUserByEmail(String email) {
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-        try{
-            User u = null;
-            List<User> Users = profileRepository.getUsers();
-            for (User p :Users){
-                if(p.getEmail().equals(email)){
-                    return p;
-                }
-            }
-
-        } catch (DatabaseException | SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
-    public boolean login(String email, String password){
-        User u = getUserByEmail(email);
-        if(u.equals(null)){
-            return false;
-        }
-        if(u.getPassword().equals(password)){
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isIdAndAuthSame(int id, String auth) {
-        String encodedCredentials = auth.replaceFirst("Basic ", "");
-        String credentials = new
-                String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
-
-        final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
-        final String email = tokenizer.nextToken();
-
-        User user = getUser(id);//studentsRepository.get(stNr);
-        if (!user.getEmail().equals(email)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
     public boolean uploadPicture(int userId, String path){
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
         try {
@@ -1200,20 +1018,5 @@ public class PersistenceController {
         }
     }
 
-    public boolean addUser(User user) {
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-        try {
-            if(profileRepository.createUser(user)) {
 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        } catch (DatabaseException | SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }

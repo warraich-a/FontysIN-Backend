@@ -1,6 +1,7 @@
 package service.resources;
 
 import service.PersistenceController;
+import service.controller.*;
 import service.model.*;
 import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
@@ -276,14 +277,14 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
-
+		UserController controller = new UserController();
 		PersistenceController persistenceController = new PersistenceController();
-
-		User loggedInUser = persistenceController.getUserFromAuth(auth);
+		PrivacyController pController = new PrivacyController();
+		User loggedInUser = controller.getUserFromAuth(auth);
 
 		List<Experience> experienceByProfileId = persistenceController.getExperience(userId, profileId);
 
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.EXPERIENCE);
+		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EXPERIENCE);
 
 		if(AllowToSee){
 			if (experienceByProfileId == null) {
@@ -303,11 +304,11 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/educations")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
-		PersistenceController persistenceController = new PersistenceController();
-		User loggedInUser = persistenceController.getUserFromAuth(auth);
-
+		UserController controller = new UserController();
+		User loggedInUser = controller.getUserFromAuth(auth);
+		PrivacyController pController = new PrivacyController();
 		List<Education> educations = persistenceController.getEducations(userId, profileId);
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.EDUCATION);
+		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
 		if(AllowToSee){
 		if (educations == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -340,11 +341,11 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/skills")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
-		PersistenceController persistenceController = new PersistenceController();
-		User loggedInUser = persistenceController.getUserFromAuth(auth);
-
+		UserController controller = new UserController();
+		User loggedInUser = controller.getUserFromAuth(auth);
+		PrivacyController pController = new PrivacyController();
 		List<Skill> skills = persistenceController.getSkills(userId, profileId);
-		boolean AllowToSee = persistenceController.AllowedToSee(userId, loggedInUser.getId(), PersistenceController.ProfilePart.SKILLS);
+		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.SKILLS);
 		if(AllowToSee){
 			if (skills == null) {
 				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -508,7 +509,10 @@ public class UsersResources {
 	@Path("user/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
-		if(!persistenceController.isIdAndAuthSame(id, auth)){
+		UserController controller = new UserController();
+		PersistenceController persistenceController = new PersistenceController();
+
+		if(!controller.isIdAndAuthSame(id, auth)){
 			return Response.status(Response.Status.UNAUTHORIZED).
 					entity("Invalid email and/or password.").build();
 		}else {
@@ -521,20 +525,7 @@ public class UsersResources {
 			}
 		}
 	}
-	@GET
-	@Path("address/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAddressById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
 
-			Address a = persistenceController.getAddress(id);
-			if (a == null) {
-				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
-			} else {
-				return Response.ok(a).build();
-			}
-
-
-	}
 
 
 	@PUT //PUT at http://localhost:XXXX/users/profile/about/id
@@ -571,32 +562,15 @@ public class UsersResources {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid experience.").build();
 		}
 	}
-	@PUT //PUT at http://localhost:XXXX/profile/id
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{userId}")
-	public Response updateUserPhone(User user) {
-		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (persistenceController.updatePh(user)) {
-			return Response.noContent().build();
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid id.").build();
-		}
-	}
-	@PUT //PUT at http://localhost:9099/users/address/id
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/address/{id}")
-	public Response updateAddress(Address a) {
-		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (persistenceController.updateAd(a)) {
-			return Response.noContent().build();
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
-		}
-	}
+
+
 	@GET
 	@Path("privacy/me")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPrivacy(@HeaderParam("Authorization") String auth) {
+		PrivacyController pController = new PrivacyController();
+		UserController persistenceController = new UserController();
+
 		String encodedCredentials = auth.replaceFirst("Basic ", "");
 		String credentials = new
 				String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
@@ -604,7 +578,7 @@ public class UsersResources {
 		final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
 		final String email = tokenizer.nextToken();
 		User u = persistenceController.getUserByEmail(email);
-		Privacy a = persistenceController.getPrivacy(u);
+		Privacy a = pController.getPrivacy(u);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -615,8 +589,9 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/privacy/{id}")
 	public Response updatePrivacy(Privacy p) {
+		PrivacyController pController = new PrivacyController();
 		// Idempotent method. Always update (even if the resource has already been updated before).
-		if (persistenceController.updatePri(p)) {
+		if (pController.updatePri(p)) {
 			return Response.noContent().build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid address.").build();
@@ -645,7 +620,7 @@ public class UsersResources {
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
 									 @QueryParam("workingYear") int workYear, @QueryParam("firstName") String name) {
 
-		PersistenceController controller = new PersistenceController();
+		UserController controller = new UserController();
 
 		List<UserDTO> users;
 
@@ -696,6 +671,8 @@ public class UsersResources {
 	@PermitAll
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response LoginUser(String body) {
+		UserController persistenceController = new UserController();
+
 		final StringTokenizer tokenizer = new StringTokenizer(body, ":");
 		final String email = tokenizer.nextToken();
 		final String password = tokenizer.nextToken();
@@ -767,7 +744,7 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("new")
 	public Response createUser(User e) {
-		PersistenceController persistenceController = new PersistenceController();
+		UserController persistenceController = new UserController();
 
 		if (!persistenceController.addUser(e))
 		{
@@ -775,9 +752,11 @@ public class UsersResources {
 			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
 			return Response.status(Response.Status.CONFLICT).entity(entity).build();
 		} else {
+
+//			LoginUser(e.getEmail());
 			String url = uriInfo.getAbsolutePath() + "/" + e.getId(); //
 			URI uri = URI.create(url);
-			return Response.created(uri).build();
+			return Response.ok(e).build();
 		}
 	}
 }
