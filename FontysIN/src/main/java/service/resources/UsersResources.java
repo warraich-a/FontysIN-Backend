@@ -620,7 +620,7 @@ public class UsersResources {
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
 									 @QueryParam("workingYear") int workYear, @QueryParam("firstName") String name) {
 
-		PersistenceController controller = new PersistenceController();
+		UserController controller = new UserController();
 
 		List<UserDTO> users;
 
