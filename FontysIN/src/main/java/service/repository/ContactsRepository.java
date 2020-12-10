@@ -14,7 +14,10 @@ public class ContactsRepository extends JDBCRepository {
     public int createContact(ContactDTO createdContactDTO) throws  DatabaseException  {
         Connection connection = super.getDatabaseConnection();
 
+
+        System.out.println("CREATE CONTACT REPOSITOPRY");
         String sql = "INSERT INTO contacts (userId, friendId, isAccepted) VALUES (?, ?, false)";
+        System.out.println("CONTACT " + createdContactDTO);
 
         try {
             int contactId = -1;
@@ -23,6 +26,8 @@ public class ContactsRepository extends JDBCRepository {
             statement.setInt(1, createdContactDTO.getUser().getId());
             statement.setInt(2, createdContactDTO.getFriend().getId());
 
+            System.out.println("createdContactDTO.getUser().getId() " + createdContactDTO.getUser().getId());
+            System.out.println("createdContactDTO.getFriend().getId() " + createdContactDTO.getFriend().getId());
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();

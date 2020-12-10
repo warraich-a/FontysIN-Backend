@@ -84,11 +84,56 @@ public class MessagesRepository extends JDBCRepository {
                 " (SELECT id AS friendProfileId, userId " +
                 " FROM profiles " +
                 " GROUP BY userId) p2 ON p2.userId = friend.id " +
-                "WHERE c.id = ?";
+                "WHERE c.id = ? " +
+                "GROUP BY m.id";
+//
+//        String sql = "SELECT c.id AS conversationId, " +
+//                "       c.firstUserId, " +
+//                "       c.secondUserId, " +
+//                "       m.id AS messageId, " +
+//                "       m.conversationId AS mConversationId, " +
+//                "       m.senderId, " +
+//                "       m.receiverId, " +
+//                "       m.content, " +
+//                "       m.date, " +
+//                "       user.id AS userId, " +
+//                "       user.firstName AS userFirstName, " +
+//                "       user.lastName AS userLastName, " +
+//                "       user.image AS userImage, " +
+//                "       p1.userProfileId, " +
+//                "       friend.id AS friendId, " +
+//                "       friend.firstName AS friendFirstName, " +
+//                "       friend.lastName AS friendLastName,  " +
+//                "       friend.image AS friendImage, " +
+//                "       p2.friendProfileId " +
+//                "FROM conversations AS c " +
+//                "         LEFT JOIN messages AS m ON (m.conversationId = c.id) " +
+//                "         LEFT JOIN users USER ON m.senderId = user.id " +
+//                "    OR c.firstUserId = user.id " +
+//                "         LEFT JOIN users friend ON m.receiverId = friend.id " +
+//                "    OR c.secondUserId = friend.id " +
+//                "         LEFT JOIN " +
+//                "     (SELECT id AS userProfileId, " +
+//                "             userId " +
+//                "      FROM profiles" +
+//                "      GROUP BY userId) p1 ON p1.userId = user.id " +
+//                "         LEFT JOIN " +
+//                "     (SELECT id AS friendProfileId, " +
+//                "             userId " +
+//                "      FROM profiles " +
+//                "      GROUP BY userId) p2 ON p2.userId = friend.id " +
+//                "WHERE (c.firstUserId = ? "  +
+//                "    AND c.isDeletedFirstUser = 0) " +
+//                "   OR (c.secondUserId = ? " +
+//                "    AND c.isDeletedSecondUser = 0) " +
+//                "GROUP BY  m.id, c.id " +
+//                "ORDER BY c.id " +
+//                "WHERE c.id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
+//            statement.setInt(2, id);
 
             ResultSet resultSet = statement.executeQuery();
 

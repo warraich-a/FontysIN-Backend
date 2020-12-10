@@ -3,6 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="70c26843-b538-4afc-9bd1-65c4301bfe0b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FontysIN/src/main/java/service/CustomApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/FontysIN/src/main/java/service/CustomApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FontysIN/src/main/java/service/repository/ContactsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/FontysIN/src/main/java/service/repository/ContactsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FontysIN/src/main/java/service/repository/MessagesRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/FontysIN/src/main/java/service/repository/MessagesRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FontysIN/src/main/java/service/resources/UsersResources.java" beforeDir="false" afterPath="$PROJECT_DIR$/FontysIN/src/main/java/service/resources/UsersResources.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +25,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/FontysIN" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Individual Project/CookeryApp" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -42,6 +46,12 @@
       <workItem from="1605226081620" duration="256000" />
       <workItem from="1605226378427" duration="20000" />
       <workItem from="1605727878475" duration="769000" />
+      <workItem from="1606260117505" duration="19000" />
+      <workItem from="1606380680068" duration="155000" />
+      <workItem from="1606422459912" duration="607000" />
+      <workItem from="1606430800326" duration="1245000" />
+      <workItem from="1607190953438" duration="664000" />
+      <workItem from="1607352824348" duration="1326000" />
     </task>
     <servers />
   </component>
@@ -49,11 +59,11 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="686" y="211" key="FileChooserDialogImpl" timestamp="1605729887337">
+    <state x="686" y="211" key="FileChooserDialogImpl" timestamp="1607353687319">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1602058296234" />
-    <state x="686" y="211" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605729887337" />
+    <state x="686" y="211" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1607353687319" />
     <state x="461" y="164" key="SettingsEditor" timestamp="1605226159818">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
