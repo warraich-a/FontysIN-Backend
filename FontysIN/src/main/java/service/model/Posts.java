@@ -17,11 +17,11 @@ public class Posts {
     private String image;
 
 
-    public Posts(){
+    public Posts() {
 
     }
 
-    public Posts(int id, int userId, String content, Timestamp date, String image){
+    public Posts(int id, int userId, String content, Timestamp date, String image) {
         setId(id);
         setUserId(userId);
         setContent(content);
@@ -65,8 +65,6 @@ public class Posts {
     public void setImage(String image) {
         this.image = image;
     }
-
-
 
 
 

@@ -3,6 +3,7 @@ package service.repository;
 import service.model.*;
 import service.model.dto.UserDTO;
 
+import javax.sql.rowset.JdbcRowSet;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -398,8 +399,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
+//                String phoneNumber = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
@@ -418,7 +419,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                     r = UserType.FontysStaff;
                 }
 
-                User u = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
+                User u = new User(id, firstName, lastName, r, email, password, locationId, departmentId,  userNumber, image);
                 allUsers.add(u);
 
             }
@@ -437,8 +438,8 @@ public class JDBCProfileRepository extends JDBCRepository {
 
 
     public User getUserById(int userId) throws DatabaseException, SQLException {
+        JDBCPrivacyRepository privacyRepository = new JDBCPrivacyRepository();
         User user = null;
-        String project_path =System.getProperty("user.dir");
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM users where id =?";
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -452,9 +453,9 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
-                String image = project_path + resultSet.getString("image");
+//                String phoneNumber = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
@@ -472,8 +473,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                     r = UserType.FontysStaff;
                 }
 
-                user = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
-                Privacy privacy = getPrivacyByUser(user);
+                user = new User(id, firstName, lastName, r, email, password, locationId, departmentId,  userNumber, image);
+                Privacy privacy = privacyRepository.getPrivacyByUser(user);
                 user.setPrivacy(privacy);
             }
             connection.setAutoCommit(false);
@@ -699,20 +700,24 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "update users set image=? where id = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
 
         try {
             preparedStatement.setString(1, path);
             preparedStatement.setInt(2, userId);
+
             preparedStatement.executeUpdate();
 
             connection.setAutoCommit(false);
 
 
             connection.commit();
-            connection.close();
             preparedStatement.close();
+
+            connection.close();
+            return true;
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot upload image.", throwable);
@@ -721,7 +726,7 @@ public class JDBCProfileRepository extends JDBCRepository {
             if (preparedStatement != null) preparedStatement.close();
             if (connection != null) connection.close();
         }
-        return true;
+
     }
 
     public List<Location> getFontysLocation() throws DatabaseException, SQLException {
@@ -813,253 +818,10 @@ public class JDBCProfileRepository extends JDBCRepository {
             throw new DatabaseException("Cannot read products from the database.",throwable);
         }
     }
-    public boolean updateAddress(Address a) throws DatabaseException {
-        Connection connection = this.getDatabaseConnection();
-        String sql = "UPDATE `addresses` SET `streetName`=?,`houseNumber`=?,`city`=?,`zipcode`=? WHERE id=?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
 
-            statement.setInt(5, a.getId());
-            statement.setString(1, a.getStreetName());
-            statement.setString(2, a.getHouseNumber());
-            statement.setString(3, a.getCity());
-            statement.setString(4, a.getZipCode());
-
-            statement.executeUpdate();
-            connection.commit();
-            connection.close();
-            return true;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
-    }
-    public boolean updatePhone(User u) throws DatabaseException {
-        Connection connection = this.getDatabaseConnection();
-        String sql = "UPDATE `users` SET `phoneNr`=? WHERE id=?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, u.getPhoneNumber());
-            statement.setInt(2, u.getId());
-
-
-
-            statement.executeUpdate();
-            connection.commit();
-            connection.close();
-            return true;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
-    }
 
     // ----------------------------------------- Privacy
 
-    public boolean createPrivacy(Privacy p) throws DatabaseException{
-        Connection connection = this.getDatabaseConnection();
-        boolean exist = false;
-        String sql = "INSERT INTO privacy(`userId`,`educationSetting`, `experienceSetting`, `skillSetting`,`hideFromSearch`) VALUES (?,?,?,?,?)";
-        try {
-            if(!exist){
-                PreparedStatement statement = connection.prepareStatement(sql);
-
-                statement.setInt(1, p.getUserId());
-                statement.setString(2,p.getEducationSetting().toString());
-                statement.setString(3,p.getExperienceSetting().toString());
-                statement.setString(4,p.getSkillSetting().toString());
-                Boolean hideFromSearch = p.getHideFromSearch();
-                int search;
-                if(hideFromSearch){
-                    search = 1;
-                }else{
-                    search = 0;
-                }
-                statement.setInt(5, search);
-                statement.executeUpdate();
-                connection.commit();
-                connection.close();
-                return true;
-            } else  {
-                connection.close();
-                return false;
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
-    }
-
-    public List<Privacy> getPrivacyList() throws DatabaseException {
-        List<Privacy> privacyList = new ArrayList<>();
-
-        Connection connection = this.getDatabaseConnection();
-        String sql = "SELECT * FROM privacy";
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                int userId = resultSet.getInt("userId");
-                String educationSetting = resultSet.getString("educationSetting");
-                String experienceSetting = resultSet.getString("experienceSetting");
-                String skillSetting = resultSet.getString("skillSetting");
-                int hideFromSearch = resultSet.getInt("hideFromSearch");
-                Privacy.Setting edu = Privacy.Setting.EVERYONE;
-                Boolean search = false;
-                if (educationSetting.equals("EVERYONE"))
-                {
-                    edu = Privacy.Setting.EVERYONE;
-                }
-                else if (educationSetting.equals("CONNECTIONS"))
-                {
-                    edu = Privacy.Setting.CONNECTIONS;
-                }
-                else  if (educationSetting.equals("ONLYME"))
-                {
-                    edu = Privacy.Setting.ONLYME;
-                }
-                Privacy.Setting exp = Privacy.Setting.EVERYONE;
-                if (experienceSetting.equals("EVERYONE"))
-                {
-                    exp = Privacy.Setting.EVERYONE;
-                }
-                else if (experienceSetting.equals("CONNECTIONS"))
-                {
-                    exp = Privacy.Setting.CONNECTIONS;
-                }
-                else  if (experienceSetting.equals("ONLYME"))
-                {
-                    exp = Privacy.Setting.ONLYME;
-                }
-                Privacy.Setting ski = Privacy.Setting.EVERYONE;
-                if (skillSetting.equals( "EVERYONE"))
-                {
-                    ski = Privacy.Setting.EVERYONE;
-                }
-                else if (skillSetting.equals("CONNECTIONS"))
-                {
-                    ski = Privacy.Setting.CONNECTIONS;
-                }
-                else  if (skillSetting.equals("ONLYME"))
-                {
-                    ski = Privacy.Setting.ONLYME;
-                }
-                if(hideFromSearch == 1){// So 1 is true, yes hide me from search
-                    search = true; // Yes hide me
-                }else{
-                    search = false; // no dont hide me
-                }
-
-                Privacy a = new Privacy(id, userId, edu, exp, ski,search);
-                privacyList.add(a);
-            }
-            connection.setAutoCommit(false);
-            connection.close();
-
-        } catch (SQLException throwable) {
-            throw new DatabaseException("Cannot read comments from the database.",throwable);
-        }
-        return privacyList;
-    }
-
-    public Privacy getPrivacyByUser(User user) throws DatabaseException {
-        Connection connection = this.getDatabaseConnection();
-        String sql = "SELECT * FROM privacy WHERE userId = ?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, user.getId());
-            ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()){
-                connection.close();
-                throw new DatabaseException("Privacy with id " + user.getId() + " cannot be found");
-            } else {
-                int id = resultSet.getInt("id");
-                int userId = resultSet.getInt("userId");
-                String educationSetting = resultSet.getString("educationSetting");
-                String experienceSetting = resultSet.getString("experienceSetting");
-                String skillSetting = resultSet.getString("skillSetting");
-                int hideFromSearch = resultSet.getInt("hideFromSearch");
-                Privacy.Setting edu = Privacy.Setting.EVERYONE;
-                Boolean search = false;
-                if (educationSetting.equals("EVERYONE"))
-                {
-                    edu = Privacy.Setting.EVERYONE;
-                }
-                else if (educationSetting.equals("CONNECTIONS"))
-                {
-                    edu = Privacy.Setting.CONNECTIONS;
-                }
-                else  if (educationSetting.equals("ONLYME"))
-                {
-                    edu = Privacy.Setting.ONLYME;
-                }
-                Privacy.Setting exp = Privacy.Setting.EVERYONE;
-                if (experienceSetting.equals("EVERYONE"))
-                {
-                    exp = Privacy.Setting.EVERYONE;
-                }
-                else if (experienceSetting.equals("CONNECTIONS"))
-                {
-                    exp = Privacy.Setting.CONNECTIONS;
-                }
-                else  if (experienceSetting.equals("ONLYME"))
-                {
-                    exp = Privacy.Setting.ONLYME;
-                }
-                Privacy.Setting ski = Privacy.Setting.EVERYONE;
-                if (skillSetting.equals( "EVERYONE"))
-                {
-                    ski = Privacy.Setting.EVERYONE;
-                }
-                else if (skillSetting.equals("CONNECTIONS"))
-                {
-                    ski = Privacy.Setting.CONNECTIONS;
-                }
-                else  if (skillSetting.equals("ONLYME"))
-                {
-                    ski = Privacy.Setting.ONLYME;
-                }
-                if(hideFromSearch == 1){ // So 1 is true, yes hide me from search
-                    search = true; // Yes hide me
-                }else{
-                    search = false; // No do not hide me
-                }
-
-                Privacy a = new Privacy(id, userId, edu, exp, ski,search);
-                connection.close();
-                return a;
-            }
-        } catch (SQLException throwable) {
-            throw new DatabaseException("Cannot read products from the database.",throwable);
-        }
-    }
-    public boolean updatePrivacy(Privacy a) throws DatabaseException {
-        Connection connection = this.getDatabaseConnection();
-        String sql = "UPDATE `privacy` SET `educationSetting`=?,`experienceSetting`=?,`skillSetting`=?,`hideFromSearch`=? WHERE id=?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            Boolean hideFromSearch = a.getHideFromSearch();
-            int search;
-            if(hideFromSearch){
-                search = 1;
-            }else{
-                search = 0;
-            }
-            statement.setInt(5, a.getId());
-            statement.setString(1, String.valueOf(a.getEducationSetting()));
-            statement.setString(2, String.valueOf(a.getExperienceSetting()));
-            statement.setString(3, String.valueOf(a.getSkillSetting()));
-            statement.setInt(4, search);
-            statement.executeUpdate();
-            connection.commit();
-            connection.close();
-            return true;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
-    }
     // ----------------------------------------- Privacy ^
     /******************Ranim******************Deleting data in profile page*********************/
 
@@ -1445,7 +1207,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
         return filtered;
     }
-    /***********************RANIM****************************Normal searching*******************************/
+    /***********************RANIM****************************Norrmal searching*******************************/
 
     //get all users withing fontys
     public List<User> getAllUsers() throws DatabaseException {
@@ -1466,14 +1228,14 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String email = resultSet.getString("email");
                 UserType userType = UserType.valueOf(resultSet.getString("userType"));
                 String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
+//                String phoneNumber = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
                 
-                User u = new User(id, firstName, lastName, userType, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
+                User u = new User(id, firstName, lastName, userType, email, password,  locationId, departmentId,  userNumber, image);
                 filtered.add(u);
 
             }
@@ -1531,10 +1293,9 @@ public class JDBCProfileRepository extends JDBCRepository {
 
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId " +
-                "FROM users u INNER JOIN profiles p ON u.id = p.userId " +
-                "LEFT JOIN privacy pr ON pr.userId = u.id WHERE u.firstName LIKE CONCAT ('%', ? ,'%') " +
-                "AND u.locationId = ? AND u.departmentId = ? AND userType = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
+                "INNER JOIN profiles p ON u.id = p.userId WHERE u.firstName " +
+                "LIKE CONCAT ('%', ? ,'%') AND u.locationId = ? AND u.departmentId = ? AND userType = ? GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, chars); // set characters
@@ -1574,8 +1335,8 @@ public class JDBCProfileRepository extends JDBCRepository {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
-                "INNER JOIN profiles p ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
-                "WHERE pr.hideFromSearch = 0 AND u.firstName LIKE CONCAT ('%', ? ,'%') GROUP BY u.id";
+                "INNER JOIN profiles p ON u.id = p.userId WHERE u.firstName " +
+                "LIKE CONCAT ('%', ? ,'%') GROUP BY u.id";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, chars); // set characters
@@ -1642,7 +1403,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     public boolean createUser(User user) throws DatabaseException, SQLException {
-
+        JDBCPrivacyRepository privacyRepository = new JDBCPrivacyRepository();
         boolean exist;
         exist = false;
         for (User u: getUsers()) {
@@ -1661,7 +1422,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         ResultSet rs = null;
         int userId = 9999;
 
-            String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, phoneNr, addressId, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             try {
@@ -1670,12 +1431,12 @@ public class JDBCProfileRepository extends JDBCRepository {
                 preparedStatement.setString(3, String.valueOf(user.getUserType()));
                 preparedStatement.setString(4, user.getEmail());
                 preparedStatement.setString(5, user.getPassword());
-                preparedStatement.setString(6, user.getPhoneNumber());
-                preparedStatement.setInt(7, user.getAddressId());
-                preparedStatement.setString(8, user.getImg());
-                preparedStatement.setInt(9, user.getLocationId());
-                preparedStatement.setInt(10, user.getDepartmentId());
-                preparedStatement.setString(11, user.getUserNumber());
+//                preparedStatement.setString(6, user.getPhoneNumber());
+//                preparedStatement.setInt(7, user.getAddressId());
+                preparedStatement.setString(6, user.getImg());
+                preparedStatement.setInt(7, user.getLocationId());
+                preparedStatement.setInt(8, user.getDepartmentId());
+                preparedStatement.setString(9, user.getUserNumber());
 
                 preparedStatement.executeUpdate();
 
@@ -1700,7 +1461,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                 connection.close();
 
                 Privacy p = new Privacy(userId);
-                createPrivacy(p);
+                privacyRepository.createPrivacy(p);
 
                 return true;
             } catch (SQLException throwable) {
