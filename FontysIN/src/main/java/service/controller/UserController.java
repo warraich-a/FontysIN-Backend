@@ -9,6 +9,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import java.security.Key;
+
+import io.jsonwebtoken.*;
+
+import java.util.Date;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
 import service.model.*;
 import service.repository.*;
 
@@ -34,16 +44,6 @@ public class UserController {
         return null;
 
     }
-    public User getUserFromAuth(String auth){
-        String encodedCredentials = auth.replaceFirst("Basic ", "");
-        String credentials = new
-                String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
-        //Split username and password tokens in credentials
-        final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
-        final String email = tokenizer.nextToken();
-        User u = getUserByEmail(email);
-        return u;
-    }
 
     public boolean login(String email, String password){
         User u = getUserByEmail(email);
@@ -57,20 +57,13 @@ public class UserController {
         return false;
     }
 
-    public boolean isIdAndAuthSame(int id, String auth) {
-        String encodedCredentials = auth.replaceFirst("Basic ", "");
-        String credentials = new
-                String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
+    public User getUserFromToken(String token) {
+        Claims decoded = decodeJWT(token);
 
-        final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
-        final String email = tokenizer.nextToken();
+        String email = decoded.getIssuer();
+        User u = getUserByEmail(email);
 
-        User user = controller.getUser(id);//studentsRepository.get(stNr);
-        if (!user.getEmail().equals(email)) {
-            return false;
-        } else {
-            return true;
-        }
+        return u;
     }
     public boolean addUser(User user) {
 
@@ -114,5 +107,45 @@ public class UserController {
         }
 
         return "";
+    }
+    private static String SECRET_KEY = "oeRaYY";
+
+    //Sample method to construct a JWT
+    public String createJWT(String id, String issuer, String subject, long ttlMillis) {
+
+        //The JWT signature algorithm we will be using to sign the token
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+
+        long nowMillis = System.currentTimeMillis();
+        Date now = new Date(nowMillis);
+
+        //We will sign our JWT with our ApiKey secret
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+
+        //Let's set the JWT Claims
+        JwtBuilder builder = Jwts.builder().setId(id)
+                .setIssuedAt(now)
+                .setSubject(subject)
+                .setIssuer(issuer)
+                .signWith(signatureAlgorithm, signingKey);
+
+//        //if it has been specified, let's add the expiration
+//        if (ttlMillis >= 0) {
+//            long expMillis = nowMillis + ttlMillis;
+//            Date exp = new Date(expMillis);
+//            builder.setExpiration(exp);
+//        }
+
+        //Builds the JWT and serializes it to a compact, URL-safe string
+        return builder.compact();
+    }
+    public  Claims decodeJWT(String jwt) {
+
+        //This line will throw an exception if it is not a signed JWS (as expected)
+        Claims claims = Jwts.parser()
+                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .parseClaimsJws(jwt).getBody();
+        return claims;
     }
 }

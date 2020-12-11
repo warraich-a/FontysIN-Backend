@@ -43,7 +43,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jvnet.mimepull/mimepull
     compile group: 'org.jvnet.mimepull', name: 'mimepull', version: '1.9.13'
 
-
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
 
     compile 'mysql:mysql-connector-java:5.1.23'

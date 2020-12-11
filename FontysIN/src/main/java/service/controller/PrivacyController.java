@@ -60,7 +60,7 @@ public class PrivacyController {
         Privacy settings = GetPrivacySetting(userId);// Get privacy settings for the user i am visiting
         User userImVisiting = controller.getUser(userId); // So if im logged in user 3 and visit 5
         List<ContactDTO> friends = new ArrayList<>();
-        friends = controller.getAllContactsDTO(loggedIn.getId());
+        friends = controller.getAllContactsDTO(userImVisiting.getId());
         List<Integer> friendsId = new ArrayList<>();
         for (ContactDTO f: friends) { // Same as Denys :D
             friendsId.add(f.getFriend().getId());
