@@ -1,13 +1,11 @@
 package service.repository;
 
-import service.PersistenceController;
+import service.controller.ContactController;
 import service.controller.PostController;
-import service.model.Contact;
 import service.model.Posts;
-import service.model.User;
 import service.model.dto.ContactDTO;
 
-import java.sql. * ;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -72,9 +70,9 @@ public class JDBCPosts extends JDBCRepository {
         List < Posts > allPosts = new ArrayList < >();
         List < ContactDTO > friends = new ArrayList < >();
         PostController persistenceController = new PostController();
-        PersistenceController persistenceController1 = new PersistenceController();
+        ContactController contactController = new ContactController();
         List < Integer > friendsId = new ArrayList < >();
-        friends = persistenceController1.getAllContactsDTO(id);
+        friends = contactController.getAllContactsDTO(id);
         allPosts = persistenceController.getPostsByDate();
         for (ContactDTO f: friends) {
             friendsId.add(f.getFriend().getId());

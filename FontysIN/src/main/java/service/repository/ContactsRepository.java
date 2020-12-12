@@ -573,11 +573,14 @@ public class ContactsRepository extends JDBCRepository {
 
 
     public UserDTO getUserDTO(int id) throws DatabaseException {
-        String project_path =System.getProperty("user.dir");
+//        String project_path =System.getProperty("user.dir");
         Connection connection = super.getDatabaseConnection();
 
+        System.out.println("Repo user id is " + id);
+
+        // was INNER JOIN
         String sql = "SELECT u.id, u.firstName, u.lastName, p.id AS profileId, image FROM users AS u " +
-                "INNER JOIN profiles p ON p.userId = u.id " +
+                "LEFT JOIN profiles p ON p.userId = u.id " +
                 "WHERE u.id = ? " +
                 "LIMIT 1";
 

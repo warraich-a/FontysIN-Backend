@@ -65,13 +65,14 @@ public class MessagesResources {
 
         MessageController messageController = new MessageController();
 
-        if (!messageController.startConversation(conversationDTO)){
+        int conversationId = messageController.startConversation(conversationDTO);
+        if (conversationId < 0){
             System.out.println("in con resources");
             String entity =  "Conversation with this id is "  + conversationDTO.getId() + " already exists.";
             return Response.status(Response.Status.CONFLICT).entity(entity).build();
         }
         else {
-            String url = uriInfo.getAbsolutePath() + "/"; // url of the posted conversation
+            String url = uriInfo.getAbsolutePath() + "/" + conversationId; // url of the posted conversation
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }
