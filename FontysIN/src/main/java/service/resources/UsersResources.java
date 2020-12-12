@@ -101,7 +101,6 @@ public class UsersResources {
 	@GET
 	@Path("{userId}")
 	public Response getUser(@PathParam("userId") int userId) {
-		System.out.println(userId);
 		UserDTO user = contactController.getUserDTO(userId);
 
 		System.out.println("Get user " + user);

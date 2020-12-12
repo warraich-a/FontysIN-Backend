@@ -1,15 +1,10 @@
 package service.repository;
 
 import service.model.*;
-import service.model.dto.UserDTO;
 
-import javax.sql.rowset.JdbcRowSet;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class JDBCProfileRepository extends JDBCRepository {
@@ -702,7 +697,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         String sql = "update users set image=? where id = ? ";
 //        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
+        System.out.println("Path " + path);
 
         try {
             preparedStatement.setString(1, path);
