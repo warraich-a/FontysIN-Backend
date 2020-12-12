@@ -154,14 +154,14 @@ public class MessagesRepository extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 String firstName = resultSet.getString("userFirstName");
                 String lastName = resultSet.getString("userLastName");
-                String image = resultSet.getString("userImage");
+                String image = "assets/" + resultSet.getString("userImage");
                 int profileId = resultSet.getInt("userProfileId");
 
                 // Receiver
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
                 String friendLastName = resultSet.getString("friendLastName");
-                String friendImage = resultSet.getString("friendImage");
+                String friendImage = "assets/" +  resultSet.getString("friendImage");
                 int friendProfileId = resultSet.getInt("friendProfileId");
 
                 // Create message
@@ -248,14 +248,14 @@ public class MessagesRepository extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 String firstName = resultSet.getString("userFirstName");
                 String lastName = resultSet.getString("userLastName");
-                String image = resultSet.getString("userImage");
+                String image = "assets/" + resultSet.getString("userImage");
                 int profileId = resultSet.getInt("userProfileId");
 
                 // Receiver
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
                 String friendLastName = resultSet.getString("friendLastName");
-                String friendImage = resultSet.getString("friendImage");
+                String friendImage = "assets/" + resultSet.getString("friendImage");
                 int friendProfileId = resultSet.getInt("friendProfileId");
 
                 UserDTO sender = new UserDTO(userId, profileId, firstName, lastName, image);
