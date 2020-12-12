@@ -268,7 +268,7 @@ public class MessagesRepository extends JDBCRepository {
     }
 
     // start new conversation with new user
-    public void startConversation(ConversationDTO conversation) throws DatabaseException {
+    public void startNewConversation(ConversationDTO conversation) throws DatabaseException {
 
         Connection connection = this.getDatabaseConnection();
 
@@ -293,6 +293,34 @@ public class MessagesRepository extends JDBCRepository {
 
         } catch (SQLException throwable) {
             throw  new DatabaseException("Cannot create new conversation.", throwable);
+        }
+    }
+
+    // start new conversation with new user
+    public boolean restartNewConversation(ConversationDTO conversation) throws DatabaseException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "UPDATE conversations SET isDeletedFirstUser = 0 WHERE firstUserId = ? and secondUserId = ? LIMIT 1";
+        try {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, conversation.getFirstUserId());
+            preparedStatement.setInt(2, conversation.getSecondUserId());
+
+            System.out.println("before prepared statemnet");
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            connection.close();
+
+            System.out.println("after prepared statemnet");
+
+            return true;
+
+
+        } catch (SQLException throwable) {
+            throw  new DatabaseException("Cannot recreate new conversation.", throwable);
         }
     }
 }
