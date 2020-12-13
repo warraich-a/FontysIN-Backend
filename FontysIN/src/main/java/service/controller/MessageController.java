@@ -90,12 +90,17 @@ public class MessageController {
      * @param conversationDTO
      * @return the id of the created conversation
      */
-    public boolean startConversation(ConversationDTO conversationDTO) {
+    public boolean startNewConversation(ConversationDTO conversationDTO) {
 
         MessagesRepository messagesRepository = new MessagesRepository();
 
         try {
-            messagesRepository.startConversation(conversationDTO);
+            if (!messagesRepository.restartNewConversation(conversationDTO)){
+                messagesRepository.startConversation(conversationDTO);
+            }
+            else{
+                messagesRepository.startConversation(conversationDTO);
+            }
             System.out.println("return true if correct");
 
             return true;

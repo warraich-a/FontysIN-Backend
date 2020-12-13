@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class JDBCPosts extends JDBCRepository {
+public class PostsRepository extends JDBCRepository {
 
     public Collection < Posts > getPosts() throws DatabaseException {
         List < Posts > posts = new ArrayList < >();
