@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBCUserRepository extends JDBCRepository {
+public class UserRepository extends JDBCRepository {
 
     /**************Ranim******************************Filter users**************************/
     //get all users with the given user type from data base
