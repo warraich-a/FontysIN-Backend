@@ -9,7 +9,7 @@ import service.repository.JDBCPrivacyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-public class PrivacyController extends JDBCPrivacyRepository {
+public class PrivacyController {
     JDBCPrivacyRepository controller = new JDBCPrivacyRepository();
     public Privacy getPrivacy(User u){
 

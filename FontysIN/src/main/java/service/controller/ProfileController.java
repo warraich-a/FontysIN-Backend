@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ProfileController extends JDBCProfileRepository {
+public class ProfileController {
 
 
     public List<About> getAbout(int userId, int profileId){
@@ -359,17 +359,5 @@ public class ProfileController extends JDBCProfileRepository {
         }
         return null;
     }
-//    public int createAddress(Address address) throws DatabaseException, SQLException {
-//        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-//        int id = profileRepository.createAddress(address);
-//        if( id != 0) {
-//            return id;
-//        }
-//        else
-//        {
-//            return 0;
-//        }
-//    }
-
 
 }

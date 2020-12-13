@@ -6,7 +6,7 @@ import service.repository.CommentsRepository;
 
 import java.util.List;
 
-public class CommentController extends CommentsRepository {
+public class CommentController {
     public List<Comments> getCommets(){
         CommentsRepository commentsRepository = new CommentsRepository();
 

@@ -14,7 +14,7 @@ import service.repository.*;
 
 import java.sql.SQLException;
 import java.util.List;
-public class UserController extends UserRepository {
+public class UserController {
     JDBCProfileRepository profileRepository = new JDBCProfileRepository();
     ProfileController controller = new ProfileController();
     public User getUserByEmail(String email) {

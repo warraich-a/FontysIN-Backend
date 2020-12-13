@@ -8,7 +8,7 @@ import service.repository.MessagesRepository;
 
 import java.util.List;
 
-public class MessageController extends MessagesRepository {
+public class MessageController {
     /**
      *
      * @param message

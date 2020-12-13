@@ -1,7 +1,5 @@
 package service.model;
 
-import service.repository.JDBCProfileRepository;
-
 import java.time.LocalDate;
 
 

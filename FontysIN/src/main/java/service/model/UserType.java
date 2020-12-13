@@ -1,6 +1,6 @@
 package service.model;
 
-public enum UserType extends User {
+public enum UserType {
     FontysStaff,
     Student,
     Teacher

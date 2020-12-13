@@ -6,7 +6,7 @@ import service.repository.LikeRepository;
 
 import java.util.List;
 
-public class LikeController extends LikeRepository {
+public class LikeController {
     public List<Like> getLikes(){
         LikeRepository likeRepository = new LikeRepository();
 

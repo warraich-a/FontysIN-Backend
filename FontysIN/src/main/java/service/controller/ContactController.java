@@ -8,7 +8,7 @@ import service.repository.DatabaseException;
 
 import java.util.List;
 
-public class ContactController extends ContactsRepository {
+public class ContactController {
     ContactsRepository contactsRepository = new ContactsRepository();
 
     /**

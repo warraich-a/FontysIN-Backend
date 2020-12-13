@@ -649,7 +649,7 @@ public class FakeDataProfile {
             return false;
         }
 
-        old.setUserPhoneNumber(e.getUserPhoneNumber());
+//        old.setUserPhoneNumber(e.getUserPhoneNumber());
 
        // old.setUserImage(e.getUserImage());
         //old.setUserDepartment(e.getUserDepartment());

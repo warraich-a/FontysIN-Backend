@@ -7,7 +7,7 @@ import service.repository.PostsRepository;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PostController extends PostsRepository {
+public class PostController {
     public List<Posts> getPosts(){
         PostsRepository postsRepository = new PostsRepository();
 

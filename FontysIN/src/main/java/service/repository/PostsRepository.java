@@ -72,7 +72,7 @@ public class PostsRepository extends JDBCRepository {
         PostController persistenceController = new PostController();
         ContactController contactController = new ContactController();
         List < Integer > friendsId = new ArrayList < >();
-        friends = contactController.getAllContactsDTO(id);
+        friends = contactController.getAcceptedContactsDTO(id);
         allPosts = persistenceController.getPostsByDate();
         for (ContactDTO f: friends) {
             friendsId.add(f.getFriend().getId());

@@ -725,22 +725,22 @@ public class UsersResources {
 		}
 	}
 
-	@PermitAll
-	@POST //POST at http://localhost:XXXX/profile/experience
-	@Path("newAddress")
-	public Response createAddress(Address address) throws DatabaseException, SQLException {
-
-		ProfileController profileController = new ProfileController();
-
-		int id = profileController.createAddress(address);
-		if (id == 0)
-		{
-			String entity =  "Address Id is zero";
-			return Response.status(Response.Status.CONFLICT).entity(entity).build();
-		} else {
-			return Response.ok(id).build();
-		}
-	}
+//	@PermitAll
+//	@POST //POST at http://localhost:XXXX/profile/experience
+//	@Path("newAddress")
+//	public Response createAddress(Address address) throws DatabaseException, SQLException {
+//
+//		ProfileController profileController = new ProfileController();
+//
+////		int id = profileController.createAddress(address);
+//		if (id == 0)
+//		{
+//			String entity =  "Address Id is zero";
+//			return Response.status(Response.Status.CONFLICT).entity(entity).build();
+//		} else {
+//			return Response.ok(id).build();
+//		}
+//	}
 
 
 	// to add a new experience
