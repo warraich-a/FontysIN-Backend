@@ -33,7 +33,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -68,7 +68,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -105,7 +105,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -145,7 +145,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -185,7 +185,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -226,7 +226,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -271,7 +271,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -315,7 +315,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -355,7 +355,7 @@ public class UserRepository extends JDBCRepository {
                 String password = resultSet.getString("password");
 //                String phoneNumber = resultSet.getString("phoneNr");
 //                int addressId = resultSet.getInt("addressId");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
                 String userNumber = resultSet.getString("userNumber");
@@ -391,7 +391,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -434,7 +434,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
@@ -472,7 +472,7 @@ public class UserRepository extends JDBCRepository {
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
 
                 UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
