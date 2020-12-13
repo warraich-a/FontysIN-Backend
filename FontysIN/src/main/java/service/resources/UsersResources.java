@@ -1,7 +1,9 @@
 package service.resources;
 
 import service.PersistenceController;
-import service.controller.*;
+import service.controller.ContactController;
+import service.controller.PrivacyController;
+import service.controller.UserController;
 import service.model.*;
 import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
