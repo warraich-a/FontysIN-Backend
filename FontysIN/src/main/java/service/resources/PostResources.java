@@ -6,7 +6,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import service.controller.LikeController;
 import service.controller.PostController;
-import service.controller.ProfileController;
 import service.model.Like;
 import service.model.Posts;
 
@@ -103,9 +102,15 @@ private UriInfo uriInfo;
 
     @GET@Path("{id}/likes")@Produces(MediaType.APPLICATION_JSON)
     public Response getPostLikes(@PathParam("id") int stNr) {
+        if(likeController.getLikesByPost(stNr).size()>0) {
+            GenericEntity<List<Like>> entity = new GenericEntity<>(likeController.getLikesByPost(stNr)) {
+            };
 
-        GenericEntity < List < Like >> entity = new GenericEntity < >(likeController.getLikesByPost(stNr)) {};
-        return Response.ok(entity).build();
+            return Response.ok(entity).build();
+        }
+        else{
+            return Response.ok("0").build();
+        }
     }
 
     @GET@Path("{id}/likes/count")@Produces(MediaType.TEXT_PLAIN)
@@ -116,13 +121,15 @@ private UriInfo uriInfo;
         return Response.ok(entity.size()).build();
     }
 
-    @GET@Path("{id}/likes/user/{userId}")@Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("{id}/likes/user/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getPostLikeByUser(@PathParam("id") int stNr, @PathParam("userId") int userId) {
 
         Like like = likeController.getPostLikesByUser(stNr, userId);
 
         if (like == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("").build();
+            return Response.ok("0").build();
         } else {
             return Response.ok(like).build();
         }
@@ -146,7 +153,6 @@ private UriInfo uriInfo;
 
     @PermitAll@PUT@Path("{userId}/uploadPicture")@Consumes(MediaType.MULTIPART_FORM_DATA)@Produces(MediaType.APPLICATION_JSON)
     public String uploadPdfFile(@FormDataParam("file") InputStream fileInputStream, @FormDataParam("file") FormDataContentDisposition fileMetaData, @PathParam("userId") int id) throws Exception {
-        ProfileController profileController = new ProfileController();
 
         String UPLOAD_PATH = "src/images/";
         String project_path = System.getProperty("user.dir");
