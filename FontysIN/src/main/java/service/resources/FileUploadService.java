@@ -2,7 +2,8 @@ package service.resources;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import service.PersistenceController;
+import service.controller.ProfileController;
+
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
@@ -38,7 +39,8 @@ public class FileUploadService {
     public String uploadPdfFile(  @FormDataParam("file") InputStream fileInputStream,
                                     @FormDataParam("file") FormDataContentDisposition fileMetaData,
                                   @PathParam("userId") int id) throws Exception {
-        PersistenceController persistenceController = new PersistenceController();
+        ProfileController profileController = new ProfileController();
+
         String UPLOAD_PATH = "src/images/";
         String project_path =System.getProperty("user.dir");
 //        String UPLOAD_PATH = "C:/Users/anasw/fontysin-semester-3-client/FontyIN-Client/src/assets/";
@@ -57,7 +59,7 @@ public class FileUploadService {
                 out.write(bytes, 0, read);
             }
 //            if(persistenceController.uploadPicture(id, fileMetaData.getFileName()+id)){
-                if(persistenceController.uploadPicture(id, file.getName())){
+                if(profileController.uploadPicture(id, file.getName())){
 
                     out.flush();
                 out.close();

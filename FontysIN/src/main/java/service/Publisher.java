@@ -15,7 +15,7 @@ class Publisher {
 
 
     public static void main(String[] args) {
-          PersistenceController persistenceController = new PersistenceController();
+
 
 
 

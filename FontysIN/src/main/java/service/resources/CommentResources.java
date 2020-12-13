@@ -1,6 +1,6 @@
 package service.resources;
 
-import service.PersistenceController;
+
 import service.controller.CommentController;
 import service.model.Comments;
 

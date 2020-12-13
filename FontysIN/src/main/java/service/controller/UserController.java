@@ -1,6 +1,6 @@
 package service.controller;
 
-import service.PersistenceController;
+
 import service.model.*;
 import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 public class UserController {
     JDBCProfileRepository profileRepository = new JDBCProfileRepository();
-    PersistenceController controller = new PersistenceController();
+    ProfileController controller = new ProfileController();
     public User getUserByEmail(String email) {
 
         try{
