@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class JDBCComments extends JDBCRepository {
+public class CommentsRepository extends JDBCRepository {
     public Collection < Comments > getComments() throws DatabaseException {
         List < Comments > comments = new ArrayList < >();
 

@@ -59,6 +59,7 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
                     "X-Requested-With, Authorization, " +
                     "Accept-Version, Content-MD5, CSRF-Token, Content-Type, " +
                     "visitorId");
+
         }
 
         // Cross origin requests can be either simple requests
@@ -66,6 +67,7 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         // to both type of requests. Only preflight requests
         // need the previously added headers.
         response.getHeaders().add("Access-Control-Allow-Origin", "*");
+        response.getHeaders().add("Access-Control-Allow-Headers", "location");
     }
 
 }

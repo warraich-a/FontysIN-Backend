@@ -2,10 +2,11 @@ package service.resources;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import service.PersistenceController;
+
 
 import service.controller.LikeController;
 import service.controller.PostController;
+import service.controller.ProfileController;
 import service.model.Like;
 import service.model.Posts;
 
@@ -145,7 +146,8 @@ private UriInfo uriInfo;
 
     @PermitAll@PUT@Path("{userId}/uploadPicture")@Consumes(MediaType.MULTIPART_FORM_DATA)@Produces(MediaType.APPLICATION_JSON)
     public String uploadPdfFile(@FormDataParam("file") InputStream fileInputStream, @FormDataParam("file") FormDataContentDisposition fileMetaData, @PathParam("userId") int id) throws Exception {
-        PersistenceController persistenceController = new PersistenceController();
+        ProfileController profileController = new ProfileController();
+
         String UPLOAD_PATH = "src/images/";
         String project_path = System.getProperty("user.dir");
 

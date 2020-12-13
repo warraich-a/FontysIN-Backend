@@ -2,13 +2,13 @@ package service.controller;
 
 import service.model.Like;
 import service.repository.DatabaseException;
-import service.repository.JDBCLikeRepository;
+import service.repository.LikeRepository;
 
 import java.util.List;
 
-public class LikeController {
+public class LikeController extends LikeRepository {
     public List<Like> getLikes(){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+        LikeRepository likeRepository = new LikeRepository();
 
         try {
             List<Like> likes = (List<Like>) likeRepository.getLikes();
@@ -21,7 +21,7 @@ public class LikeController {
     }
 
     public List<Like> getLikesByPost(int id){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+        LikeRepository likeRepository = new LikeRepository();
 
         try {
             List<Like> likes = (List<Like>) likeRepository.getLikesByPost(id);
@@ -34,7 +34,7 @@ public class LikeController {
     }
 
     public Like getPostLikesByUser(int id,int userId){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+        LikeRepository likeRepository = new LikeRepository();
 
         try {
             Like like = (Like) likeRepository.getPostLikeByUSer(id,userId);
@@ -47,7 +47,7 @@ public class LikeController {
     }
 
     public boolean addLike (Like like){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+        LikeRepository likeRepository = new LikeRepository();
 
         try {
             return likeRepository.addLike(like);
@@ -58,7 +58,7 @@ public class LikeController {
     }
 
     public boolean deleteLike(Like like){
-        JDBCLikeRepository likeRepository = new JDBCLikeRepository();
+        LikeRepository likeRepository = new LikeRepository();
 
         try {
             return likeRepository.deleteLike(like);

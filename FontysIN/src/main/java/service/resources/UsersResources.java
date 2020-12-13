@@ -1,7 +1,10 @@
 package service.resources;
 
-import service.PersistenceController;
-import service.controller.*;
+
+import service.controller.ContactController;
+import service.controller.PrivacyController;
+import service.controller.ProfileController;
+import service.controller.UserController;
 import service.model.*;
 import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
@@ -23,7 +26,9 @@ import java.util.StringTokenizer;
 @Path("users")
 public class UsersResources {
 	private final FakeDataProfile fakeDataProfile = FakeDataProfile.getInstance();
-	PersistenceController persistenceController = new PersistenceController();
+	ProfileController persistenceController = new ProfileController();
+	ContactController contactController = new ContactController();
+
 	@Context
 	private UriInfo uriInfo;
 
@@ -32,11 +37,7 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
 	public Response getContacts(@PathParam("id") int id) { // returns users list or contacts list?
-		System.out.println("Contacts route");
-
-//		List<ContactDTO> contacts = fakeDataProfile.getAllContactsDTO(id);
-		PersistenceController controller = new PersistenceController();
-		List<ContactDTO> contacts = controller.getAllContactsDTO(id);
+		List<ContactDTO> contacts = contactController.getAllContactsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -46,11 +47,7 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
 	@Path("{id}/acceptedContacts")
 	public Response getAcceptedContacts(@PathParam("id") int id) { // returns users list or contacts list?
-		System.out.println("Accepted Contacts route");
-
-//		List<ContactDTO> contacts = fakeDataProfile.getContactsDTO(id);
-		PersistenceController controller = new PersistenceController();
-		List<ContactDTO> contacts = controller.getAcceptedContactsDTO(id);
+		List<ContactDTO> contacts = contactController.getAcceptedContactsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -61,9 +58,7 @@ public class UsersResources {
 	@Path("{id}/requests")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContactsRequests(@PathParam("id") int id) { // returns users list or contacts list?
-//		List<ContactDTO> requests = fakeDataProfile.getContactsRequestsDTO(id);
-		PersistenceController controller = new PersistenceController();
-		List<ContactDTO> requests = controller.getContactsRequestsDTO(id);
+		List<ContactDTO> requests = contactController.getContactsRequestsDTO(id);
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(requests) { };
 
@@ -74,11 +69,7 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts")
 	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
-//		int contactId = fakeDataProfile.createContact(contact);
-		PersistenceController controller = new PersistenceController();
-		int contactId = controller.createContact(contact);
-
-		System.out.println("Contact id route " + contactId);
+		int contactId = contactController.createContact(contact);
 
 		if (contactId < 0){ // already friends
 			//String entity =  "You and user with id " + contact.getFriendId() + " are already connected.";
@@ -95,9 +86,7 @@ public class UsersResources {
 	@DELETE //DELETE at http://localhost:XXXX/users/1/contacts/2
 	@Path("{userId}/contacts/{contactId}")
 	public Response deleteContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId) {
-//		fakeDataProfile.deleteContact(userId, contactId);
-		PersistenceController controller = new PersistenceController();
-		controller.deleteContact(userId, contactId);
+		contactController.deleteContact(userId, contactId);
 
 		return Response.noContent().build();
 	}
@@ -107,9 +96,7 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
 	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact) {
-//		fakeDataProfile.updateContact(contactId, contact);
-		PersistenceController controller = new PersistenceController();
-		controller.updateContact(contactId, contact);
+		contactController.updateContact(contactId, contact);
 
 		return Response.noContent().build();
 	}
@@ -117,9 +104,9 @@ public class UsersResources {
 	@GET
 	@Path("{userId}")
 	public Response getUser(@PathParam("userId") int userId) {
-//		UserDTO user = fakeDataProfile.getUserDTO(userId);
-		PersistenceController controller = new PersistenceController();
-		UserDTO user = controller.getUserDTO(userId);
+		UserDTO user = contactController.getUserDTO(userId);
+
+		System.out.println("Get user " + user);
 
 		if(user != null){
 			return Response.ok(user).build(); // Status ok 200, return user
@@ -134,10 +121,11 @@ public class UsersResources {
 	@Path("p/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GeUser(@PathParam("userId") int userId) {
-		PersistenceController persistenceController = new PersistenceController();
+		ProfileController profileController = new ProfileController();
 
 
-		User u = persistenceController.getUser(userId);
+
+		User u = profileController.getUser(userId);
 		System.out.println("User id " + userId);
 		System.out.println("Got user by id " + u);
 		if (u == null) {
@@ -153,9 +141,9 @@ public class UsersResources {
 	@Path("{userId}/profiles/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetProfile(@PathParam("userId") int userId) {
-		PersistenceController persistenceController = new PersistenceController();
+		ProfileController profileController = new ProfileController();
 
-		List<Profile> foundProfiles = persistenceController.getProfile(userId); // getting the profile by userid
+		List<Profile> foundProfiles = profileController.getProfile(userId); // getting the profile by userid
 
 		if (foundProfiles == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid student number.").build();
@@ -278,11 +266,11 @@ public class UsersResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
 		UserController controller = new UserController();
-		PersistenceController persistenceController = new PersistenceController();
+		ProfileController profileController = new ProfileController();
 		PrivacyController pController = new PrivacyController();
 		User loggedInUser = controller.getUserFromAuth(auth);
 
-		List<Experience> experienceByProfileId = persistenceController.getExperience(userId, profileId);
+		List<Experience> experienceByProfileId = profileController.getExperience(userId, profileId);
 
 		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EXPERIENCE);
 
@@ -304,10 +292,12 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/educations")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
+		ProfileController profileController = new ProfileController();
+
 		UserController controller = new UserController();
 		User loggedInUser = controller.getUserFromAuth(auth);
 		PrivacyController pController = new PrivacyController();
-		List<Education> educations = persistenceController.getEducations(userId, profileId);
+		List<Education> educations = profileController.getEducations(userId, profileId);
 		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
 		if(AllowToSee){
 		if (educations == null) {
@@ -325,9 +315,10 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/abouts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response  GetAbouts(@PathParam("userId") int userId, @PathParam("profileId") int profileId) {
-		PersistenceController persistenceController = new PersistenceController();
+		ProfileController profileController = new ProfileController();
 
-		List<About> abouts = persistenceController.getAbout(userId, profileId);
+
+		List<About> abouts = profileController.getAbout(userId, profileId);
 
 		if (abouts == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -341,10 +332,12 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/skills")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
+		ProfileController profileController = new ProfileController();
+
 		UserController controller = new UserController();
 		User loggedInUser = controller.getUserFromAuth(auth);
 		PrivacyController pController = new PrivacyController();
-		List<Skill> skills = persistenceController.getSkills(userId, profileId);
+		List<Skill> skills = profileController.getSkills(userId, profileId);
 		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.SKILLS);
 		if(AllowToSee){
 			if (skills == null) {
@@ -365,9 +358,10 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/profiles/{profileId}/experiences/new")
 	public Response CreateExperience(@PathParam("userId") int userId, @PathParam("profileId") int profileId, Experience e) {
-		PersistenceController persistenceController = new PersistenceController();
+		ProfileController profileController = new ProfileController();
 
-		if (!persistenceController.addExperience(e))
+
+		if (!profileController.addExperience(e))
 		{
 			String entity =  "Experience Exists";
 			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
@@ -384,8 +378,9 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/educations/new")
 	public Response CreateEducation(@PathParam("userId") int userId, @PathParam("profileId") int profileId, Education e) {
 
-		PersistenceController persistenceController = new PersistenceController();
-		if (!persistenceController.addEducation(e))
+		ProfileController profileController = new ProfileController();
+
+		if (!profileController.addEducation(e))
 		{
 			String entity =  "Education Exists";
 			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
@@ -403,8 +398,9 @@ public class UsersResources {
 	public Response deleteUserExperience(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										 @PathParam("experinceID") int experinceID) {
 
-		PersistenceController controller = new PersistenceController();
-		controller.DeleteExperience(userId,profileID,experinceID);
+		ProfileController profileController = new ProfileController();
+
+		profileController.DeleteExperience(userId,profileID,experinceID);
 
 		return Response.noContent().build();
 	}
@@ -415,8 +411,9 @@ public class UsersResources {
 	public Response deleteUserEducation(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 										@PathParam("educationID") int educationID) {
 
-		PersistenceController controller = new PersistenceController();
-		controller.DeleteEducation(userId,profileID,educationID);
+		ProfileController profileController = new ProfileController();
+
+		profileController.DeleteEducation(userId,profileID,educationID);
 
 		return Response.noContent().build();
 	}
@@ -427,8 +424,9 @@ public class UsersResources {
 	public Response deleteUserSkill(@PathParam("userId") int userId ,@PathParam("profileID") int profileID,
 									@PathParam("skillId") int skillId) {
 
-		PersistenceController controller = new PersistenceController();
-		controller.DeleteSkill(userId,profileID,skillId);
+		ProfileController profileController = new ProfileController();
+
+		profileController.DeleteSkill(userId,profileID,skillId);
 
 		return Response.noContent().build();
 	}
@@ -439,8 +437,9 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/abouts/new")
 	public Response CreateAbout(@PathParam("userId") int userId, @PathParam("profileId") int profileId, About a) {
 
-		PersistenceController persistenceController = new PersistenceController();
-		if (!persistenceController.addAbout(a))
+		ProfileController profileController = new ProfileController();
+
+		if (!profileController.addAbout(a))
 		{
 			String entity =  "About Exists";
 			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
@@ -458,8 +457,9 @@ public class UsersResources {
 	@Path("{userId}/profiles/{profileId}/skills/new")
 	public Response CreateAbout(@PathParam("userId") int userId, @PathParam("profileId") int profileId, Skill s) {
 
-		PersistenceController persistenceController = new PersistenceController();
-		if (!persistenceController.addSkill(s, userId))
+		ProfileController profileController = new ProfileController();
+
+		if (!profileController.addSkill(s, userId))
 		{
 			String entity =  "SKill Exists";
 			// throw new Exception(Response.Status.CONFLICT, "This topic already exists");
@@ -510,14 +510,15 @@ public class UsersResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
 		UserController controller = new UserController();
-		PersistenceController persistenceController = new PersistenceController();
+		ProfileController profileController = new ProfileController();
+
 
 		if(!controller.isIdAndAuthSame(id, auth)){
 			return Response.status(Response.Status.UNAUTHORIZED).
 					entity("Invalid email and/or password.").build();
 		}else {
 
-			User u = persistenceController.getUser(id);
+			User u = profileController.getUser(id);
 			if (u == null) {
 				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 			} else {
@@ -602,8 +603,9 @@ public class UsersResources {
 	@Path("{userId}/profiles/new")
 	public Response AddProfile(@PathParam("userId") int userId, Profile p) throws DatabaseException, SQLException {
 
-		PersistenceController persistenceController = new PersistenceController();
-		int id = persistenceController.addProfile(p, userId);
+		ProfileController profileController = new ProfileController();
+
+		int id = profileController.addProfile(p, userId);
 		if (id == 0)
 		{
 			String entity =  "Profile Exists";
@@ -688,8 +690,9 @@ public class UsersResources {
 	@Produces (MediaType.APPLICATION_JSON)
 	@Path("fontysLocations")
 	public Response getFontysLocations (){
-		PersistenceController persistenceController = new PersistenceController();
-		List<Location> locations =persistenceController.getFontysLocations();
+		ProfileController profileController = new ProfileController();
+
+		List<Location> locations =profileController.getFontysLocations();
 
 		if (locations == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -707,8 +710,9 @@ public class UsersResources {
 	@Produces (MediaType.APPLICATION_JSON)
 	@Path("fontysDepartments")
 	public Response getFontysDepartments (){
-		PersistenceController persistenceController = new PersistenceController();
-		List<Department> departments =persistenceController.getFontysDepartments();
+		ProfileController profileController = new ProfileController();
+
+		List<Department> departments =profileController.getFontysDepartments();
 
 		if (departments == null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
@@ -726,8 +730,9 @@ public class UsersResources {
 	@Path("newAddress")
 	public Response createAddress(Address address) throws DatabaseException, SQLException {
 
-		PersistenceController persistenceController = new PersistenceController();
-		int id = persistenceController.createAddress(address);
+		ProfileController profileController = new ProfileController();
+
+		int id = profileController.createAddress(address);
 		if (id == 0)
 		{
 			String entity =  "Address Id is zero";

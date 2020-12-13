@@ -13,8 +13,8 @@ public class User {
     private String lastName; // user's last name
     private String email; // user's email
     private String password; // user's password
-    private String phoneNumber; // user's phone number
-    private int addressId; // user's address
+//    private String phoneNumber; // user's phone number
+//    private int addressId; // user's address
     private int locationId; // user's location
     private int departmentId; // user's department
     private String userNumber; // user's number
@@ -115,21 +115,21 @@ public class User {
         this.password = password;
     }
 
-    public String getUserPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setUserPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public int getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(int addressId) {
-        this.addressId = addressId;
-    }
+//    public String getUserPhoneNumber() {
+//        return phoneNumber;
+//    }
+//
+//    public void setUserPhoneNumber(String phoneNumber) {
+//        this.phoneNumber = phoneNumber;
+//    }
+//
+//    public int getAddressId() {
+//        return addressId;
+//    }
+//
+//    public void setAddressId(int addressId) {
+//        this.addressId = addressId;
+//    }
 
     public int getLocationId() {
         return locationId;
@@ -171,13 +171,13 @@ public class User {
         this.userType = userType;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+//    public String getPhoneNumber() {
+//        return phoneNumber;
+//    }
+//
+//    public void setPhoneNumber(String phoneNumber) {
+//        this.phoneNumber = phoneNumber;
+//    }
 
     public Education getEducation() {
         return education;
@@ -217,8 +217,8 @@ public class User {
                 ", Last Name: '" + lastName + '\'' +
                 ", Email: '" + email + '\'' +
                 ", Password: '" + password + '\'' +
-                ", Phone Number: " + phoneNumber + '\'' +
-                ", Address: " + addressId + '\'' +
+//                ", Phone Number: " + phoneNumber + '\'' +
+//                ", Address: " + addressId + '\'' +
                 ", Location: " + locationId + '\'' +
                 ", Department: " + departmentId + '\'' +
                 ", User Number: " + userNumber + '\'' +

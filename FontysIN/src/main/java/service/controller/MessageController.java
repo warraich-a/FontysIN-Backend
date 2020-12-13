@@ -8,7 +8,7 @@ import service.repository.MessagesRepository;
 
 import java.util.List;
 
-public class MessageController {
+public class MessageController extends MessagesRepository {
     /**
      *
      * @param message
@@ -91,20 +91,21 @@ public class MessageController {
      * @return the id of the created conversation
      */
     public boolean startNewConversation(ConversationDTO conversationDTO) {
-
         MessagesRepository messagesRepository = new MessagesRepository();
-
         try {
             if (!messagesRepository.restartNewConversation(conversationDTO)){
-                messagesRepository.startNewConversation(conversationDTO);
+                messagesRepository.startConversation(conversationDTO);
+            }
+            else{
+                messagesRepository.startConversation(conversationDTO);
             }
             System.out.println("return true if correct");
 
             return true;
         } catch (DatabaseException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
 

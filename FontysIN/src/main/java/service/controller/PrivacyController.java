@@ -1,19 +1,15 @@
 package service.controller;
 
-import service.PersistenceController;
+
 import service.model.Privacy;
+import service.model.User;
 import service.model.dto.ContactDTO;
 import service.repository.DatabaseException;
-import service.repository.JDBCProfileRepository;
+import service.repository.JDBCPrivacyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import service.model.*;
-import service.repository.*;
-
-import java.sql.SQLException;
-import java.util.List;
-public class PrivacyController {
+public class PrivacyController extends JDBCPrivacyRepository {
     JDBCPrivacyRepository controller = new JDBCPrivacyRepository();
     public Privacy getPrivacy(User u){
 
@@ -55,12 +51,14 @@ public class PrivacyController {
 
     }
     public boolean AllowedToSee(int userId, int loggedinId, ProfilePart profilePart){
-        PersistenceController controller = new PersistenceController();
-        User loggedIn = controller.getUser(loggedinId); // The logged in user
+        ProfileController profileController = new ProfileController();
+
+        ContactController contactController = new ContactController();
+        User loggedIn = profileController.getUser(loggedinId); // The logged in user
         Privacy settings = GetPrivacySetting(userId);// Get privacy settings for the user i am visiting
-        User userImVisiting = controller.getUser(userId); // So if im logged in user 3 and visit 5
+        User userImVisiting = profileController.getUser(userId); // So if im logged in user 3 and visit 5
         List<ContactDTO> friends = new ArrayList<>();
-        friends = controller.getAllContactsDTO(loggedIn.getId());
+        friends = contactController.getAllContactsDTO(loggedIn.getId());
         List<Integer> friendsId = new ArrayList<>();
         for (ContactDTO f: friends) { // Same as Denys :D
             friendsId.add(f.getFriend().getId());

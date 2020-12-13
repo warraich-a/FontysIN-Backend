@@ -2,13 +2,13 @@ package service.controller;
 
 import service.model.Comments;
 import service.repository.DatabaseException;
-import service.repository.JDBCComments;
+import service.repository.CommentsRepository;
 
 import java.util.List;
 
-public class CommentController {
+public class CommentController extends CommentsRepository {
     public List<Comments> getCommets(){
-        JDBCComments commentsRepository = new JDBCComments();
+        CommentsRepository commentsRepository = new CommentsRepository();
 
         try {
             List<Comments> comments = (List<Comments>) commentsRepository.getComments();
@@ -23,7 +23,7 @@ public class CommentController {
     }
 
     public List<Comments> getCommetsByPostId(int pId){
-        JDBCComments commentsRepository = new JDBCComments();
+        CommentsRepository commentsRepository = new CommentsRepository();
 
         try {
             List<Comments> comments = (List<Comments>) commentsRepository.getCommentsByPostId(pId);
@@ -38,7 +38,7 @@ public class CommentController {
     }
 
     public Comments getCommet(int Id){
-        JDBCComments commentsRepository = new JDBCComments();
+        CommentsRepository commentsRepository = new CommentsRepository();
 
         try {
             Comments comm = (Comments) commentsRepository.getComment(Id);
@@ -53,7 +53,7 @@ public class CommentController {
     }
 
     public boolean addComment(Comments comm){
-        JDBCComments commentsRepository = new JDBCComments();
+        CommentsRepository commentsRepository = new CommentsRepository();
 
         try {
             return commentsRepository.addComm(comm);
@@ -64,7 +64,7 @@ public class CommentController {
     }
 
     public boolean updateComment(Comments comm){
-        JDBCComments commentsRepository = new JDBCComments();
+        CommentsRepository commentsRepository = new CommentsRepository();
 
         try {
             return commentsRepository.updateComm(comm);
@@ -75,7 +75,7 @@ public class CommentController {
     }
 
     public boolean deleteComment(Comments comm){
-        JDBCComments commentsRepository = new JDBCComments();
+        CommentsRepository commentsRepository = new CommentsRepository();
 
         try {
             return commentsRepository.deleteComment(comm);

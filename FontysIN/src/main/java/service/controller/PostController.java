@@ -2,14 +2,14 @@ package service.controller;
 
 import service.model.Posts;
 import service.repository.DatabaseException;
-import service.repository.JDBCPosts;
+import service.repository.PostsRepository;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class PostController {
+public class PostController extends PostsRepository {
     public List<Posts> getPosts(){
-        JDBCPosts postsRepository = new JDBCPosts();
+        PostsRepository postsRepository = new PostsRepository();
 
         try {
             List<Posts> posts = (List<Posts>) postsRepository.getPosts();
@@ -24,7 +24,7 @@ public class PostController {
     }
 
     public List<Posts> getPostsByDate(){
-        JDBCPosts postsRepository = new JDBCPosts();
+        PostsRepository postsRepository = new PostsRepository();
 
         try {
             List<Posts> posts = (List<Posts>) postsRepository.getPostsByDate();
@@ -39,7 +39,7 @@ public class PostController {
     }
 
     public List<Posts> getNewsfeed(int uId){
-        JDBCPosts postsRepository = new JDBCPosts();
+        PostsRepository postsRepository = new PostsRepository();
 
         try {
             List<Posts> posts = (List<Posts>) postsRepository.getNewsfeed(uId);
@@ -55,7 +55,7 @@ public class PostController {
         return null;
     }
     public List<Posts> getPostByUserId(int uId){
-        JDBCPosts postsRepository = new JDBCPosts();
+        PostsRepository postsRepository = new PostsRepository();
 
         try {
             List<Posts> posts = (List<Posts>) postsRepository.getPostsByUserId(uId);
@@ -69,7 +69,7 @@ public class PostController {
         return null;
     }
     public Posts getPost(int Id){
-        JDBCPosts postsRepository = new JDBCPosts();
+        PostsRepository postsRepository = new PostsRepository();
 
         try {
             Posts post = (Posts) postsRepository.getPost(Id);
@@ -84,7 +84,7 @@ public class PostController {
     }
 
     public boolean addPost(Posts post){
-        JDBCPosts postsRepository = new JDBCPosts();
+        PostsRepository postsRepository = new PostsRepository();
 
         try {
             return postsRepository.addPosts(post);
@@ -95,7 +95,7 @@ public class PostController {
     }
 
     public boolean updatePost(Posts post){
-        JDBCPosts postsRepository = new JDBCPosts();
+        PostsRepository postsRepository = new PostsRepository();
 
         try {
             return postsRepository.updatePost(post);
@@ -106,7 +106,7 @@ public class PostController {
     }
 
     public boolean deletePost(Posts post){
-        JDBCPosts postsRepository = new JDBCPosts();
+        PostsRepository postsRepository = new PostsRepository();
 
         try {
             return postsRepository.deletePost(post);
