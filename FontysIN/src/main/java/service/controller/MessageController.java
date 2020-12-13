@@ -91,9 +91,7 @@ public class MessageController {
      * @return the id of the created conversation
      */
     public boolean startNewConversation(ConversationDTO conversationDTO) {
-
         MessagesRepository messagesRepository = new MessagesRepository();
-
         try {
             if (!messagesRepository.restartNewConversation(conversationDTO)){
                 messagesRepository.startConversation(conversationDTO);
@@ -106,8 +104,8 @@ public class MessageController {
             return true;
         } catch (DatabaseException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
 

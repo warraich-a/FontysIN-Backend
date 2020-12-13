@@ -154,14 +154,14 @@ public class MessagesRepository extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 String firstName = resultSet.getString("userFirstName");
                 String lastName = resultSet.getString("userLastName");
-                String image = resultSet.getString("userImage");
+                String image = "assets/" + resultSet.getString("userImage");
                 int profileId = resultSet.getInt("userProfileId");
 
                 // Receiver
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
                 String friendLastName = resultSet.getString("friendLastName");
-                String friendImage = resultSet.getString("friendImage");
+                String friendImage = "assets/" +  resultSet.getString("friendImage");
                 int friendProfileId = resultSet.getInt("friendProfileId");
 
                 // Create message
@@ -248,14 +248,14 @@ public class MessagesRepository extends JDBCRepository {
                 int userId = resultSet.getInt("userId");
                 String firstName = resultSet.getString("userFirstName");
                 String lastName = resultSet.getString("userLastName");
-                String image = resultSet.getString("userImage");
+                String image = "assets/" + resultSet.getString("userImage");
                 int profileId = resultSet.getInt("userProfileId");
 
                 // Receiver
                 int friendId = resultSet.getInt("friendId");
                 String friendFirstName = resultSet.getString("friendFirstName");
                 String friendLastName = resultSet.getString("friendLastName");
-                String friendImage = resultSet.getString("friendImage");
+                String friendImage = "assets/" + resultSet.getString("friendImage");
                 int friendProfileId = resultSet.getInt("friendProfileId");
 
                 UserDTO sender = new UserDTO(userId, profileId, firstName, lastName, image);
@@ -313,7 +313,7 @@ public class MessagesRepository extends JDBCRepository {
     }
 
     // start new conversation with new user
-    public void startConversation(ConversationDTO conversation) throws DatabaseException {
+    public int startConversation(ConversationDTO conversation) throws DatabaseException {
 
         Connection connection = this.getDatabaseConnection();
 
@@ -321,7 +321,7 @@ public class MessagesRepository extends JDBCRepository {
                 "WHERE NOT EXISTS (SELECT secondUserId FROM conversations WHERE secondUserId = ? AND firstUserId = ?) LIMIT 1";
         try {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, conversation.getFirstUserId());
             preparedStatement.setInt(2, conversation.getSecondUserId());
             preparedStatement.setInt(3, conversation.getSecondUserId());
@@ -330,11 +330,20 @@ public class MessagesRepository extends JDBCRepository {
             System.out.println("before prepared startemnet");
 
             preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+
+            int conversationId = -1;
+            if(resultSet != null && resultSet.next()) {
+                conversationId = resultSet.getInt(1);
+            }
+
             connection.commit();
             connection.close();
 
             System.out.println("after prepared startemnet");
 
+            return conversationId;
 
         } catch (SQLException throwable) {
             throw  new DatabaseException("Cannot create new conversation.", throwable);

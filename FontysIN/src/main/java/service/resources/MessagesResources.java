@@ -62,7 +62,6 @@ public class MessagesResources {
     @Path("newConversation")
     @PermitAll
     public Response StartNewConversation(ConversationDTO conversationDTO) {
-
         MessageController messageController = new MessageController();
 
         if (!messageController.startNewConversation(conversationDTO)){
