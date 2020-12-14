@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import service.PersistenceController;
 import service.controller.UserController;
 
+import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -14,7 +15,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Base64;
+import java.util.List;
+import java.util.StringTokenizer;
 
 @Provider
 public class AuthenticationFilter implements ContainerRequestFilter {
@@ -31,6 +34,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         Method method = resourceInfo.getResourceMethod();
 
         if (method.isAnnotationPresent(PermitAll.class)) {
+            return;
+        }
+
+        // if access is denied for all: deny access
+        if (method.isAnnotationPresent(DenyAll.class)) {
+            Response response = Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to perform this action").build();
+            requestContext.abortWith(response);
             return;
         }
 
