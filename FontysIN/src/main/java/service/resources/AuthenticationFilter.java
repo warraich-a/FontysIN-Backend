@@ -2,8 +2,7 @@ package service.resources;
 
 
 import io.jsonwebtoken.Claims;
-import service.PersistenceController;
-import service.controller.UserController;
+import service.controller.*;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
