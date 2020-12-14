@@ -4,17 +4,14 @@ import service.PersistenceController;
 import service.model.Privacy;
 import service.model.dto.ContactDTO;
 import service.repository.DatabaseException;
-import service.repository.JDBCProfileRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import service.model.*;
 import service.repository.*;
 
-import java.sql.SQLException;
-import java.util.List;
 public class PrivacyController {
-    JDBCPrivacyRepository controller = new JDBCPrivacyRepository();
+    PrivacyRepository controller = new PrivacyRepository();
     public Privacy getPrivacy(User u){
 
         try {

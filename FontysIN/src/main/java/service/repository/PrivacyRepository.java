@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class JDBCPrivacyRepository  extends JDBCRepository{
+public class PrivacyRepository extends JDBCRepository{
 
     public boolean createPrivacy(Privacy p) throws DatabaseException{
         Connection connection = this.getDatabaseConnection();

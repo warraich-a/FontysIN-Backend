@@ -3,13 +3,9 @@ package service.repository;
 import service.model.*;
 import service.model.dto.UserDTO;
 
-import javax.sql.rowset.JdbcRowSet;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class JDBCProfileRepository extends JDBCRepository {
@@ -438,7 +434,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
 
     public User getUserById(int userId) throws DatabaseException, SQLException {
-        JDBCPrivacyRepository privacyRepository = new JDBCPrivacyRepository();
+        PrivacyRepository privacyRepository = new PrivacyRepository();
         User user = null;
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM users where id =?";
@@ -1392,7 +1388,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     public boolean createUser(User user) throws DatabaseException, SQLException {
-        JDBCPrivacyRepository privacyRepository = new JDBCPrivacyRepository();
+        PrivacyRepository privacyRepository = new PrivacyRepository();
         boolean exist;
         exist = false;
         for (User u: getUsers()) {
