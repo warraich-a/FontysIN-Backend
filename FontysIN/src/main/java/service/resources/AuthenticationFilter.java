@@ -1,8 +1,7 @@
 package service.resources;
 
 
-import io.jsonwebtoken.Claims;
-import service.controller.*;
+import service.controller.UserController;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
@@ -24,7 +23,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
     // requestContext contains information about the HTTP request message
-    UserController controller = new UserController();
+
 
     @Override
     public void filter(ContainerRequestContext requestContext)
@@ -44,7 +43,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
 
         final String AUTHORIZATION_PROPERTY = "Authorization";
-        
+        final String AUTHENTICATION_SCHEME = "Basic";
+
         //Get request headers
         final MultivaluedMap<String, String> headers = requestContext.getHeaders();
         //Fetch authorization header
@@ -56,15 +56,16 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             requestContext.abortWith(response);
             return;
         }
-
-
-        final String token = authorization.get(0);
-        Claims decoded = controller.decodeJWT(token);
-
-        String email = decoded.getIssuer();
-        String password = decoded.getSubject();
-
-
+        //Get encoded username and password
+        final String encodedCredentials =
+                authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+        //Decode username and password into one string
+        String credentials = new
+                String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
+        //Split username and password tokens in credentials
+        final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
+        final String email = tokenizer.nextToken();
+        final String password = tokenizer.nextToken();
         System.out.println(email);
         System.out.println(password);
         //Check if username and password are valid (e.g., database)
@@ -80,9 +81,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         System.out.println("VALID USER");
     }
    private boolean isValidUser(String email, String password) {
-
+       UserController controller = new UserController();
        boolean valid;
-
       valid = controller.login(email, password);
       return valid;
     }
