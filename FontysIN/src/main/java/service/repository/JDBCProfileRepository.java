@@ -2,16 +2,16 @@ package service.repository;
 
 import service.model.*;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCProfileRepository extends JDBCRepository {
 
-    public List<Profile> getProfile(int givenUserId) throws DatabaseException, SQLException {
+
+    public List<Profile> getProfile(int givenUserId) throws DatabaseException, SQLException, URISyntaxException {
         List<Profile> foundProfiles = new ArrayList<>();
 
 
@@ -47,7 +47,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return foundProfiles;
     }
 
-    public List<Experience> getExperiences(int userId, int givenProfileId) throws DatabaseException, SQLException {
+    public List<Experience> getExperiences(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
         List<Experience> foundExperiences = new ArrayList<>();
         for (Profile p: getProfile(userId)) {
             if (p.getUserId() == userId && p.getId() == givenProfileId) {
@@ -102,8 +102,73 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
         return null;
     }
+    public Experience getExperienceById(int expId) throws DatabaseException, URISyntaxException {
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM experiences WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, expId);
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()){
+                connection.close();
+                throw new DatabaseException("Experience with id " + expId + " cannot be found");
+            } else {
+                int Id = resultSet.getInt("id");
+                int profileId = resultSet.getInt("profileId");
+                String title = resultSet.getString("title");
+                String company = resultSet.getString("company");
+                String 	location= resultSet.getString("location");
+                String content = resultSet.getString("title");
+                String empType = resultSet.getString("employmentType");
+                int startDate = resultSet.getInt("startDate");
+                int endDate = resultSet.getInt("endDate");
+                String description = resultSet.getString("description");
+                EmplymentType r = EmplymentType.FullTime;
+                if (empType == "FullTime")
+                {
+                    r = EmplymentType.FullTime;
+                }
+                else if (empType == "PartTime")
+                {
+                    r = EmplymentType.PartTime;
+                }
+                else  if (empType == "FreeLancer")
+                {
+                    r = EmplymentType.FreeLancer;
+                }
+                Experience e = new Experience(Id, profileId, title, company, r, location,  startDate, endDate, description);
+                connection.close();
+                return e;
+            }
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read products from the database.",throwable);
+        }
+    }
+    public boolean updateExperience(Experience ex) throws DatabaseException, URISyntaxException {
+        Connection connection = this.getDatabaseConnection();
+        String sql = "UPDATE `experiences` SET `title`=?,`company`=?,`location`=?,`employmentType`=?,`startDate`=?,`endDate`=?,`description`=? WHERE id=?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
 
-    public List<Education> getEducations(int userId, int givenProfileId) throws DatabaseException, SQLException {
+            statement.setString(1, ex.getTitle());
+            statement.setString(2, ex.getCompany());
+            statement.setString(3, ex.getLocation());
+            statement.setString(4, String.valueOf(ex.getEmploymentType()));
+            statement.setInt(5, ex.getStartDateExperience());
+            statement.setInt(6, ex.getEndDateExperience());
+            statement.setString(7, ex.getDescriptionExperience());
+            statement.setInt(8, ex.getId());
+            statement.executeUpdate();
+            connection.commit();
+            connection.close();
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<Education> getEducations(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
         List<Education> foundEducations = new ArrayList<>();
 
         for (Profile p: getProfile(userId)) {
@@ -144,8 +209,60 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
         return null;
     }
+    public Education getEducationById(int eduId) throws DatabaseException, URISyntaxException {
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM educations WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, eduId);
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()){
+                connection.close();
+                throw new DatabaseException("Experience with id " + eduId + " cannot be found");
+            } else {
+                int id = resultSet.getInt("id");
+                int profileId = resultSet.getInt("profileId");
+                String school = resultSet.getString("school");
+                int startYear = resultSet.getInt("startYear");
+                int endYear = resultSet.getInt("endYear");
+                String degree = resultSet.getString("degree");
+                String fieldStudy = resultSet.getString("fieldStudy");
+                String description = resultSet.getString("description");
 
-    public List<About> getAbout(int userId, int givenProfileId) throws DatabaseException, SQLException {
+                Education e = new Education(id, profileId, school, startYear, endYear, degree, fieldStudy, description);
+                connection.close();
+                return e;
+            }
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read products from the database.",throwable);
+        }
+    }
+    public boolean updateEducation(Education education) throws DatabaseException, URISyntaxException {
+        Connection connection = this.getDatabaseConnection();
+        String sql = "UPDATE `educations` SET `school`=?,`startYear`=?,`endYear`=?,`degree`=?,`fieldStudy`=?,`description`=? WHERE id=?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+
+            statement.setString(1, education.getSchool());
+            statement.setInt(2, education.getStartYearEducation());
+            statement.setInt(3, education.getEndYearEducation());
+            statement.setString(4,  education.getDegreeEducation());
+            statement.setString(5,  education.getFieldStudy());
+            statement.setString(6,  education.getDescriptionEducation());
+            statement.setInt(7, education.getId());
+
+            statement.executeUpdate();
+            connection.commit();
+            connection.close();
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<About> getAbout(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
         List<About> foundAbout = new ArrayList<>();
 
         for (Profile p: getProfile(userId)) {
@@ -181,8 +298,51 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
         return null;
     }
+    public About getAboutById(int aboId) throws DatabaseException, URISyntaxException {
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM about WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, aboId);
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()){
+                connection.close();
+                throw new DatabaseException("Experience with id " + aboId + " cannot be found");
+            } else {
+                int id = resultSet.getInt("id");
+                int profileId = resultSet.getInt("profileId");
+                String content = resultSet.getString("content");
 
-    public List<Skill> getSkills(int userId, int givenProfileId) throws DatabaseException, SQLException {
+                About e = new About(id, profileId, content);
+                connection.close();
+                return e;
+            }
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read products from the database.",throwable);
+        }
+    }
+
+    public boolean updateAbout(About about) throws DatabaseException, URISyntaxException {
+        Connection connection = this.getDatabaseConnection();
+        String sql = "UPDATE `about` SET `content`=? WHERE id=?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, about.getContent());
+            statement.setInt(2, about.getId());
+
+
+
+            statement.executeUpdate();
+            connection.commit();
+            connection.close();
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<Skill> getSkills(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
         List<Skill> foundSkill = new ArrayList<>();
 
         for (Profile p: getProfile(userId)) {
@@ -220,14 +380,13 @@ public class JDBCProfileRepository extends JDBCRepository {
         return null;
     }
 
-    public User getUser(int userId) throws DatabaseException, SQLException {
-        User user = null;
+    public List<User> getUsers() throws DatabaseException, SQLException, URISyntaxException {
+        List<User> allUsers = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
-        String sql = "SELECT * FROM users where id =?";
+        String sql = "SELECT * FROM users";
         PreparedStatement statement = connection.prepareStatement(sql);
         try {
-            statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -236,8 +395,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 String userType = resultSet.getString("userType");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNr");
-                int addressId = resultSet.getInt("addressId");
+//                String phoneNumber = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
                 String image = resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
@@ -256,36 +415,85 @@ public class JDBCProfileRepository extends JDBCRepository {
                     r = UserType.FontysStaff;
                 }
 
-                user = new User(id, firstName, lastName, r, email, password, phoneNumber, addressId, locationId, departmentId,  userNumber, image);
+                User u = new User(id, firstName, lastName, r, email, password, locationId, departmentId,  userNumber, image);
+                allUsers.add(u);
 
             }
-            connection.setAutoCommit(false);
-
-            connection.commit();
             statement.close();
             connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
-        } finally {
-            if (statement != null) statement.close();
+        }
+        finally {
+            if  (statement != null) statement.close();
             if (connection != null) connection.close();
+        }
+        return allUsers;
+    }
 
+
+    public User getUserById(int userId) throws DatabaseException, SQLException, URISyntaxException {
+        PrivacyRepository privacyRepository = new PrivacyRepository();
+        User user = null;
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM users where id =?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        try {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String userType = resultSet.getString("userType");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+//                String phoneNumber = resultSet.getString("phoneNr");
+//                int addressId = resultSet.getInt("addressId");
+                String image = resultSet.getString("image");
+                int locationId = resultSet.getInt("locationId");
+                int departmentId = resultSet.getInt("departmentId");
+                String userNumber = resultSet.getString("userNumber");
+                UserType r = UserType.Teacher;
+                if (userType == "student")
+                {
+                    r = UserType.Student;
+                }
+                else if (userType == "employee")
+                {
+                    r = UserType.Teacher;
+                }
+                else  if (userType == "admin")
+                {
+                    r = UserType.FontysStaff;
+                }
+
+                user = new User(id, firstName, lastName, r, email, password, locationId, departmentId,  userNumber, image);
+                Privacy privacy = privacyRepository.getPrivacyByUser(user);
+                user.setPrivacy(privacy);
+            }
+            connection.setAutoCommit(false);
+
+            connection.commit();
+            statement.close();
+
+            connection.close();
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read data from the database.", throwable);
+        }
+        finally {
+            if  (statement != null) statement.close();
+            if (connection != null) connection.close();
         }
         return user;
     }
 
-//    public User getUser(int userId) throws DatabaseException, SQLException {
-//
-//        for (User u: getUsers()) {
-//            if (u.getId() == userId) {
-//                return u;
-//            }
-//        }
-//        return null;
-//    }
 
-    public boolean createExperience(Experience experience) throws DatabaseException, SQLException {
+
+    public boolean createExperience(Experience experience) throws DatabaseException, SQLException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
 
         Boolean exist;
@@ -327,7 +535,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
     }
 
-    public boolean createEducation(Education education) throws DatabaseException, SQLException {
+    public boolean createEducation(Education education) throws DatabaseException, SQLException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
 
         Boolean exist;
@@ -366,7 +574,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return true;
     }
 
-    public boolean createSkill(Skill skill, int userId) throws DatabaseException, SQLException {
+    public boolean createSkill(Skill skill, int userId) throws DatabaseException, SQLException, URISyntaxException {
 
 
         for (Skill p: getSkills(userId, skill.getProfileId())) {
@@ -401,7 +609,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
 
-    public int createProfile(Profile newProfile, int userId) throws DatabaseException, SQLException {
+    public int createProfile(Profile newProfile, int userId) throws DatabaseException, SQLException, URISyntaxException {
 
         int id = 0;
         boolean exist;
@@ -432,7 +640,7 @@ public class JDBCProfileRepository extends JDBCRepository {
                     System.out.println("Generated Emp Id: "+rs.getInt(1));
                     id = rs.getInt(1);
                 }
-                
+
 //                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 //                ps.setString(1, "id");
                 connection.setAutoCommit(false);
@@ -454,7 +662,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return 0;
     }
 
-    public boolean createAbout(About about) throws DatabaseException, SQLException {
+    public boolean createAbout(About about) throws DatabaseException, SQLException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "INSERT INTO about ( profileId, content) VALUES (?,?) ";
@@ -486,26 +694,28 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
 
-    public boolean uploadImage(int userId, String path) throws DatabaseException, SQLException, IOException {
+    public boolean uploadImage(int userId, String path) throws DatabaseException, SQLException, IOException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "update users set image=? where id = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
-
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        System.out.println("Path " + path);
 
         try {
             preparedStatement.setString(1, path);
             preparedStatement.setInt(2, userId);
+
             preparedStatement.executeUpdate();
 
             connection.setAutoCommit(false);
 
 
             connection.commit();
-            connection.close();
             preparedStatement.close();
-            return true;
 
+            connection.close();
+            return true;
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot upload image.", throwable);
@@ -514,9 +724,10 @@ public class JDBCProfileRepository extends JDBCRepository {
             if (preparedStatement != null) preparedStatement.close();
             if (connection != null) connection.close();
         }
+
     }
 
-    public List<Location> getFontysLocation() throws DatabaseException, SQLException {
+    public List<Location> getFontysLocation() throws DatabaseException, SQLException, URISyntaxException {
         List<Location> fontysLocations = new ArrayList<>();
 
             Connection connection = this.getDatabaseConnection();
@@ -536,6 +747,8 @@ public class JDBCProfileRepository extends JDBCRepository {
                 }
                 connection.setAutoCommit(false);
                 connection.commit();
+                statement.close();
+                connection.close();
 
             } catch (SQLException throwable) {
                 throw new DatabaseException("Cannot read students from the database.", throwable);
@@ -547,7 +760,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return fontysLocations;
     }
 
-    public List<Department> getFontysDepartments() throws DatabaseException, SQLException {
+    public List<Department> getFontysDepartments() throws DatabaseException, SQLException, URISyntaxException {
         List<Department> fontysDepartments = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
@@ -566,6 +779,8 @@ public class JDBCProfileRepository extends JDBCRepository {
             connection.setAutoCommit(false);
             statement.close();
             connection.commit();
+            statement.close();
+            connection.close();
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read students from the database.", throwable);
@@ -577,8 +792,579 @@ public class JDBCProfileRepository extends JDBCRepository {
         return fontysDepartments;
     }
 
+    public Address getAddressById(int aId) throws DatabaseException, URISyntaxException {
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM addresses WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, aId);
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()){
+                connection.close();
+                throw new DatabaseException("Experience with id " + aId + " cannot be found");
+            } else {
+                int id = resultSet.getInt("id");
+                String 	streetName = resultSet.getString("streetName");
+                String houseNumber = resultSet.getString("houseNumber");
+                String city = resultSet.getString("city");
+                String zipcode = resultSet.getString("zipcode");
 
-    public int createAddress(Address address) throws DatabaseException, SQLException {
+                Address a = new Address(id, streetName,houseNumber,city,zipcode);
+                connection.close();
+                return a;
+            }
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read products from the database.",throwable);
+        }
+    }
+
+
+    // ----------------------------------------- Privacy
+
+    // ----------------------------------------- Privacy ^
+    /******************Ranim******************Deleting data in profile page*********************/
+
+    // Delete education in profile page
+    public void deleteEducation(int userId, int profileId, int educationId) throws DatabaseException, URISyntaxException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM educations where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,educationId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            connection.close();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete education.", throwable);
+        }
+
+    }
+
+    // Delete experience in profile page
+    public void deleteExperience(int userId, int profileId, int experienceId) throws DatabaseException, URISyntaxException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM experiences where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,experienceId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            connection.close();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete experience.", throwable);
+        }
+
+    }
+
+    // Delete skill in profile page
+    public void deleteSkill(int userId, int profileId, int skillId) throws DatabaseException, URISyntaxException {
+
+        Connection connection = this.getDatabaseConnection();
+
+        String sql = "Delete FROM skills where id = ? AND profileId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,skillId);
+            preparedStatement.setInt(2,profileId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            connection.close();
+        }
+        catch (SQLException throwable){
+            throw  new DatabaseException("Cannot delete skill.", throwable);
+        }
+
+    }
+
+//    /**************Ranim******************************Filter users**************************/
+//    //get all users with the given user type from data base
+//    public List<UserDTO> getUsersByType(UserType type) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
+//                "LEFT JOIN users u ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
+//                "WHERE u.userType = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setString(1, type.name()); // set user type parameter
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//            connection.close();
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    //get all users with the given location id from data base
+//    public List<UserDTO> getUsersByLocation(int lId) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
+//                "LEFT JOIN users u ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
+//                "WHERE u.locationId = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setInt(1, lId); // set location id parameter
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    //get all users with the given department id from data base
+//    public List<UserDTO> getUsersByDepartment(int bId) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles p " +
+//                "LEFT JOIN users u ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
+//                "WHERE u.departmentId = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setInt(1, bId); // set user fontys location parameter
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    //get all users with the given start study year from data base
+//    public List<UserDTO> getUsersByStartStudyYear(int year) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
+//                "FROM ((educations INNER JOIN profiles p ON educations.profileId = p.id) " +
+//                "INNER JOIN users u ON p.userId = u.id) " +
+//                "LEFT JOIN privacy pr ON pr.userId = u.id " +
+//                "WHERE school = 'Fontys' AND u.userType = 'Student' " +
+//                "AND startYear = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setInt(1, year); // set user start study year parameter
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    //get all users with the given start work year from data base
+//    public List<UserDTO> getUsersByStartWorkYear(int year) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
+//                "FROM ((experiences INNER JOIN profiles p ON experiences.profileId = p.id) " +
+//                "INNER JOIN users u ON p.userId = u.id) LEFT JOIN privacy pr ON pr.userId = u.id " +
+//                "WHERE company = 'Fontys' AND u.userType != 'Student' AND startDate = ? " +
+//                "AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setInt(1, year); // set user start study year parameter
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    //get all users with the given user type, location and department from data base
+//    public List<UserDTO> getUsersByUserTypeAndLocationAndDepartment(UserType type, int lId, int dId) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId " +
+//                "FROM profiles p LEFT JOIN users u ON u.id = p.userId " +
+//                "LEFT JOIN privacy pr ON pr.userId = u.id " +
+//                "WHERE userType = ? AND locationId = ? " +
+//                "AND departmentId = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setString(1, type.name()); // set user start study year parameter
+//            statement.setInt(2, lId); // set user location id parameter
+//            statement.setInt(3, dId); // set user department id parameter
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    //get all users with the given user type, location and department from data base
+//    public List<UserDTO> getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(UserType type, int year, int lId, int dId) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
+//                "FROM ((educations INNER JOIN profiles p ON educations.profileId = p.id) " +
+//                "INNER JOIN users u ON p.userId = u.id) " +
+//                "LEFT JOIN privacy pr ON pr.userId = u.id WHERE school = 'Fontys' " +
+//                "AND u.userType = ? AND u.locationId = ? AND u.departmentId = ? " +
+//                "AND startYear = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//
+//            statement.setString(1, type.name()); // set user start study year parameter
+//            statement.setInt(2, lId); // set user location id parameter
+//            statement.setInt(3, dId); // set user department id parameter
+//            statement.setInt(4, year); // set user start study year parameter
+//
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    //get all users with the given user type, location and department from data base
+//    public List<UserDTO> getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(UserType type, int year, int lId, int dId) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, u.image, p.id AS profileId " +
+//                "FROM ((experiences INNER JOIN profiles p ON experiences.profileId = p.id) " +
+//                "INNER JOIN users u ON p.userId = u.id) LEFT JOIN privacy pr ON pr.userId = u.id " +
+//                "WHERE company = 'Fontys' AND u.userType = ? AND u.locationId = ? " +
+//                "AND u.departmentId = ? AND startDate = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//
+//            statement.setString(1, type.name()); // set user start study year parameter
+//            statement.setInt(2, lId); // set user location id parameter
+//            statement.setInt(3, dId); // set user department id parameter
+//            statement.setInt(4, year); // set user start study year parameter
+//
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//    /***********************RANIM****************************Norrmal searching*******************************/
+//
+//    //get all users withing fontys
+//    public List<User> getAllUsers() throws DatabaseException {
+//
+//        List<User> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT * FROM users";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String email = resultSet.getString("email");
+//                UserType userType = UserType.valueOf(resultSet.getString("userType"));
+//                String password = resultSet.getString("password");
+////                String phoneNumber = resultSet.getString("phoneNr");
+////                int addressId = resultSet.getInt("addressId");
+//                String image = resultSet.getString("image");
+//                int locationId = resultSet.getInt("locationId");
+//                int departmentId = resultSet.getInt("departmentId");
+//                String userNumber = resultSet.getString("userNumber");
+//
+//                User u = new User(id, firstName, lastName, userType, email, password,  locationId, departmentId,  userNumber, image);
+//                filtered.add(u);
+//
+//            }
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    /***************************************List User DTO**************************************/
+//    //get all users to make use of userdto
+//    public List<UserDTO> getUsersDTO() throws DatabaseException {
+//
+//        List<UserDTO> users = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM profiles AS p " +
+//                "LEFT JOIN users u ON u.id = p.userId GROUP BY u.id";
+//
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                users.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return users;
+//    }
+//
+//    /****************************************Using search box in the filter page*********************************************************/
+//    //get all users with the given user type, location, department and user name from data base
+//    public List<UserDTO> getUsersByUserTypeLocationDeoartmentAndName(String chars, int lId, int dId, UserType type) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId " +
+//                "FROM users u INNER JOIN profiles p ON u.id = p.userId " +
+//                "LEFT JOIN privacy pr ON pr.userId = u.id WHERE u.firstName LIKE CONCAT ('%', ? ,'%') " +
+//                "AND u.locationId = ? AND u.departmentId = ? AND userType = ? AND pr.hideFromSearch = 0 GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setString(1, chars); // set characters
+//            statement.setInt(2, lId); // set user location id parameter
+//            statement.setInt(3, dId); // set user department id parameter
+//            statement.setString(4, type.name()); // set user type parameter
+//
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+//
+//    //get all users with the given first name chars
+//    public List<UserDTO> getUsersByFirstNameChars(String chars) throws DatabaseException {
+//
+//        List<UserDTO> filtered = new ArrayList<>();
+//
+//        Connection connection = this.getDatabaseConnection();
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, image, p.id AS profileId FROM users u " +
+//                "INNER JOIN profiles p ON u.id = p.userId LEFT JOIN privacy pr ON pr.userId = u.id " +
+//                "WHERE pr.hideFromSearch = 0 AND u.firstName LIKE CONCAT ('%', ? ,'%') GROUP BY u.id";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setString(1, chars); // set characters
+//
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()){
+//                int id = resultSet.getInt("id");
+//                String firstName = resultSet.getString("firstName");
+//                String lastName = resultSet.getString("lastName");
+//                String image = resultSet.getString("image");
+//                int profileId = resultSet.getInt("profileId");
+//
+//                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+//
+//                filtered.add(userDTO);
+//
+//            }
+//
+//            connection.close();
+//
+//
+//        } catch (SQLException throwable) {
+//            throw new DatabaseException("Cannot read users from the database.",throwable);
+//        }
+//        return filtered;
+//    }
+
+    public int createAddress(Address address) throws DatabaseException, SQLException, URISyntaxException {
         int id = 0;
         Connection connection = this.getDatabaseConnection();
         ResultSet rs = null;
@@ -614,45 +1400,75 @@ public class JDBCProfileRepository extends JDBCRepository {
         return id;
     }
 
-    public boolean createUser(User user) throws DatabaseException, SQLException {
-
+    public boolean createUser(User user) throws DatabaseException, SQLException, URISyntaxException {
+        PrivacyRepository privacyRepository = new PrivacyRepository();
+        boolean exist;
+        exist = false;
+        for (User u: getUsers()) {
+            if(u.getEmail().equals(user.getEmail())){
+                exist = true;
+//                deleteAdrress(u.getAddressId());
+            } else if(u.getFirstName().equals(user.getFirstName())
+                    && u.getUserNumber().equals(user.getUserNumber())){
+                exist = true;
+            }
+        }
         Connection connection = this.getDatabaseConnection();
 
-        String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, phoneNr, addressId, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        if(!exist) {
 
-        try {
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, String.valueOf(user.getUserType()));
-            preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setString(6, user.getPhoneNumber());
-            preparedStatement.setInt(7, user.getAddressId());
-            preparedStatement.setString(8, user.getImg());
-            preparedStatement.setInt(9, user.getLocationId());
-            preparedStatement.setInt(10, user.getDepartmentId());
-            preparedStatement.setString(11, user.getUserNumber());
+        ResultSet rs = null;
+        int userId = 9999;
 
-            preparedStatement.executeUpdate();
+            String sql = "INSERT INTO users (firstName, lastName,  userType, email, password, image, locationId, departmentId, userNumber) VALUES (?,?,?,?,?,?,?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-//            rs = preparedStatement.getGeneratedKeys();
+            try {
+                preparedStatement.setString(1, user.getFirstName());
+                preparedStatement.setString(2, user.getLastName());
+                preparedStatement.setString(3, String.valueOf(user.getUserType()));
+                preparedStatement.setString(4, user.getEmail());
+                preparedStatement.setString(5, user.getPassword());
+//                preparedStatement.setString(6, user.getPhoneNumber());
+//                preparedStatement.setInt(7, user.getAddressId());
+                preparedStatement.setString(6, user.getImg());
+                preparedStatement.setInt(7, user.getLocationId());
+                preparedStatement.setInt(8, user.getDepartmentId());
+                preparedStatement.setString(9, user.getUserNumber());
+
+                preparedStatement.executeUpdate();
+
+
 //            if(rs != null && rs.next()){
 //                System.out.println("Generated Emp Id: "+rs.getInt(1));
 //                id = rs.getInt(1);
 //            }
-            connection.setAutoCommit(false);
-            preparedStatement.close();
-            connection.commit();
 
-        } catch (SQLException throwable) {
-            throw new DatabaseException("Something Wrong with query", throwable);
-        }
-        finally {
-            if (preparedStatement != null) preparedStatement.close();
-            if (connection != null) connection.close();
+                rs = preparedStatement.getGeneratedKeys();
+                if(rs != null && rs.next()){
+                    System.out.println("Generated Emp Id: "+rs.getInt(1));
+                    userId = rs.getInt(1);
+                }
+                connection.setAutoCommit(false);
+                connection.commit();
+                preparedStatement.close();
+                connection.close();
+
+                Privacy p = new Privacy(userId);
+                privacyRepository.createPrivacy(p);
+
+                return true;
+            } catch (SQLException throwable) {
+                throw new DatabaseException("Something Wrong with query", throwable);
+            } finally {
+
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            }
 
         }
-        return true;
+        return false;
+
     }
+
 }
