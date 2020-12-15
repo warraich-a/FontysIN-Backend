@@ -32,6 +32,7 @@ public class UserRepository extends JDBCRepository {
             while (resultSet.next()){
                 int id = resultSet.getInt("id");
                 String firstName = resultSet.getString("firstName");
+
                 String lastName = resultSet.getString("lastName");
                 String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");

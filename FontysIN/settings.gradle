@@ -1,2 +1,4 @@
 rootProject.name = 'FontysIN'
+include 'src:Test'
+findProject(':src:Test')?.name = 'Test'
 

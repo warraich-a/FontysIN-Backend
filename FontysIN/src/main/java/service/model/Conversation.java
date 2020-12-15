@@ -23,6 +23,9 @@ public class Conversation {
         this.messages = new ArrayList<>();
     }
 
+    public Conversation() {
+    }
+
     public int getId() {
         return id;
     }
