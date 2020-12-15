@@ -4,6 +4,7 @@ import service.model.Comments;
 import service.repository.DatabaseException;
 import service.repository.CommentsRepository;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class CommentController {
@@ -16,7 +17,7 @@ public class CommentController {
 
 
             return comments;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -31,7 +32,7 @@ public class CommentController {
 
 
             return comments;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -46,7 +47,7 @@ public class CommentController {
 
 
             return comm;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -57,7 +58,7 @@ public class CommentController {
 
         try {
             return commentsRepository.addComm(comm);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -68,7 +69,7 @@ public class CommentController {
 
         try {
             return commentsRepository.updateComm(comm);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -79,7 +80,7 @@ public class CommentController {
 
         try {
             return commentsRepository.deleteComment(comm);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;

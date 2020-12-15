@@ -1,19 +1,16 @@
 package service.repository;
 
-import service.model.*;
-import service.model.dto.*;
+import service.model.Privacy;
+import service.model.User;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class PrivacyRepository extends JDBCRepository{
 
-    public boolean createPrivacy(Privacy p) throws DatabaseException{
+    public boolean createPrivacy(Privacy p) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         boolean exist = false;
         String sql = "INSERT INTO privacy(`userId`,`educationSetting`, `experienceSetting`, `skillSetting`,`hideFromSearch`) VALUES (?,?,?,?,?)";
@@ -47,7 +44,7 @@ public class PrivacyRepository extends JDBCRepository{
         return false;
     }
 
-    public List<Privacy> getPrivacyList() throws DatabaseException {
+    public List<Privacy> getPrivacyList() throws DatabaseException, URISyntaxException {
         List<Privacy> privacyList = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
@@ -120,7 +117,7 @@ public class PrivacyRepository extends JDBCRepository{
         return privacyList;
     }
 
-    public Privacy getPrivacyByUser(User user) throws DatabaseException {
+    public Privacy getPrivacyByUser(User user) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM privacy WHERE userId = ?";
         try {
@@ -191,7 +188,7 @@ public class PrivacyRepository extends JDBCRepository{
             throw new DatabaseException("Cannot read products from the database.",throwable);
         }
     }
-    public boolean updatePrivacy(Privacy a) throws DatabaseException {
+    public boolean updatePrivacy(Privacy a) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "UPDATE `privacy` SET `educationSetting`=?,`experienceSetting`=?,`skillSetting`=?,`hideFromSearch`=? WHERE id=?";
         try {

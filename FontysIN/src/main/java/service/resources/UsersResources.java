@@ -15,6 +15,7 @@ import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -599,7 +600,7 @@ public class UsersResources {
 
 	@POST //POST at http://localhost:XXXX/profile/experience
 	@Path("{userId}/profiles/new")
-	public Response AddProfile(@PathParam("userId") int userId, Profile p) throws DatabaseException, SQLException {
+	public Response AddProfile(@PathParam("userId") int userId, Profile p) throws DatabaseException, SQLException, URISyntaxException {
 
 		ProfileController profileController = new ProfileController();
 

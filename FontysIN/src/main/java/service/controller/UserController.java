@@ -1,29 +1,25 @@
 package service.controller;
 
 
-import service.model.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import service.model.User;
+import service.model.UserType;
 import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
 import service.repository.JDBCProfileRepository;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import service.repository.UserRepository;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
+import java.net.URISyntaxException;
 import java.security.Key;
-
-import io.jsonwebtoken.*;
-
-import java.util.Date;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
-import service.model.*;
-import service.repository.*;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 public class UserController {
     JDBCProfileRepository profileRepository = new JDBCProfileRepository();
@@ -39,7 +35,7 @@ public class UserController {
                 }
             }
 
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -119,7 +115,7 @@ public class UserController {
             {
                 return false;
             }
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -166,7 +162,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -187,7 +183,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -207,7 +203,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -227,7 +223,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -247,7 +243,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -270,7 +266,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -294,7 +290,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -318,7 +314,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -337,7 +333,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -362,7 +358,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -383,7 +379,7 @@ public class UserController {
             System.out.println(users);
             return users;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
