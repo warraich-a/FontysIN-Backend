@@ -153,3 +153,5 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
 /src/main/resources/app.properties
 /src/test/resources/app.properties
+/src/test/resources/data.sql
+/src/test/resources/
