@@ -2,6 +2,7 @@ package service.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Blob;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -12,15 +13,15 @@ public class Posts {
     private int id;
     private int userId;
     private String content;
-    private Date date;
-    private Blob image;
+    private Timestamp date;
+    private String image;
 
 
-    public Posts(){
+    public Posts() {
 
     }
 
-    public Posts(int id, int userId, String content, Date date, Blob image){
+    public Posts(int id, int userId, String content, Timestamp date, String image) {
         setId(id);
         setUserId(userId);
         setContent(content);
@@ -28,13 +29,7 @@ public class Posts {
         setImage(image);
 
     }
-    public Posts(int id, int userId, String content, Date date){
-        setId(id);
-        setUserId(userId);
-        setContent(content);
-        setDate(date);
 
-    }
 
     public int getId() {
         return id;
@@ -57,21 +52,19 @@ public class Posts {
         this.content = content;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
-    public Blob getImage() {
+    public String getImage() {
         return image;
     }
-    public void setImage(Blob image) {
+    public void setImage(String image) {
         this.image = image;
     }
-
-
 
 
 

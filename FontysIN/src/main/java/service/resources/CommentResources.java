@@ -1,41 +1,32 @@
 package service.resources;
 
-import service.model.Comments;
-import service.model.Posts;
-import service.repository.FakeDataPostComm;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import service.controller.CommentController;
+import service.model.Comments;
+
+import javax.ws.rs. * ;
+import javax.ws.rs.core. * ;
 import java.net.URI;
 import java.util.List;
 
 @Path("/comments")
-public class CommentResources {
-    @Context
-    private UriInfo uriInfo;
+public class CommentResources {@Context
+private UriInfo uriInfo;
 
-    private static final FakeDataPostComm fakeDataStore = new FakeDataPostComm();
+    CommentController persistenceController = new CommentController();
 
-    @GET
-    @Path("")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET@Path("")@Produces(MediaType.APPLICATION_JSON)
     public Response getAllComments() {
-        GenericEntity<List<Comments>> entity = new GenericEntity<>(fakeDataStore.getCommentsList()) {  };
+        GenericEntity < List < Comments >> entity = new GenericEntity < >(persistenceController.getCommets()) {};
         return Response.ok(entity).build();
-    }
-    @GET
-    @Path("post/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    }@GET@Path("post/{id}")@Produces(MediaType.APPLICATION_JSON)
     public Response getAllCommentsByPostId(@PathParam("id") int stNr) {
-        GenericEntity<List<Comments>> entity = new GenericEntity<>(fakeDataStore.getCommentsListByPost(stNr)) {  };
+        GenericEntity < List < Comments >> entity = new GenericEntity < >(persistenceController.getCommetsByPostId(stNr)) {};
         return Response.ok(entity).build();
-    }
-    @GET
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    }@GET@Path("{id}")@Produces(MediaType.APPLICATION_JSON)
     public Response getCommentPath(@PathParam("id") int stNr) {
 
-        Comments comment = fakeDataStore.getComment(stNr);
+        Comments comment = persistenceController.getCommet(stNr);
         if (comment == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid comment id.").build();
         } else {
@@ -43,13 +34,10 @@ public class CommentResources {
         }
     }
 
-
-    @GET
-    @Path("{id}/content")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET@Path("{id}/content")@Produces(MediaType.APPLICATION_JSON)
     public Response getCommentContent(@PathParam("id") int stNr) {
 
-        Comments comment = fakeDataStore.getComment(stNr);
+        Comments comment = persistenceController.getCommet(stNr);
         if (comment == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid comment id.").build();
         } else {
@@ -57,21 +45,21 @@ public class CommentResources {
         }
     }
 
-    @DELETE
-    @Path("{id}")
+    @DELETE@Path("{id}")
     public Response deleteComment(@PathParam("id") int stNr) {
-        fakeDataStore.deleteComment(stNr);
+        persistenceController.deleteComment(persistenceController.getCommet(stNr));
 
         return Response.noContent().build();
     }
 
-    @POST
-    @Path("")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.TEXT_PLAIN})
+    @POST@Path("")@Consumes({
+            MediaType.APPLICATION_JSON
+    })@Produces({
+            MediaType.TEXT_PLAIN
+    })
     public Response createComment(Comments comm) {
-        if (!fakeDataStore.addComment(comm)){
-            String entity =  "comm with same comm id " + comm.getId() + " already exists.";
+        if (!persistenceController.addComment(comm)) {
+            String entity = "comm with same comm id " + comm.getId() + " already exists.";
             return Response.status(Response.Status.CONFLICT).entity(entity).build();
         } else {
             String url = uriInfo.getAbsolutePath() + "/" + comm.getId();
@@ -80,12 +68,11 @@ public class CommentResources {
         }
     }
 
-    @PUT
-    @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces({MediaType.TEXT_PLAIN})
+    @PUT@Path("{id}")@Consumes(MediaType.APPLICATION_JSON)@Produces({
+            MediaType.TEXT_PLAIN
+    })
     public Response updateComment(Comments comm) {
-        if (fakeDataStore.updateComment(comm)) {
+        if (persistenceController.updateComment(comm)) {
             return Response.noContent().build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid comm id.").build();

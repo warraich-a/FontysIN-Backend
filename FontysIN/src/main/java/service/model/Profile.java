@@ -12,6 +12,12 @@ public class Profile {
         this.userId = userId;
         this.language = language;
     }
+    public Profile(int id, int userId, String language) {
+        this.id = id;
+        this.userId = userId;
+        this.language = language;
+    }
+
 
     public Profile() {
         this.id = idSeeder;

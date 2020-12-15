@@ -2,6 +2,7 @@ package service.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Blob;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -12,13 +13,13 @@ public class Comments {
     private int userId;
     private int postId;
     private String content;
-    private Date date;
+    private Timestamp date;
     private String username;
 
-    public Comments(){
+    public Comments() {
 
     }
-    public Comments(int id, int userId, int postId, String content, Date date){
+    public Comments(int id, int userId, int postId, String content, Timestamp date) {
         setId(id);
         setUserId(userId);
         setContent(content);
@@ -56,10 +57,10 @@ public class Comments {
         this.content = content;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

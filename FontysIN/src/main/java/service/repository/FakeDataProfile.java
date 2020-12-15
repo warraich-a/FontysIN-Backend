@@ -20,7 +20,6 @@ public class FakeDataProfile {
     private final List<Department> departments = new ArrayList<>();
     private final List<Location> locations = new ArrayList<>();
     private final List<Privacy> privacyList = new ArrayList<>();
-    private final List<Work> workings = new ArrayList<>();
 
 
     private static final FakeDataProfile INSTANCE = new FakeDataProfile();
@@ -93,27 +92,18 @@ public class FakeDataProfile {
         locations.add(loc2);
         locations.add(loc3);
 
-        //adding work info to the workings list
-        Work work1 = new Work(1, 1, "Fontys", 101010);
-        Work work2 = new Work(2, 2, "Fontys", 2005);
-        Work work3 = new Work(3, 4, "Fontys ", 2000);
-
-        workings.add(work1);
-        workings.add(work2);
-        workings.add(work3);
-
 
         // Users
 
-        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1, work1);
-        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2,1, 1, "364957", edu2, work1);
-        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3, work1);
-        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1, work1);
-        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3, work1);
-        User user6 = new User(6, "Ahmad", "Ahmad", UserType.FontysStaff, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
-        User user7 = new User(7, "Robin", "Bomers", UserType.FontysStaff, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu6,work2);
-        User user8 = new User(8, "Kelvin", "Kanen", UserType.Teacher, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6, work3);
-        User user9 = new User(9, "Ali", "Hweja", UserType.Teacher, "ali@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu6, work2);
+        User user1 = new User(1, "Rawan", "AD", UserType.Student, "rawan@fontys.com", "1234", "0634457345", 1, 1, 1, "123748", edu1);
+        User user2 = new User(2, "Ranim", "Ayoubi", UserType.Student, "ranim@fontys.com", "1234", "0634586375", 2,1, 1, "364957", edu2);
+        User user3 = new User(3, "Anas", "Ahmad", UserType.Student, "anas@fontys.com", "1234", "0638465827", 3, 2, 2, "175947", edu3);
+        User user4 = new User(4, "Denys", "Sytnyk", UserType.Student, "denys@fontys.com", "1234", "0638465283", 4, 3, 3, "947392", edu1);
+        User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu3);
+        User user6 = new User(6, "Ahmad", "Ahmad", UserType.FontysStaff, "ahmad@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6);
+        User user7 = new User(7, "Robin", "Bomers", UserType.FontysStaff, "robin@fontys.com", "1234", "0638465283", 4, 1, 1, "364957", edu6);
+        User user8 = new User(8, "Kelvin", "Kanen", UserType.Teacher, "kelvin@fontys.com", "1234", "0638483829", 5, 2, 3, "734695", edu6);
+        User user9 = new User(9, "Ali", "Hweja", UserType.Teacher, "ali@fontys.com", "1234", "0638483829", 5, 1, 4, "734695",edu6);
 
 
         users.add(user1);
@@ -231,10 +221,10 @@ public class FakeDataProfile {
         skills.add(s6);
 
 
-        Privacy privacy1 = new Privacy(1,1);
-        Privacy privacy2 = new Privacy(2,2);
-        privacyList.add(privacy1);
-        privacyList.add(privacy2);
+//        Privacy privacy1 = new Privacy(1,1);
+//        Privacy privacy2 = new Privacy(2,2);
+//        privacyList.add(privacy1);
+//        privacyList.add(privacy2);
     }
 
     //searching implementation by filtering
@@ -261,16 +251,6 @@ public class FakeDataProfile {
         for (Education e : educations) {
             if (e.getStartYearEducation() == year) {
                 return e;
-            }
-        }
-        return null;
-    }
-
-    // get woking by its start work year
-    public Work getWorking(int year) {
-        for (Work w : workings) {
-            if (w.getStartYearWork() == year) {
-                return w;
             }
         }
         return null;
@@ -332,16 +312,6 @@ public class FakeDataProfile {
         return filetered;
     }
 
-    //5. filter users by work year
-    public List<User> getUsersByWorkYear(Work working) {
-        List<User> filetered = new ArrayList<>();
-        for (User u : users) {
-            if (u.getWorking().equals(working)) {
-                filetered.add(u);
-            }
-        }
-        return filetered;
-    }
 
 
     //Experience
@@ -600,12 +570,12 @@ public class FakeDataProfile {
         for (Profile p: profiles) {
             if (p.getUserId() == userId) {
                 for (Skill sk: skills){
-                    if(sk.getProfileId() == profileId) {
-                        if (sk.getName().equals(s.getName())) {
+                        if(sk.getProfileId() == profileId) {
+                            if (sk.getName().equals(s.getName())) {
 
-                            return false;
+                                return false;
+                            }
                         }
-                    }
                 }
             }
         }
@@ -679,7 +649,7 @@ public class FakeDataProfile {
             return false;
         }
 
-        old.setUserPhoneNumber(e.getUserPhoneNumber());
+//        old.setUserPhoneNumber(e.getUserPhoneNumber());
 
        // old.setUserImage(e.getUserImage());
         //old.setUserDepartment(e.getUserDepartment());
@@ -975,90 +945,6 @@ public class FakeDataProfile {
     }
 
     //////////////////Privacy
-    public Privacy GetPrivacySetting(int id){
-        for (Privacy p :privacyList){
-            if(p.getUserId() == id){
-                return p;
-            }
-        }
-        return null;
-    }
-    public Privacy GetPrivacyById(int id){
-        for (Privacy p: privacyList){
-            if(p.getId() == id){
-                return p;
-            }
-        }
-        return null;
-    }
-    public boolean updatePrivacy(int id, Privacy p) {
-        Privacy old = this.GetPrivacyById(id);
-        if (old == null) {
-            return false;
-        }
-        old.setEducationSetting(p.getEducationSetting());
-        old.setExperienceSetting(p.getExperienceSetting());
-        old.setSkillSetting(p.getSkillSetting());
-        return true;
-    }
 
-    private List<User> GetUsersConnections(int userId){
-        List<User> connections = new ArrayList<>();
-        for (Contact c :contacts) {
-            if(c.getUser().getId() == userId){
-                if(c.getIsAccepted()){
-                    User u = c.getFriend();
-                    connections.add(u);
-                }
-
-            }
-        }
-        return connections;
-    }
-
-    public boolean AllowedToSee(int userId, int visitorId, ProfilePart profilePart){
-        User visitor = getUser(visitorId);
-        Privacy settings = GetPrivacySetting(userId);
-
-        // If there are no settings everyone is allowed to see
-        if(settings == null)
-        {
-            return true;
-        }
-
-        Privacy.Setting privacySetting;
-        switch(profilePart)
-        {
-            case EDUCATION:
-                privacySetting = settings.getEducationSetting();
-                break;
-            case EXPERIENCE:
-                privacySetting = settings.getExperienceSetting();
-                break;
-            case SKILLS:
-                privacySetting = settings.getSkillSetting();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + profilePart);
-        }
-        if(userId == visitorId){ // So am i visting my own page
-            return true;
-        }
-        else if(privacySetting == Privacy.Setting.EVERYONE){
-           return true;
-        }
-        else if(privacySetting == Privacy.Setting.CONNECTIONS){
-           List<User> Connections = GetUsersConnections(userId); // Get a user connections
-           if(Connections.contains(visitor)){
-               return true;
-           }
-        }
-        return false;
-    }
-
-    public enum ProfilePart
-    {
-        EDUCATION, EXPERIENCE, SKILLS
-    }
 
 }
