@@ -17,7 +17,6 @@ import javax.ws.rs.core.*;
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.StringTokenizer;
 //import org.json.simple.JSONObject;
@@ -28,6 +27,7 @@ public class UsersResources {
 	private final FakeDataProfile fakeDataProfile = FakeDataProfile.getInstance();
 	ProfileController persistenceController = new ProfileController();
 	ContactController contactController = new ContactController();
+	UserController userController = new UserController();
 
 	@Context
 	private UriInfo uriInfo;
@@ -36,8 +36,10 @@ public class UsersResources {
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
-	public Response getContacts(@PathParam("id") int id) { // returns users list or contacts list?
-		List<ContactDTO> contacts = contactController.getAllContactsDTO(id);
+	public Response getContacts(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+		User user = userController.getUserFromToken(auth);
+
+		List<ContactDTO> contacts = contactController.getAllContactsDTO(user.getId());
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -46,8 +48,12 @@ public class UsersResources {
 
 	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
 	@Path("{id}/acceptedContacts")
-	public Response getAcceptedContacts(@PathParam("id") int id) { // returns users list or contacts list?
-		List<ContactDTO> contacts = contactController.getAcceptedContactsDTO(id);
+	public Response getAcceptedContacts(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+		User user = userController.getUserFromToken(auth);
+
+		System.out.println("USER INT TOKEN " + user);
+
+		List<ContactDTO> contacts = contactController.getAcceptedContactsDTO(user.getId());
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
 
@@ -57,8 +63,10 @@ public class UsersResources {
 	@GET //GET at http://localhost:XXXX/users/1/requests
 	@Path("{id}/requests")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getContactsRequests(@PathParam("id") int id) { // returns users list or contacts list?
-		List<ContactDTO> requests = contactController.getContactsRequestsDTO(id);
+	public Response getContactsRequests(@PathParam("id") int id, @HeaderParam("Authorization") String auth) { // returns users list or contacts list?
+		User user = userController.getUserFromToken(auth);
+
+		List<ContactDTO> requests = contactController.getContactsRequestsDTO(user.getId());
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(requests) { };
 
@@ -68,7 +76,7 @@ public class UsersResources {
 	@POST //POST at http://localhost:XXXX/users/1
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts")
-	public Response createContact(@PathParam("userId") int userId, ContactDTO contact) {
+	public Response createContact(@PathParam("userId") int userId, ContactDTO contact, @HeaderParam("Authorization") String auth) {
 		int contactId = contactController.createContact(contact);
 
 		if (contactId < 0){ // already friends
@@ -85,8 +93,10 @@ public class UsersResources {
 
 	@DELETE //DELETE at http://localhost:XXXX/users/1/contacts/2
 	@Path("{userId}/contacts/{contactId}")
-	public Response deleteContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId) {
-		contactController.deleteContact(userId, contactId);
+	public Response deleteContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, @HeaderParam("Authorization") String auth) {
+		User user = userController.getUserFromToken(auth);
+
+		contactController.deleteContact(user.getId(), contactId);
 
 		return Response.noContent().build();
 	}
@@ -95,7 +105,7 @@ public class UsersResources {
 	@PATCH //PATCH at http://localhost:XXXX/users/1/contacts/2
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
-	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact) {
+	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact, @HeaderParam("Authorization") String auth) {
 		contactController.updateContact(contactId, contact);
 
 		return Response.noContent().build();
@@ -103,8 +113,10 @@ public class UsersResources {
 
 	@GET
 	@Path("{userId}")
-	public Response getUser(@PathParam("userId") int userId) {
-		UserDTO user = contactController.getUserDTO(userId);
+	public Response getUser(@PathParam("userId") int userId, @HeaderParam("Authorization") String auth) {
+		User userInToken = userController.getUserFromToken(auth);
+
+		UserDTO user = contactController.getUserDTO(userInToken.getId());
 
 		System.out.println("Get user " + user);
 
