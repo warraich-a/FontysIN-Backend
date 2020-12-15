@@ -433,7 +433,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
 
     public User getUserById(int userId) throws DatabaseException, SQLException {
-        JDBCPrivacyRepository privacyRepository = new JDBCPrivacyRepository();
+        PrivacyRepository privacyRepository = new PrivacyRepository();
         User user = null;
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM users where id =?";
@@ -1396,7 +1396,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     public boolean createUser(User user) throws DatabaseException, SQLException {
-        JDBCPrivacyRepository privacyRepository = new JDBCPrivacyRepository();
+        PrivacyRepository privacyRepository = new PrivacyRepository();
         boolean exist;
         exist = false;
         for (User u: getUsers()) {

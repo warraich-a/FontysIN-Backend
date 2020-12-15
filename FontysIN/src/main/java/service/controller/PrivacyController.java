@@ -5,12 +5,15 @@ import service.model.Privacy;
 import service.model.User;
 import service.model.dto.ContactDTO;
 import service.repository.DatabaseException;
-import service.repository.JDBCPrivacyRepository;
+import service.repository.PrivacyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import service.model.*;
+import service.repository.*;
+
 public class PrivacyController {
-    JDBCPrivacyRepository controller = new JDBCPrivacyRepository();
+    PrivacyRepository controller = new PrivacyRepository();
     public Privacy getPrivacy(User u){
 
         try {
@@ -58,7 +61,7 @@ public class PrivacyController {
         Privacy settings = GetPrivacySetting(userId);// Get privacy settings for the user i am visiting
         User userImVisiting = profileController.getUser(userId); // So if im logged in user 3 and visit 5
         List<ContactDTO> friends = new ArrayList<>();
-        friends = contactController.getAllContactsDTO(loggedIn.getId());
+        friends = contactController.getAllContactsDTO(userImVisiting.getId());
         List<Integer> friendsId = new ArrayList<>();
         for (ContactDTO f: friends) { // Same as Denys :D
             friendsId.add(f.getFriend().getId());

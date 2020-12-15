@@ -268,7 +268,7 @@ public class UsersResources {
 		UserController controller = new UserController();
 		ProfileController profileController = new ProfileController();
 		PrivacyController pController = new PrivacyController();
-		User loggedInUser = controller.getUserFromAuth(auth);
+		User loggedInUser = controller.getUserFromToken(auth);
 
 		List<Experience> experienceByProfileId = profileController.getExperience(userId, profileId);
 
@@ -295,7 +295,7 @@ public class UsersResources {
 		ProfileController profileController = new ProfileController();
 
 		UserController controller = new UserController();
-		User loggedInUser = controller.getUserFromAuth(auth);
+		User loggedInUser = controller.getUserFromToken(auth);
 		PrivacyController pController = new PrivacyController();
 		List<Education> educations = profileController.getEducations(userId, profileId);
 		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
@@ -335,7 +335,7 @@ public class UsersResources {
 		ProfileController profileController = new ProfileController();
 
 		UserController controller = new UserController();
-		User loggedInUser = controller.getUserFromAuth(auth);
+		User loggedInUser = controller.getUserFromToken(auth);
 		PrivacyController pController = new PrivacyController();
 		List<Skill> skills = profileController.getSkills(userId, profileId);
 		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.SKILLS);
@@ -508,23 +508,15 @@ public class UsersResources {
 	@GET
 	@Path("user/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUserById(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+	public Response getUserById(@PathParam("id") int id) {
 		UserController controller = new UserController();
-		ProfileController profileController = new ProfileController();
-
-
-		if(!controller.isIdAndAuthSame(id, auth)){
-			return Response.status(Response.Status.UNAUTHORIZED).
-					entity("Invalid email and/or password.").build();
-		}else {
-
-			User u = profileController.getUser(id);
+			User u = persistenceController.getUser(id);
 			if (u == null) {
 				return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 			} else {
 				return Response.ok(u).build();
 			}
-		}
+
 	}
 
 
@@ -568,17 +560,11 @@ public class UsersResources {
 	@GET
 	@Path("privacy/me")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPrivacy(@HeaderParam("Authorization") String auth) {
+	public Response getPrivacy(@HeaderParam("Authorization") String token) {
 		PrivacyController pController = new PrivacyController();
 		UserController persistenceController = new UserController();
 
-		String encodedCredentials = auth.replaceFirst("Basic ", "");
-		String credentials = new
-				String(Base64.getDecoder().decode(encodedCredentials.getBytes()));
-		//Split username and password tokens in credentials
-		final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
-		final String email = tokenizer.nextToken();
-		User u = persistenceController.getUserByEmail(email);
+		User u = persistenceController.getUserFromToken(token);
 		Privacy a = pController.getPrivacy(u);
 		if (a == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
@@ -671,7 +657,7 @@ public class UsersResources {
 	@POST //POST at http://localhost:XXXX/users/
 	@Path("login")
 	@PermitAll
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces("text/plain")
 	public Response LoginUser(String body) {
 		UserController persistenceController = new UserController();
 
@@ -680,7 +666,9 @@ public class UsersResources {
 		final String password = tokenizer.nextToken();
 		User user = persistenceController.getUserByEmail(email);
 		if (persistenceController.login(email, password)) {
-			return Response.ok(user).build();
+			String userId = Integer.toString(user.getId());
+			String token = persistenceController.createJWT(userId, email,password, -1);
+			return Response.ok(token).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid email.").build();
 		}
