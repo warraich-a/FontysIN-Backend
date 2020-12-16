@@ -680,7 +680,7 @@ public class UsersResources {
 		User user = persistenceController.getUserByEmail(email);
 		if (persistenceController.login(email, password)) {
 			String userId = Integer.toString(user.getId());
-			String token = persistenceController.createJWT(userId, email,password, -1);
+			String token = persistenceController.createJWT(userId, user.getFirstName(),user.getLastName(), -1);
 			return Response.ok(token).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid email.").build();

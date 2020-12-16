@@ -18,6 +18,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import static service.controller.UserController.SECRET_KEY;
+
 @Provider
 public class AuthenticationFilter implements ContainerRequestFilter {
 
@@ -60,31 +62,29 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         final String token = authorization.get(0);
         Claims decoded = controller.decodeJWT(token);
-
-        String email = decoded.getIssuer();
-        String password = decoded.getSubject();
-
-
-        System.out.println(email);
-        System.out.println(password);
-        //Check if username and password are valid (e.g., database)
-        //If not valid: abort with UNAUTHORIED and stop
-        if (!isValidUser(email, password)) {
+        // If i can decode it it is valid
+        String id = decoded.getId();
+        if(id.isEmpty()){
             System.out.println("Invalid user");
             Response response = Response.status(Response.Status.UNAUTHORIZED).
                     entity("Invalid email and/or password.").build();
             requestContext.abortWith(response);
             return;
         }
+        //Check if username and password are valid (e.g., database)
+        //If not valid: abort with UNAUTHORIED and stop
+//        if (!isValidUser(email, password)) {
+//
+//        }
 
         System.out.println("VALID USER");
     }
-   private boolean isValidUser(String email, String password) {
-
-       boolean valid;
-
-      valid = controller.login(email, password);
-      return valid;
-    }
+//   private boolean isValidUser(String email, String password) {
+//
+//       boolean valid;
+//
+//      valid = controller.login(email, password);
+//      return valid;
+//    }
 
 }

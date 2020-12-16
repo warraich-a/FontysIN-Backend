@@ -21,6 +21,9 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+
+import static java.lang.Integer.parseInt;
+
 public class UserController {
     JDBCProfileRepository profileRepository = new JDBCProfileRepository();
     ProfileController controller = new ProfileController();
@@ -42,6 +45,20 @@ public class UserController {
 
     }
 
+    public User getUser(int userId){
+        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+        try {
+            User user = profileRepository.getUserById(userId);
+
+            System.out.println("ok");
+
+            return user;
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public boolean login(String email, String password){
         User u = getUserByEmail(email);
         if(u.equals(null)){
@@ -56,12 +73,13 @@ public class UserController {
     public User getUserFromToken(String token) {
         Claims decoded = decodeJWT(token);
 
-        String email = decoded.getIssuer();
-        User u = getUserByEmail(email);
+        String id = decoded.getId();
+
+        User u = getUser(parseInt(id));
 
         return u;
     }
-    private static String SECRET_KEY = "oeRaYY";
+    public static String SECRET_KEY = "oeRaYY";
 
     //Sample method to construct a JWT
     public String createJWT(String id, String issuer, String subject, long ttlMillis) {
