@@ -6,6 +6,7 @@ import service.model.dto.ConversationDTO;
 import service.repository.DatabaseException;
 import service.repository.MessagesRepository;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class MessageController {
@@ -21,7 +22,7 @@ public class MessageController {
         try {
             messageId =  messagesRepository.createMessage(message);
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
@@ -40,7 +41,7 @@ public class MessageController {
         try {
             conversations =  messagesRepository.getConversations(id);
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
@@ -59,7 +60,7 @@ public class MessageController {
         try {
             conversation =  messagesRepository.getConversation(id);
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
@@ -79,7 +80,7 @@ public class MessageController {
         try {
             return messagesRepository.deleteConversation(userId, conversationId);
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -102,7 +103,7 @@ public class MessageController {
             System.out.println("return true if correct");
 
             return true;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;

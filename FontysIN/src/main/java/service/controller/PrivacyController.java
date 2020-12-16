@@ -7,10 +7,9 @@ import service.model.dto.ContactDTO;
 import service.repository.DatabaseException;
 import service.repository.PrivacyRepository;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import service.model.*;
-import service.repository.*;
 
 public class PrivacyController {
     PrivacyRepository controller = new PrivacyRepository();
@@ -22,7 +21,7 @@ public class PrivacyController {
             System.out.println("ok");
 
             return exp;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -32,7 +31,7 @@ public class PrivacyController {
 
         try {
             return controller.updatePrivacy(edu);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -47,7 +46,7 @@ public class PrivacyController {
                     return p;
                 }
             }
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;

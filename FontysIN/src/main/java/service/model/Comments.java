@@ -29,6 +29,16 @@ public class Comments {
 
 
     }
+
+    public Comments(int id, int userId, int postId, String content) {
+        setId(id);
+        setUserId(userId);
+        setContent(content);
+        setPostId(postId);
+
+
+
+    }
     public int getId() {
         return id;
     }

@@ -30,6 +30,14 @@ public class Posts {
 
     }
 
+    public Posts(int id, int userId, String content, String image) {
+        setId(id);
+        setUserId(userId);
+        setContent(content);
+
+        setImage(image);
+
+    }
 
     public int getId() {
         return id;

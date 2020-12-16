@@ -6,15 +6,18 @@ import service.model.UserType;
 import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
 
+import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsRepository extends JDBCRepository {
-    public int createContact(ContactDTO createdContactDTO) throws  DatabaseException  {
+    public int createContact(ContactDTO createdContactDTO) throws DatabaseException, URISyntaxException {
         Connection connection = super.getDatabaseConnection();
 
-        String sql = "INSERT INTO contacts (userId, friendId, isAccepted) VALUES (?, ?, false)";
+        String sql = "INSERT INTO contacts (userId, friendId) " +
+                "SELECT ?, ? WHERE NOT EXISTS (SELECT userId, friendId FROM contacts " +
+                "WHERE (userId = ? AND friendId = ?) OR (userId = ? AND friendId = ?))";
 
         try {
             int contactId = -1;
@@ -22,10 +25,16 @@ public class ContactsRepository extends JDBCRepository {
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, createdContactDTO.getUser().getId());
             statement.setInt(2, createdContactDTO.getFriend().getId());
+            statement.setInt(3, createdContactDTO.getUser().getId());
+            statement.setInt(4, createdContactDTO.getFriend().getId());
+            statement.setInt(5, createdContactDTO.getFriend().getId());
+            statement.setInt(6, createdContactDTO.getUser().getId());
 
-            System.out.println("createdContactDTO.getUser().getId() " + createdContactDTO.getUser().getId());
-            System.out.println("createdContactDTO.getFriend().getId() " + createdContactDTO.getFriend().getId());
-            statement.executeUpdate();
+            int affected = statement.executeUpdate();
+
+            if(affected <= 0) {
+                throw new DatabaseException("Cannot create contact, already exists");
+            }
 
             ResultSet resultSet = statement.getGeneratedKeys();
 
@@ -45,7 +54,7 @@ public class ContactsRepository extends JDBCRepository {
     }
 
     // Delete or Reject
-    public boolean deleteContact(int userId, int contactId) throws  DatabaseException {
+    public boolean deleteContact(int userId, int contactId) throws DatabaseException, URISyntaxException {
         Connection connection = super.getDatabaseConnection();
 
         String sql = "DELETE FROM contacts WHERE id = ? AND (userId = ? OR friendId = ?)";
@@ -56,7 +65,11 @@ public class ContactsRepository extends JDBCRepository {
             statement.setInt(2, userId);
             statement.setInt(3, userId);
 
-            statement.executeUpdate();
+            int affected = statement.executeUpdate();
+
+            if(affected <= 0) {
+                return false;
+            }
 
             connection.commit();
             statement.close();
@@ -70,7 +83,7 @@ public class ContactsRepository extends JDBCRepository {
     }
 
 
-    public List<Contact> getAllContacts(int id) throws DatabaseException {
+    public List<Contact> getAllContacts(int id) throws DatabaseException, URISyntaxException {
         List<Contact> contacts = new ArrayList<>();
 
         Connection connection = super.getDatabaseConnection();
@@ -164,7 +177,7 @@ public class ContactsRepository extends JDBCRepository {
 
 
 
-    public List<ContactDTO> getAllContactsDTO(int id) throws DatabaseException {
+    public List<ContactDTO> getAllContactsDTO(int id) throws DatabaseException, URISyntaxException {
         // All contacts of current user
         List<Contact> allContacts = getAllContacts(id);
 
@@ -232,7 +245,7 @@ public class ContactsRepository extends JDBCRepository {
     }
 
     // Accepted contacts
-    public List<Contact> getContacts(int id) throws DatabaseException {
+    public List<Contact> getContacts(int id) throws DatabaseException, URISyntaxException {
         List<Contact> acceptedContacts = new ArrayList<>();
 
         Connection connection = super.getDatabaseConnection();
@@ -326,7 +339,7 @@ public class ContactsRepository extends JDBCRepository {
     }
 
 
-    public List<ContactDTO> getAcceptedContactsDTO(int id) throws DatabaseException {
+    public List<ContactDTO> getAcceptedContactsDTO(int id) throws DatabaseException, URISyntaxException {
         List<ContactDTO> acceptedContacts = new ArrayList<>();
 
         Connection connection = super.getDatabaseConnection();
@@ -383,7 +396,7 @@ public class ContactsRepository extends JDBCRepository {
 
 
     // Get requests
-    public List<Contact> getContactsRequests(int id) throws DatabaseException{
+    public List<Contact> getContactsRequests(int id) throws DatabaseException, URISyntaxException {
         List<Contact> requests = new ArrayList<>();
 
         Connection connection = super.getDatabaseConnection();
@@ -477,7 +490,7 @@ public class ContactsRepository extends JDBCRepository {
 
     }
 
-    public List<ContactDTO> getContactsRequestsDTO(int id) throws DatabaseException {
+    public List<ContactDTO> getContactsRequestsDTO(int id) throws DatabaseException, URISyntaxException {
         List<ContactDTO> requests = new ArrayList<>();
 
         Connection connection = super.getDatabaseConnection();
@@ -534,7 +547,7 @@ public class ContactsRepository extends JDBCRepository {
     }
 
 
-    public void updateContact(int contactId, Contact updatedContact) throws DatabaseException {
+    public boolean  updateContact(int contactId, Contact updatedContact) throws DatabaseException, URISyntaxException {
         Connection connection = super.getDatabaseConnection();
 
         String sql = "UPDATE contacts SET isAccepted = ? WHERE (userId = ? AND friendId = ?)";
@@ -545,11 +558,17 @@ public class ContactsRepository extends JDBCRepository {
             statement.setInt(2, updatedContact.getUser().getId());
             statement.setInt(3, updatedContact.getFriend().getId());
 
-            statement.executeUpdate();
+            int affected = statement.executeUpdate();
+
+            if(affected <= 0) {
+                return false;
+            }
 
             connection.commit();
             statement.close();
             connection.close();
+
+            return true;
         }
         catch (SQLException throwable) {
             throw new DatabaseException("Cannot update the contact", throwable);
@@ -557,7 +576,7 @@ public class ContactsRepository extends JDBCRepository {
     }
 
 
-    public UserDTO getUserDTO(int id) throws DatabaseException {
+    public UserDTO getUserDTO(int id) throws DatabaseException, URISyntaxException {
 //        String project_path =System.getProperty("user.dir");
         Connection connection = super.getDatabaseConnection();
 
@@ -597,7 +616,7 @@ public class ContactsRepository extends JDBCRepository {
     }
 
 
-    public User getUser(int id) throws DatabaseException {
+    public User getUser(int id) throws DatabaseException, URISyntaxException {
         Connection connection = super.getDatabaseConnection();
 
         String sql = "SELECT * FROM user WHERE userId = ?";

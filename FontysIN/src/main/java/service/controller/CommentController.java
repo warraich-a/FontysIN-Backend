@@ -4,11 +4,13 @@ import service.model.Comments;
 import service.repository.DatabaseException;
 import service.repository.CommentsRepository;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class CommentController {
+    CommentsRepository commentsRepository = new CommentsRepository();
     public List<Comments> getCommets(){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
             List<Comments> comments = (List<Comments>) commentsRepository.getComments();
@@ -16,70 +18,69 @@ public class CommentController {
 
 
             return comments;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     public List<Comments> getCommetsByPostId(int pId){
-        CommentsRepository commentsRepository = new CommentsRepository();
+        List<Comments> comments;
 
         try {
-            List<Comments> comments = (List<Comments>) commentsRepository.getCommentsByPostId(pId);
-
-
+            comments=  commentsRepository.getCommentsByPostId(pId);
 
             return comments;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
+
     }
 
     public Comments getCommet(int Id){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
-            Comments comm = (Comments) commentsRepository.getComment(Id);
+            Comments comm = commentsRepository.getComment(Id);
 
 
 
             return comm;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     public boolean addComment(Comments comm){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
             return commentsRepository.addComm(comm);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
     }
 
     public boolean updateComment(Comments comm){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
             return commentsRepository.updateComm(comm);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
     }
 
     public boolean deleteComment(Comments comm){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
             return commentsRepository.deleteComment(comm);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
