@@ -1,5 +1,7 @@
 package service.model.dto;
 
+import java.util.Objects;
+
 public class ContactDTO {
 	// ContactDTO
 
@@ -58,5 +60,21 @@ public class ContactDTO {
 				", friend=" + friend +
 				", isAccepted=" + isAccepted +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ContactDTO that = (ContactDTO) o;
+		return id == that.id &&
+				isAccepted == that.isAccepted &&
+				Objects.equals(user, that.user) &&
+				Objects.equals(friend, that.friend);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, user, friend, isAccepted);
 	}
 }

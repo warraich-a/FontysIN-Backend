@@ -1,5 +1,7 @@
 package service.model.dto;
 
+import java.util.Objects;
+
 public class UserDTO {
 	private int id;
 	private int profileId;
@@ -67,5 +69,22 @@ public class UserDTO {
 				", lastName='" + lastName + '\'' +
 				", image='" + image + '\'' +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		UserDTO userDTO = (UserDTO) o;
+		return id == userDTO.id &&
+				profileId == userDTO.profileId &&
+				Objects.equals(firstName, userDTO.firstName) &&
+				Objects.equals(lastName, userDTO.lastName) &&
+				Objects.equals(image, userDTO.image);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, profileId, firstName, lastName, image);
 	}
 }

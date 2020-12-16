@@ -1,6 +1,7 @@
 package service.controller;
 
 import service.model.Contact;
+import service.model.User;
 import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
 import service.repository.ContactsRepository;
@@ -107,13 +108,15 @@ public class ContactController {
      * @param contactId
      * @param contact
      */
-    public void updateContact(int contactId, Contact contact) {
+    public boolean updateContact(int contactId, Contact contact) {
+        boolean result = false;
         try {
-            contactsRepository.updateContact(contactId, contact);
+            result = contactsRepository.updateContact(contactId, contact);
         }
         catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
+        return result;
     }
 
     /**
@@ -124,6 +127,21 @@ public class ContactController {
     public UserDTO getUserDTO(int id) {
         try {
             return contactsRepository.getUserDTO(id);
+        }
+        catch (DatabaseException | URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     *
+     * @param id
+     * @return User of type User
+     */
+    public User getUser(int id) {
+        try {
+            return contactsRepository.getUser(id);
         }
         catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
