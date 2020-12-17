@@ -1,13 +1,11 @@
-package Repository;
+package Controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.Rule;
-import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
-import service.model.*;
-import service.model.dto.UserDTO;
 
-public class UserRepositoryTest {
+import org.junit.jupiter.api.Test;
+import service.model.*;
+
+public class UserTest {
 
     @Test //check user type
     void GetUserType(){
@@ -66,3 +64,4 @@ public class UserRepositoryTest {
         assertEquals("1", u.getDepartmentId());
     }
 }
+
