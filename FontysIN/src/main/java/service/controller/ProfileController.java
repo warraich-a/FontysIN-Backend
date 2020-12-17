@@ -5,6 +5,7 @@ import service.repository.DatabaseException;
 import service.repository.JDBCProfileRepository;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return about;
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -35,7 +36,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return experience;
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -50,7 +51,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return educations;
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -64,7 +65,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return skills;
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -78,14 +79,14 @@ public class ProfileController {
             System.out.println("ok");
 
             return profiles;
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
     }
+    JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
     public User getUser(int userId){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
             User user = profileRepository.getUserById(userId);
@@ -93,7 +94,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return user;
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -109,7 +110,7 @@ public class ProfileController {
             {
                 return false;
             }
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -125,7 +126,7 @@ public class ProfileController {
             {
                 return false;
             }
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -142,13 +143,13 @@ public class ProfileController {
             {
                 return false;
             }
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public int addProfile(Profile profile, int userId) throws DatabaseException, SQLException {
+    public int addProfile(Profile profile, int userId) throws DatabaseException, SQLException, URISyntaxException {
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
         int id = profileRepository.createProfile(profile, userId);
         if( id != 0) {
@@ -169,7 +170,7 @@ public class ProfileController {
             {
                 return false;
             }
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -195,7 +196,7 @@ public class ProfileController {
             System.out.println("deleted");
             return true;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -218,7 +219,7 @@ public class ProfileController {
             System.out.println("deleted");
             return true;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -241,7 +242,7 @@ public class ProfileController {
             System.out.println("deleted");
             return true;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -256,7 +257,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return exp;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -269,7 +270,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return exp;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -282,7 +283,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return exp;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -291,28 +292,28 @@ public class ProfileController {
 
     public boolean updateEdu(Education edu){
 
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
         try {
             return profileRepository.updateEducation(edu);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
     }
     public boolean updateExp(Experience edu){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
         try {
             return profileRepository.updateExperience(edu);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
     }
     public boolean updateAbo(About edu){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
         try {
             return profileRepository.updateAbout(edu);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -330,7 +331,7 @@ public class ProfileController {
             {
                 return false;
             }
-        } catch (DatabaseException | SQLException | IOException e) {
+        } catch (DatabaseException | SQLException | IOException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -344,7 +345,7 @@ public class ProfileController {
             System.out.println("ok");
 
             return locations;
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -354,7 +355,7 @@ public class ProfileController {
         JDBCProfileRepository profileRepository = new JDBCProfileRepository();
         try {
             return  profileRepository.getFontysDepartments();
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;

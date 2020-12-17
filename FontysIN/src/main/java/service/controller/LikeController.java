@@ -4,6 +4,7 @@ import service.model.Like;
 import service.repository.DatabaseException;
 import service.repository.LikeRepository;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class LikeController {
@@ -14,7 +15,7 @@ public class LikeController {
             List<Like> likes = (List<Like>) likeRepository.getLikes();
 
             return likes;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -27,7 +28,7 @@ public class LikeController {
             List<Like> likes = (List<Like>) likeRepository.getLikesByPost(id);
 
             return likes;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -40,7 +41,7 @@ public class LikeController {
             Like like = (Like) likeRepository.getPostLikeByUSer(id,userId);
 
             return like;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -51,7 +52,7 @@ public class LikeController {
 
         try {
             return likeRepository.addLike(like);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -62,7 +63,7 @@ public class LikeController {
 
         try {
             return likeRepository.deleteLike(like);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;

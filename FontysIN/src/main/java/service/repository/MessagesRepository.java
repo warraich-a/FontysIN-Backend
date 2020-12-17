@@ -5,6 +5,7 @@ import service.model.Message;
 import service.model.dto.ConversationDTO;
 import service.model.dto.UserDTO;
 
+import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,7 @@ public class MessagesRepository extends JDBCRepository {
      * @return created message id
      * @throws DatabaseException
      */
-    public int createMessage(Message message) throws  DatabaseException  {
+    public int createMessage(Message message) throws DatabaseException, URISyntaxException {
         // 1. Get conversation id
         // 2. Add message to db
         Connection connection = super.getDatabaseConnection();
@@ -65,7 +66,7 @@ public class MessagesRepository extends JDBCRepository {
      * @return a conversation with a specific id
      * @throws DatabaseException
      */
-    public Conversation getConversation(int id) throws DatabaseException {
+    public Conversation getConversation(int id) throws DatabaseException, URISyntaxException {
         Connection connection = super.getDatabaseConnection();
 
         String sql = "SELECT c.id AS conversationId, c.firstUserId, c.secondUserId, " +
@@ -195,7 +196,7 @@ public class MessagesRepository extends JDBCRepository {
      * @return a list of conversations of a specific user
      * @throws DatabaseException
      */
-    public List<Conversation> getConversations(int id) throws DatabaseException {
+    public List<Conversation> getConversations(int id) throws DatabaseException, URISyntaxException {
         // 1. Get all messages for a conversation
         // 2. Create a conversation
         // 3. Add conversation to conversations list
@@ -288,7 +289,7 @@ public class MessagesRepository extends JDBCRepository {
     }
 
     // Delete conversation in messaging page
-    public boolean deleteConversation(int userId, int conversationId) throws DatabaseException {
+    public boolean deleteConversation(int userId, int conversationId) throws DatabaseException, URISyntaxException {
 
         Connection connection = this.getDatabaseConnection();
 
@@ -313,7 +314,7 @@ public class MessagesRepository extends JDBCRepository {
     }
 
     // start new conversation with new user
-    public int startConversation(ConversationDTO conversation) throws DatabaseException {
+    public int startConversation(ConversationDTO conversation) throws DatabaseException, URISyntaxException {
 
         Connection connection = this.getDatabaseConnection();
 
@@ -351,7 +352,7 @@ public class MessagesRepository extends JDBCRepository {
     }
 
     // start new conversation with new user
-    public boolean restartNewConversation(ConversationDTO conversation) throws DatabaseException {
+    public boolean restartNewConversation(ConversationDTO conversation) throws DatabaseException, URISyntaxException {
 
         Connection connection = this.getDatabaseConnection();
 

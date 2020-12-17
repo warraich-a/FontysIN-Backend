@@ -5,6 +5,7 @@ import service.controller.PostController;
 import service.model.Posts;
 import service.model.dto.ContactDTO;
 
+import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class PostsRepository extends JDBCRepository {
 
-    public Collection < Posts > getPosts() throws DatabaseException {
+    public Collection < Posts > getPosts() throws DatabaseException, URISyntaxException {
         List < Posts > posts = new ArrayList < >();
 
         Connection connection = this.getDatabaseConnection();
@@ -38,7 +39,7 @@ public class PostsRepository extends JDBCRepository {
         return posts;
     }
 
-    public Collection < Posts > getPostsByDate() throws DatabaseException {
+    public Collection < Posts > getPostsByDate() throws DatabaseException, URISyntaxException {
         List < Posts > posts = new ArrayList < >();
 
         Connection connection = this.getDatabaseConnection();
@@ -92,7 +93,7 @@ public class PostsRepository extends JDBCRepository {
         return posts;
     }
 
-    public Collection < Posts > getPostsByUserId(int uId) throws DatabaseException {
+    public Collection < Posts > getPostsByUserId(int uId) throws DatabaseException, URISyntaxException {
         List < Posts > posts = new ArrayList < >();
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM posts WHERE userId = ?";
@@ -117,7 +118,7 @@ public class PostsRepository extends JDBCRepository {
         return posts;
     }
 
-    public Posts getPost(int postId) throws DatabaseException {
+    public Posts getPost(int postId) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM posts WHERE id = ?";
         try {
@@ -142,7 +143,7 @@ public class PostsRepository extends JDBCRepository {
         }
     }
 
-    public boolean addPosts(Posts post) throws DatabaseException {
+    public boolean addPosts(Posts post) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         boolean exist = false;
         String sql = "INSERT INTO posts(`userId`, `content`, `image`) VALUES (?,?,?)";
@@ -172,7 +173,7 @@ public class PostsRepository extends JDBCRepository {
         return false;
     }
 
-    public boolean updatePost(Posts post) throws DatabaseException {
+    public boolean updatePost(Posts post) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "UPDATE `posts` SET `userId`=?,`content`=?,`image`=? WHERE id=?";
         try {
@@ -198,7 +199,7 @@ public class PostsRepository extends JDBCRepository {
     }
 
     public boolean deletePost(Posts post) throws DatabaseException,
-            SQLException {
+            SQLException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "DELETE FROM likes WHERE postId = ?";
         try {

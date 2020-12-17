@@ -1,11 +1,13 @@
 package service.controller;
 
 import service.model.Contact;
+import service.model.User;
 import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
 import service.repository.ContactsRepository;
 import service.repository.DatabaseException;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class ContactController {
@@ -23,7 +25,7 @@ public class ContactController {
 
             return allContacts;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -43,7 +45,7 @@ public class ContactController {
 
             return acceptedContacts;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -61,7 +63,7 @@ public class ContactController {
 
             return requests;
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -78,7 +80,7 @@ public class ContactController {
         try {
             contactId =  contactsRepository.createContact(contact);
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
@@ -95,7 +97,7 @@ public class ContactController {
         try {
             return contactsRepository.deleteContact(userId, contactId);
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }
@@ -106,13 +108,15 @@ public class ContactController {
      * @param contactId
      * @param contact
      */
-    public void updateContact(int contactId, Contact contact) {
+    public boolean updateContact(int contactId, Contact contact) {
+        boolean result = false;
         try {
-            contactsRepository.updateContact(contactId, contact);
+            result = contactsRepository.updateContact(contactId, contact);
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
+        return result;
     }
 
     /**
@@ -124,7 +128,22 @@ public class ContactController {
         try {
             return contactsRepository.getUserDTO(id);
         }
-        catch (DatabaseException e) {
+        catch (DatabaseException | URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     *
+     * @param id
+     * @return User of type User
+     */
+    public User getUser(int id) {
+        try {
+            return contactsRepository.getUser(id);
+        }
+        catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
             return null;
         }

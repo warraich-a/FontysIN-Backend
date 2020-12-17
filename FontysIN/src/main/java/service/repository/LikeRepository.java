@@ -1,16 +1,16 @@
 package service.repository;
 
 import service.model.Like;
-import service.model.Posts;
 
-import java.sql. * ;
+import java.net.URISyntaxException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class LikeRepository extends JDBCRepository {
 
-    public Collection < Like > getLikes() throws DatabaseException {
+    public Collection < Like > getLikes() throws DatabaseException, URISyntaxException {
         List < Like > likes = new ArrayList < >();
 
         Connection connection = this.getDatabaseConnection();
@@ -35,7 +35,7 @@ public class LikeRepository extends JDBCRepository {
         return likes;
     }
 
-    public Collection < Like > getLikesByPost(int id) throws DatabaseException {
+    public Collection < Like > getLikesByPost(int id) throws DatabaseException, URISyntaxException {
         List < Like > likes = new ArrayList < >();
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM likes WHERE postId = ?";
@@ -60,7 +60,7 @@ public class LikeRepository extends JDBCRepository {
         return likes;
     }
 
-    public Like getPostLikeByUSer(int id, int userId) throws DatabaseException {
+    public Like getPostLikeByUSer(int id, int userId) throws DatabaseException, URISyntaxException {
         Like like = null;
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM likes WHERE postId = ? AND likerId = ?";
@@ -86,7 +86,7 @@ public class LikeRepository extends JDBCRepository {
         return like;
     }
 
-    public boolean addLike(Like like) throws DatabaseException {
+    public boolean addLike(Like like) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         boolean exist = false;
         String sql = "INSERT INTO likes(`postId`, `LikerId`) VALUES (?,?)";
@@ -115,7 +115,7 @@ public class LikeRepository extends JDBCRepository {
         return false;
     }
 
-    public boolean deleteLike(Like like) throws DatabaseException {
+    public boolean deleteLike(Like like) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "DELETE FROM likes WHERE id=?";
         try {

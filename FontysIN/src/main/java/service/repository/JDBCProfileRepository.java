@@ -3,6 +3,7 @@ package service.repository;
 import service.model.*;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public class JDBCProfileRepository extends JDBCRepository {
 
 
-    public List<Profile> getProfile(int givenUserId) throws DatabaseException, SQLException {
+    public List<Profile> getProfile(int givenUserId) throws DatabaseException, SQLException, URISyntaxException {
         List<Profile> foundProfiles = new ArrayList<>();
 
 
@@ -46,7 +47,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return foundProfiles;
     }
 
-    public List<Experience> getExperiences(int userId, int givenProfileId) throws DatabaseException, SQLException {
+    public List<Experience> getExperiences(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
         List<Experience> foundExperiences = new ArrayList<>();
         for (Profile p: getProfile(userId)) {
             if (p.getUserId() == userId && p.getId() == givenProfileId) {
@@ -101,7 +102,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
         return null;
     }
-    public Experience getExperienceById(int expId) throws DatabaseException {
+    public Experience getExperienceById(int expId) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM experiences WHERE id = ?";
         try {
@@ -143,7 +144,7 @@ public class JDBCProfileRepository extends JDBCRepository {
             throw new DatabaseException("Cannot read products from the database.",throwable);
         }
     }
-    public boolean updateExperience(Experience ex) throws DatabaseException {
+    public boolean updateExperience(Experience ex) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "UPDATE `experiences` SET `title`=?,`company`=?,`location`=?,`employmentType`=?,`startDate`=?,`endDate`=?,`description`=? WHERE id=?";
         try {
@@ -167,7 +168,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return false;
     }
 
-    public List<Education> getEducations(int userId, int givenProfileId) throws DatabaseException, SQLException {
+    public List<Education> getEducations(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
         List<Education> foundEducations = new ArrayList<>();
 
         for (Profile p: getProfile(userId)) {
@@ -208,7 +209,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
         return null;
     }
-    public Education getEducationById(int eduId) throws DatabaseException {
+    public Education getEducationById(int eduId) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM educations WHERE id = ?";
         try {
@@ -236,7 +237,7 @@ public class JDBCProfileRepository extends JDBCRepository {
             throw new DatabaseException("Cannot read products from the database.",throwable);
         }
     }
-    public boolean updateEducation(Education education) throws DatabaseException {
+    public boolean updateEducation(Education education) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "UPDATE `educations` SET `school`=?,`startYear`=?,`endYear`=?,`degree`=?,`fieldStudy`=?,`description`=? WHERE id=?";
         try {
@@ -261,7 +262,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return false;
     }
 
-    public List<About> getAbout(int userId, int givenProfileId) throws DatabaseException, SQLException {
+    public List<About> getAbout(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
         List<About> foundAbout = new ArrayList<>();
 
         for (Profile p: getProfile(userId)) {
@@ -297,7 +298,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
         return null;
     }
-    public About getAboutById(int aboId) throws DatabaseException {
+    public About getAboutById(int aboId) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM about WHERE id = ?";
         try {
@@ -321,7 +322,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         }
     }
 
-    public boolean updateAbout(About about) throws DatabaseException {
+    public boolean updateAbout(About about) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "UPDATE `about` SET `content`=? WHERE id=?";
         try {
@@ -341,7 +342,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return false;
     }
 
-    public List<Skill> getSkills(int userId, int givenProfileId) throws DatabaseException, SQLException {
+    public List<Skill> getSkills(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
         List<Skill> foundSkill = new ArrayList<>();
 
         for (Profile p: getProfile(userId)) {
@@ -379,7 +380,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return null;
     }
 
-    public List<User> getUsers() throws DatabaseException, SQLException {
+    public List<User> getUsers() throws DatabaseException, SQLException, URISyntaxException {
         List<User> allUsers = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
@@ -431,9 +432,9 @@ public class JDBCProfileRepository extends JDBCRepository {
         return allUsers;
     }
 
+    PrivacyRepository privacyRepository = new PrivacyRepository();
+    public User getUserById(int userId) throws DatabaseException, SQLException, URISyntaxException {
 
-    public User getUserById(int userId) throws DatabaseException, SQLException {
-        PrivacyRepository privacyRepository = new PrivacyRepository();
         User user = null;
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM users where id =?";
@@ -490,7 +491,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
 
 
-    public boolean createExperience(Experience experience) throws DatabaseException, SQLException {
+    public boolean createExperience(Experience experience) throws DatabaseException, SQLException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
 
         Boolean exist;
@@ -532,7 +533,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
     }
 
-    public boolean createEducation(Education education) throws DatabaseException, SQLException {
+    public boolean createEducation(Education education) throws DatabaseException, SQLException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
 
         Boolean exist;
@@ -571,7 +572,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return true;
     }
 
-    public boolean createSkill(Skill skill, int userId) throws DatabaseException, SQLException {
+    public boolean createSkill(Skill skill, int userId) throws DatabaseException, SQLException, URISyntaxException {
 
 
         for (Skill p: getSkills(userId, skill.getProfileId())) {
@@ -606,7 +607,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
 
-    public int createProfile(Profile newProfile, int userId) throws DatabaseException, SQLException {
+    public int createProfile(Profile newProfile, int userId) throws DatabaseException, SQLException, URISyntaxException {
 
         int id = 0;
         boolean exist;
@@ -659,7 +660,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return 0;
     }
 
-    public boolean createAbout(About about) throws DatabaseException, SQLException {
+    public boolean createAbout(About about) throws DatabaseException, SQLException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "INSERT INTO about ( profileId, content) VALUES (?,?) ";
@@ -691,7 +692,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
 
-    public boolean uploadImage(int userId, String path) throws DatabaseException, SQLException, IOException {
+    public boolean uploadImage(int userId, String path) throws DatabaseException, SQLException, IOException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "update users set image=? where id = ? ";
@@ -724,7 +725,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 
     }
 
-    public List<Location> getFontysLocation() throws DatabaseException, SQLException {
+    public List<Location> getFontysLocation() throws DatabaseException, SQLException, URISyntaxException {
         List<Location> fontysLocations = new ArrayList<>();
 
             Connection connection = this.getDatabaseConnection();
@@ -757,7 +758,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return fontysLocations;
     }
 
-    public List<Department> getFontysDepartments() throws DatabaseException, SQLException {
+    public List<Department> getFontysDepartments() throws DatabaseException, SQLException, URISyntaxException {
         List<Department> fontysDepartments = new ArrayList<>();
 
         Connection connection = this.getDatabaseConnection();
@@ -788,40 +789,11 @@ public class JDBCProfileRepository extends JDBCRepository {
         return fontysDepartments;
     }
 
-    public Address getAddressById(int aId) throws DatabaseException {
-        Connection connection = this.getDatabaseConnection();
-        String sql = "SELECT * FROM addresses WHERE id = ?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, aId);
-            ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()){
-                connection.close();
-                throw new DatabaseException("Experience with id " + aId + " cannot be found");
-            } else {
-                int id = resultSet.getInt("id");
-                String 	streetName = resultSet.getString("streetName");
-                String houseNumber = resultSet.getString("houseNumber");
-                String city = resultSet.getString("city");
-                String zipcode = resultSet.getString("zipcode");
 
-                Address a = new Address(id, streetName,houseNumber,city,zipcode);
-                connection.close();
-                return a;
-            }
-        } catch (SQLException throwable) {
-            throw new DatabaseException("Cannot read products from the database.",throwable);
-        }
-    }
-
-
-    // ----------------------------------------- Privacy
-
-    // ----------------------------------------- Privacy ^
     /******************Ranim******************Deleting data in profile page*********************/
 
     // Delete education in profile page
-    public void deleteEducation(int userId, int profileId, int educationId) throws DatabaseException {
+    public void deleteEducation(int userId, int profileId, int educationId) throws DatabaseException, URISyntaxException {
 
         Connection connection = this.getDatabaseConnection();
 
@@ -842,7 +814,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     // Delete experience in profile page
-    public void deleteExperience(int userId, int profileId, int experienceId) throws DatabaseException {
+    public void deleteExperience(int userId, int profileId, int experienceId) throws DatabaseException, URISyntaxException {
 
         Connection connection = this.getDatabaseConnection();
 
@@ -863,7 +835,7 @@ public class JDBCProfileRepository extends JDBCRepository {
     }
 
     // Delete skill in profile page
-    public void deleteSkill(int userId, int profileId, int skillId) throws DatabaseException {
+    public void deleteSkill(int userId, int profileId, int skillId) throws DatabaseException, URISyntaxException {
 
         Connection connection = this.getDatabaseConnection();
 
@@ -1360,7 +1332,7 @@ public class JDBCProfileRepository extends JDBCRepository {
 //        return filtered;
 //    }
 
-    public int createAddress(Address address) throws DatabaseException, SQLException {
+    public int createAddress(Address address) throws DatabaseException, SQLException, URISyntaxException {
         int id = 0;
         Connection connection = this.getDatabaseConnection();
         ResultSet rs = null;
@@ -1395,7 +1367,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return id;
     }
 
-    public boolean createUser(User user) throws DatabaseException, SQLException {
+    public boolean createUser(User user) throws DatabaseException, SQLException, URISyntaxException {
         PrivacyRepository privacyRepository = new PrivacyRepository();
         boolean exist;
         exist = false;

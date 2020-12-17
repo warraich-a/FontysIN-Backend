@@ -7,13 +7,14 @@ import service.model.dto.ContactDTO;
 import service.repository.DatabaseException;
 import service.repository.PrivacyRepository;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import service.model.*;
-import service.repository.*;
 
 public class PrivacyController {
     PrivacyRepository controller = new PrivacyRepository();
+    ProfileController profileController = new ProfileController();
+    ContactController contactController = new ContactController();
     public Privacy getPrivacy(User u){
 
         try {
@@ -22,7 +23,7 @@ public class PrivacyController {
             System.out.println("ok");
 
             return exp;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -32,7 +33,7 @@ public class PrivacyController {
 
         try {
             return controller.updatePrivacy(edu);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -47,21 +48,19 @@ public class PrivacyController {
                     return p;
                 }
             }
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
 
     }
     public boolean AllowedToSee(int userId, int loggedinId, ProfilePart profilePart){
-        ProfileController profileController = new ProfileController();
 
-        ContactController contactController = new ContactController();
         User loggedIn = profileController.getUser(loggedinId); // The logged in user
         Privacy settings = GetPrivacySetting(userId);// Get privacy settings for the user i am visiting
         User userImVisiting = profileController.getUser(userId); // So if im logged in user 3 and visit 5
         List<ContactDTO> friends = new ArrayList<>();
-        friends = contactController.getAllContactsDTO(userImVisiting.getId());
+        friends = contactController.getAcceptedContactsDTO(userImVisiting.getId());
         List<Integer> friendsId = new ArrayList<>();
         for (ContactDTO f: friends) { // Same as Denys :D
             friendsId.add(f.getFriend().getId());

@@ -4,6 +4,7 @@ import service.model.User;
 import service.model.UserType;
 import service.model.dto.UserDTO;
 
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +16,7 @@ public class UserRepository extends JDBCRepository {
 
     /**************Ranim******************************Filter users**************************/
     //get all users with the given user type from data base
-    public List<UserDTO> getUsersByType(UserType type) throws DatabaseException {
+    public List<UserDTO> getUsersByType(UserType type) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -50,7 +51,7 @@ public class UserRepository extends JDBCRepository {
     }
 
     //get all users with the given location id from data base
-    public List<UserDTO> getUsersByLocation(int lId) throws DatabaseException {
+    public List<UserDTO> getUsersByLocation(int lId) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -87,7 +88,7 @@ public class UserRepository extends JDBCRepository {
     }
 
     //get all users with the given department id from data base
-    public List<UserDTO> getUsersByDepartment(int bId) throws DatabaseException {
+    public List<UserDTO> getUsersByDepartment(int bId) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -124,7 +125,7 @@ public class UserRepository extends JDBCRepository {
     }
 
     //get all users with the given start study year from data base
-    public List<UserDTO> getUsersByStartStudyYear(int year) throws DatabaseException {
+    public List<UserDTO> getUsersByStartStudyYear(int year) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -164,7 +165,7 @@ public class UserRepository extends JDBCRepository {
     }
 
     //get all users with the given start work year from data base
-    public List<UserDTO> getUsersByStartWorkYear(int year) throws DatabaseException {
+    public List<UserDTO> getUsersByStartWorkYear(int year) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -204,7 +205,7 @@ public class UserRepository extends JDBCRepository {
     }
 
     //get all users with the given user type, location and department from data base
-    public List<UserDTO> getUsersByUserTypeAndLocationAndDepartment(UserType type, int lId, int dId) throws DatabaseException {
+    public List<UserDTO> getUsersByUserTypeAndLocationAndDepartment(UserType type, int lId, int dId) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -245,7 +246,7 @@ public class UserRepository extends JDBCRepository {
     }
 
     //get all users with the given user type, location and department from data base
-    public List<UserDTO> getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(UserType type, int year, int lId, int dId) throws DatabaseException {
+    public List<UserDTO> getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(UserType type, int year, int lId, int dId) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -290,7 +291,7 @@ public class UserRepository extends JDBCRepository {
     }
 
     //get all users with the given user type, location and department from data base
-    public List<UserDTO> getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(UserType type, int year, int lId, int dId) throws DatabaseException {
+    public List<UserDTO> getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(UserType type, int year, int lId, int dId) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -335,7 +336,7 @@ public class UserRepository extends JDBCRepository {
     /***********************RANIM****************************Norrmal searching*******************************/
 
     //get all users withing fontys
-    public List<User> getAllUsers() throws DatabaseException {
+    public List<User> getAllUsers() throws DatabaseException, URISyntaxException {
 
         List<User> filtered = new ArrayList<>();
 
@@ -374,7 +375,7 @@ public class UserRepository extends JDBCRepository {
 
     /***************************************List User DTO**************************************/
     //get all users to make use of userdto
-    public List<UserDTO> getUsersDTO() throws DatabaseException {
+    public List<UserDTO> getUsersDTO() throws DatabaseException, URISyntaxException {
 
         List<UserDTO> users = new ArrayList<>();
 
@@ -411,7 +412,7 @@ public class UserRepository extends JDBCRepository {
 
     /****************************************Using search box in the filter page*********************************************************/
     //get all users with the given user type, location, department and user name from data base
-    public List<UserDTO> getUsersByUserTypeLocationDeoartmentAndName(String chars, int lId, int dId, UserType type) throws DatabaseException {
+    public List<UserDTO> getUsersByUserTypeLocationDeoartmentAndName(String chars, int lId, int dId, UserType type) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 
@@ -453,7 +454,7 @@ public class UserRepository extends JDBCRepository {
     }
 
     //get all users with the given first name chars
-    public List<UserDTO> getUsersByFirstNameChars(String chars) throws DatabaseException {
+    public List<UserDTO> getUsersByFirstNameChars(String chars) throws DatabaseException, URISyntaxException {
 
         List<UserDTO> filtered = new ArrayList<>();
 

@@ -2,13 +2,14 @@ package service.repository;
 
 import service.model.Comments;
 
+import java.net.URISyntaxException;
 import java.sql. * ;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class CommentsRepository extends JDBCRepository {
-    public Collection < Comments > getComments() throws DatabaseException {
+    public Collection < Comments > getComments() throws DatabaseException, URISyntaxException {
         List < Comments > comments = new ArrayList < >();
 
         Connection connection = this.getDatabaseConnection();
@@ -35,7 +36,7 @@ public class CommentsRepository extends JDBCRepository {
         return comments;
     }
 
-    public Collection < Comments > getCommentsByPostId(int pId) throws DatabaseException {
+    public Collection < Comments > getCommentsByPostId(int pId) throws DatabaseException, URISyntaxException {
         List < Comments > comments = new ArrayList < >();
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM comments WHERE postId = ?";
@@ -61,7 +62,7 @@ public class CommentsRepository extends JDBCRepository {
         return comments;
     }
 
-    public Comments getComment(int commId) throws DatabaseException {
+    public Comments getComment(int commId) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM comments WHERE id = ?";
         try {
@@ -87,7 +88,7 @@ public class CommentsRepository extends JDBCRepository {
         }
     }
 
-    public boolean addComm(Comments comm) throws DatabaseException {
+    public boolean addComm(Comments comm) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         boolean exist = false;
         String sql = "INSERT INTO comments(`userId`,`postId`, `content`) VALUES (?,?,?)";
@@ -114,7 +115,7 @@ public class CommentsRepository extends JDBCRepository {
         return false;
     }
 
-    public boolean updateComm(Comments comm) throws DatabaseException {
+    public boolean updateComm(Comments comm) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "UPDATE `comments` SET `userId`=?,`postId`=?,`content`=?,`date`=? WHERE id=?";
         try {
@@ -137,7 +138,7 @@ public class CommentsRepository extends JDBCRepository {
         return false;
     }
 
-    public boolean deleteComment(Comments comm) throws DatabaseException {
+    public boolean deleteComment(Comments comm) throws DatabaseException, URISyntaxException {
         Connection connection = this.getDatabaseConnection();
         String sql = "DELETE FROM comments WHERE id=?";
         try {

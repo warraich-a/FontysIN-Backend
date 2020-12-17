@@ -4,6 +4,7 @@ import service.model.Posts;
 import service.repository.DatabaseException;
 import service.repository.PostsRepository;
 
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class PostController {
             System.out.println("ok");
 
             return posts;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -32,7 +33,7 @@ public class PostController {
             System.out.println("ok");
 
             return posts;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -63,7 +64,7 @@ public class PostController {
             System.out.println("ok");
 
             return posts;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -77,7 +78,7 @@ public class PostController {
             System.out.println("ok");
 
             return post;
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
@@ -88,7 +89,7 @@ public class PostController {
 
         try {
             return postsRepository.addPosts(post);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -99,7 +100,7 @@ public class PostController {
 
         try {
             return postsRepository.updatePost(post);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
@@ -110,7 +111,7 @@ public class PostController {
 
         try {
             return postsRepository.deletePost(post);
-        } catch (DatabaseException | SQLException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
