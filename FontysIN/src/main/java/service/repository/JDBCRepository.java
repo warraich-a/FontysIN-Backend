@@ -12,9 +12,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+
 class JDBCRepository {
 
-    protected Connection getDatabaseConnection() throws DatabaseException, URISyntaxException {
+    protected Connection getDatabaseConnection() throws URISyntaxException {
         URL res = getClass().getClassLoader().getResource("app.properties");
         File configFile = Paths.get(res.toURI()).toFile();
 
@@ -25,6 +26,8 @@ class JDBCRepository {
 
 
         try(FileReader reader = new FileReader(configFile)) {
+            Class.forName("org.h2.Driver");
+
             Properties properties = new Properties();
             properties.load(reader);
 
@@ -35,9 +38,13 @@ class JDBCRepository {
             connection = DriverManager.getConnection(url, username, pass);
             connection.setAutoCommit(false);
 
+            RunScript.execute(connection, new FileReader("test.sql"));
+
         } catch (SQLException | FileNotFoundException e) {
             throw new IllegalStateException("Driver failed " + url + ".", e);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 

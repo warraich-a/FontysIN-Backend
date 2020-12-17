@@ -60,7 +60,7 @@ public class PostsRepository extends JDBCRepository {
             connection.close();
 
         } catch(SQLException throwable) {
-            throw new DatabaseException("Cannot read students from the database.", throwable);
+            throw new DatabaseException("Cannot read posts from the database.", throwable);
         }
         return posts;
     }
