@@ -46,7 +46,9 @@ public class UserController {
     }
 
     public User getUser(int userId){
-        ProfileRepository profileRepository = new ProfileRepository();
+
+//        ProfileRepository profileRepository = new ProfileRepository();
+
 
         try {
             User user = profileRepository.getUserById(userId);

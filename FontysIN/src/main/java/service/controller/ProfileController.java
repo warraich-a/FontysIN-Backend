@@ -85,9 +85,9 @@ public class ProfileController {
         }
         return null;
     }
+//    JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
     public User getUser(int userId){
-//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             User user = profileRepository.getUserById(userId);
@@ -293,7 +293,8 @@ public class ProfileController {
 
     public boolean updateEdu(Education edu){
 
-        ProfileRepository profileRepository = new ProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
+
         try {
             return profileRepository.updateEducation(edu);
         } catch (DatabaseException | URISyntaxException e) {
@@ -302,7 +303,9 @@ public class ProfileController {
         return false;
     }
     public boolean updateExp(Experience edu){
-        ProfileRepository profileRepository = new ProfileRepository();
+
+//        ProfileRepository profileRepository = new ProfileRepository();
+
         try {
             return profileRepository.updateExperience(edu);
         } catch (DatabaseException | URISyntaxException e) {
@@ -311,7 +314,9 @@ public class ProfileController {
         return false;
     }
     public boolean updateAbo(About edu){
-        ProfileRepository profileRepository = new ProfileRepository();
+
+//        ProfileRepository profileRepository = new ProfileRepository();
+
         try {
             return profileRepository.updateAbout(edu);
         } catch (DatabaseException | URISyntaxException e) {

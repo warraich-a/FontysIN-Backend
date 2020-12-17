@@ -13,6 +13,8 @@ import java.util.List;
 
 public class PrivacyController {
     PrivacyRepository controller = new PrivacyRepository();
+    ProfileController profileController = new ProfileController();
+    ContactController contactController = new ContactController();
     public Privacy getPrivacy(User u){
 
         try {
@@ -53,14 +55,12 @@ public class PrivacyController {
 
     }
     public boolean AllowedToSee(int userId, int loggedinId, ProfilePart profilePart){
-        ProfileController profileController = new ProfileController();
 
-        ContactController contactController = new ContactController();
         User loggedIn = profileController.getUser(loggedinId); // The logged in user
         Privacy settings = GetPrivacySetting(userId);// Get privacy settings for the user i am visiting
         User userImVisiting = profileController.getUser(userId); // So if im logged in user 3 and visit 5
         List<ContactDTO> friends = new ArrayList<>();
-        friends = contactController.getAllContactsDTO(userImVisiting.getId());
+        friends = contactController.getAcceptedContactsDTO(userImVisiting.getId());
         List<Integer> friendsId = new ArrayList<>();
         for (ContactDTO f: friends) { // Same as Denys :D
             friendsId.add(f.getFriend().getId());
