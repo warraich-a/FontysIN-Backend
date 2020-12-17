@@ -1,6 +1,5 @@
 package service.controller;
 
-import service.model.Contact;
 import service.model.User;
 import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
@@ -108,7 +107,7 @@ public class ContactController {
      * @param contactId
      * @param contact
      */
-    public boolean updateContact(int contactId, Contact contact) {
+    public boolean updateContact(int contactId, ContactDTO contact) {
         boolean result = false;
         try {
             result = contactsRepository.updateContact(contactId, contact);

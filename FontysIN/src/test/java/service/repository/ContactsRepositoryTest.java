@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.model.Contact;
 import service.model.User;
 import service.model.UserType;
 import service.model.dto.ContactDTO;
@@ -84,29 +83,6 @@ public class ContactsRepositoryTest {
 
 
     @Test
-    public void getAllContacts() throws DatabaseException, URISyntaxException {
-        List<Contact> expectedContacts = Arrays.asList(
-                new Contact(1, new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan@student.fontys.nl", "1234", 1, 1, "123456", "assets/rawan image"),
-                        new User(2, "Anas", "Ahmad", UserType.Student, "anas@student.fontys.nl", "12345", 1, 2, "123456", "assets/anas image")),
-                new Contact(2,
-                        new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan@student.fontys.nl", "1234", 1, 1, "123456", "assets/rawan image"),
-                        new User(3, "Beatrice", "Forslund", UserType.Student, "beatrice@student.fontys.nl", "123456", 1, 3, "123456", "assets/bea image")),
-                new Contact(3,
-                        new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan@student.fontys.nl", "1234", 1, 1, "123456", "assets/rawan image"),
-                        new User(4, "Ranim", "Alayoubi", UserType.Student, "ranim@student.fontys.nl", "1234567", 2, 1, "123456", "assets/ranim image")),
-                new Contact(4,
-                        new User(5, "Denys", "Sytnyk", UserType.Student, "denys@student.fontys.nl", "12345678", 3, 1, "123456", "assets/denys image"),
-                        new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan@student.fontys.nl", "1234", 1, 1, "123456", "assets/rawan image"))
-        );
-
-        List<Contact> actualContacts = contactsRepository.getAllContacts(1);
-
-        assertEquals(expectedContacts.size(), actualContacts.size());
-        assertArrayEquals(expectedContacts.toArray(), actualContacts.toArray());
-    }
-
-
-    @Test
     public void getContactsRequestsDTO() throws DatabaseException, URISyntaxException {
         List<ContactDTO> expectedContacts = Arrays.asList(
                 new ContactDTO(4, new UserDTO(5, 0, "Denys", "Sytnyk", "assets/denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false)
@@ -161,9 +137,9 @@ public class ContactsRepositoryTest {
 
     @Test
     public void updateContact() throws DatabaseException, URISyntaxException {
-        Contact updatedContact = new Contact(
-                new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan@student.fontys.nl", "1234", 1, 1, "123456", "assets/rawan image"),
-                new User(4, "Ranim", "Alayoubi", UserType.Student, "ranim@student.fontys.nl", "1234567", 2, 1, "123456", "assets/ranim image"));
+        ContactDTO updatedContact = new ContactDTO(3,
+                new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"),
+                new UserDTO(4, 4, "Ranim", "Alayoubi", "assets/ranim image"), true);
 
         boolean result = contactsRepository.updateContact(1, updatedContact);
 
@@ -173,9 +149,9 @@ public class ContactsRepositoryTest {
 
     @Test
     public void updateContact_doesNotExist_returnsFalse() throws DatabaseException, URISyntaxException {
-        Contact updatedContact = new Contact(
-                new User(7, "user", "user lastname", UserType.Student, "user@student.fontys.nl", "1234", 1, 1, "123456", "assets/user image"),
-                new User(8, "friend", "friend lastname", UserType.Student, "friend@student.fontys.nl", "1234567", 2, 1, "123456", "assets/friend image"));
+        ContactDTO updatedContact = new ContactDTO(8,
+                new UserDTO(7, 7, "user", "user lastname", "assets/user image"),
+                new UserDTO(8, 8, "friend", "friend lastname", "assets/friend image"), true);
 
         boolean result = contactsRepository.updateContact(8, updatedContact);
 

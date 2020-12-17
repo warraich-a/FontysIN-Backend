@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.model.Contact;
 import service.model.User;
 import service.model.UserType;
 import service.model.dto.ContactDTO;
@@ -126,9 +125,11 @@ public class ContactControllerTest {
 
     @Test
     public void updateContact() throws DatabaseException, URISyntaxException {
-        Contact updatedContact = new Contact(
-                new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan@student.fontys.nl", "1234", 1, 1, "123456", "assets/rawan image"),
-                new User(4, "Ranim", "Alayoubi", UserType.Student, "ranim@student.fontys.nl", "1234567", 2, 1, "123456", "assets/ranim image"));
+        	//public UserDTO(int id, int profileId, String firstName, String lastName, String image) {
+
+            ContactDTO updatedContact = new ContactDTO(3,
+                new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"),
+                new UserDTO(4, 4, "Ranim", "Alayoubi", "assets/ranim image"), true);
         when(contactsRepository.updateContact(1, updatedContact)).thenReturn(true);
 
         boolean result = contactController.updateContact(1, updatedContact);
