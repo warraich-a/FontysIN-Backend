@@ -1,5 +1,7 @@
 package service.model;
 
+import java.util.Objects;
+
 public class Privacy {
 public enum Setting {
     EVERYONE, CONNECTIONS, ONLYME
@@ -84,5 +86,21 @@ private int id;
         this.userId = userId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Privacy privacy = (Privacy) o;
+        return id == privacy.id &&
+                userId == privacy.userId &&
+                hideFromSearch == privacy.hideFromSearch &&
+                educationSetting == privacy.educationSetting &&
+                experienceSetting == privacy.experienceSetting &&
+                skillSetting == privacy.skillSetting;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, educationSetting, experienceSetting, skillSetting, hideFromSearch);
+    }
 }

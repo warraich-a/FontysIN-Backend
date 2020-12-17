@@ -1,6 +1,6 @@
 package service.model;
 
-import java.time.LocalDate;
+import java.util.Objects;
 
 
 public class Education {
@@ -120,5 +120,26 @@ public class Education {
                 ", fieldStudy='" + fieldStudy + '\'' +
                 ", descriptionEducation='" + descriptionEducation + '\'' +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Education education = (Education) o;
+        return id == education.id &&
+                profileId == education.profileId &&
+                startYearEducation == education.startYearEducation &&
+                endYearEducation == education.endYearEducation &&
+                Objects.equals(school, education.school) &&
+                Objects.equals(degreeEducation, education.degreeEducation) &&
+                Objects.equals(fieldStudy, education.fieldStudy) &&
+                Objects.equals(descriptionEducation, education.descriptionEducation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, profileId, school, startYearEducation, endYearEducation, degreeEducation, fieldStudy, descriptionEducation);
     }
 }

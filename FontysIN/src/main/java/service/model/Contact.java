@@ -1,5 +1,7 @@
 package service.model;
 
+import java.util.Objects;
+
 public class Contact {
 	private int id;
 	private static int idSeeder = 0;
@@ -60,5 +62,21 @@ public class Contact {
 
 	public static void decreaseIdSeeder() {
 		idSeeder--;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Contact contact = (Contact) o;
+		return id == contact.id &&
+				isAccepted == contact.isAccepted &&
+				Objects.equals(user, contact.user) &&
+				Objects.equals(friend, contact.friend);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, user, friend, isAccepted);
 	}
 }

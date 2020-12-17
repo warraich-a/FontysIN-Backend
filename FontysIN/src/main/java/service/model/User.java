@@ -3,6 +3,7 @@ package service.model;
 //import javax.xml.bind.annotation.XmlRootElement;
 
 import java.util.Objects;
+
 //
 //@SuppressWarnings("WeakerAccess")
 //@XmlRootElement
@@ -171,30 +172,43 @@ public class User {
     }
 
     //methods
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User u = (User) o;
-        return id == u.id;
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
     @Override
     public String toString() {
         return "User{" +
-                "User ID: " + id +
-                ", First Name: '" + firstName + '\'' +
-                ", Last Name: '" + lastName + '\'' +
-                ", Email: '" + email + '\'' +
-                ", Password: '" + password + '\'' +
-                ", Location: " + locationId + '\'' +
-                ", Department: " + departmentId + '\'' +
-                ", User Number: " + userNumber + '\'' +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", locationId=" + locationId +
+                ", departmentId=" + departmentId +
+                ", userNumber='" + userNumber + '\'' +
+                ", img='" + img + '\'' +
+                ", userType=" + userType +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                locationId == user.locationId &&
+                departmentId == user.departmentId &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(userNumber, user.userNumber) &&
+                Objects.equals(img, user.img) &&
+                userType == user.userType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email, password, locationId, departmentId, userNumber, img, userType, education, privacy);
     }
 }

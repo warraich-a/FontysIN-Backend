@@ -1,6 +1,6 @@
 package service.model;
 
-import java.time.LocalDate;
+import java.util.Objects;
 
 
 public class Experience {
@@ -134,4 +134,26 @@ public class Experience {
 //                ", descriptionExperience='" + descriptionExperience + '\'' +
 //                '}';
 //    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Experience that = (Experience) o;
+        return id == that.id &&
+                profileId == that.profileId &&
+                startDateExperience == that.startDateExperience &&
+                endDateExperience == that.endDateExperience &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(company, that.company) &&
+                employmentType == that.employmentType &&
+                Objects.equals(location, that.location) &&
+                Objects.equals(descriptionExperience, that.descriptionExperience);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, profileId, title, company, employmentType, location, startDateExperience, endDateExperience, descriptionExperience);
+    }
 }
