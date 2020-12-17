@@ -46,7 +46,6 @@ public class UserController {
     }
 
     public User getUser(int userId){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
             User user = profileRepository.getUserById(userId);

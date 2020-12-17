@@ -1,4 +1,4 @@
-package service;
+package service.controller;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PrivacyTest {
+public class PrivacyControllerTest {
 
     @InjectMocks
     PrivacyController controller;
@@ -109,6 +109,6 @@ public class PrivacyTest {
         User actualUser = profileController.getUser(3);
 
         assertEquals(user2, actualUser);
-        //K -__----------------
+        //K why is this not working
     }
 }

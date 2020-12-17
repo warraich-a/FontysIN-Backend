@@ -432,9 +432,9 @@ public class JDBCProfileRepository extends JDBCRepository {
         return allUsers;
     }
 
-
+    PrivacyRepository privacyRepository = new PrivacyRepository();
     public User getUserById(int userId) throws DatabaseException, SQLException, URISyntaxException {
-        PrivacyRepository privacyRepository = new PrivacyRepository();
+
         User user = null;
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM users where id =?";
@@ -789,36 +789,7 @@ public class JDBCProfileRepository extends JDBCRepository {
         return fontysDepartments;
     }
 
-    public Address getAddressById(int aId) throws DatabaseException, URISyntaxException {
-        Connection connection = this.getDatabaseConnection();
-        String sql = "SELECT * FROM addresses WHERE id = ?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, aId);
-            ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()){
-                connection.close();
-                throw new DatabaseException("Experience with id " + aId + " cannot be found");
-            } else {
-                int id = resultSet.getInt("id");
-                String 	streetName = resultSet.getString("streetName");
-                String houseNumber = resultSet.getString("houseNumber");
-                String city = resultSet.getString("city");
-                String zipcode = resultSet.getString("zipcode");
 
-                Address a = new Address(id, streetName,houseNumber,city,zipcode);
-                connection.close();
-                return a;
-            }
-        } catch (SQLException throwable) {
-            throw new DatabaseException("Cannot read products from the database.",throwable);
-        }
-    }
-
-
-    // ----------------------------------------- Privacy
-
-    // ----------------------------------------- Privacy ^
     /******************Ranim******************Deleting data in profile page*********************/
 
     // Delete education in profile page
