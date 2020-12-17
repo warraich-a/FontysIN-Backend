@@ -5,12 +5,11 @@ import service.model.Like;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class LikeRepository extends JDBCRepository {
 
-    public Collection < Like > getLikes() throws DatabaseException, URISyntaxException {
+    public List < Like > getLikes() throws DatabaseException, URISyntaxException {
         List < Like > likes = new ArrayList < >();
 
         Connection connection = this.getDatabaseConnection();
@@ -35,7 +34,7 @@ public class LikeRepository extends JDBCRepository {
         return likes;
     }
 
-    public Collection < Like > getLikesByPost(int id) throws DatabaseException, URISyntaxException {
+    public List < Like > getLikesByPost(int id) throws DatabaseException, URISyntaxException {
         List < Like > likes = new ArrayList < >();
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM likes WHERE postId = ?";

@@ -36,9 +36,9 @@ public class CommentsRepository extends JDBCRepository {
         return comments;
     }
 
-    public Collection < Comments > getCommentsByPostId(int pId) throws DatabaseException, URISyntaxException {
+    public List < Comments > getCommentsByPostId(int pId) throws DatabaseException, URISyntaxException {
         List < Comments > comments = new ArrayList < >();
-        Connection connection = this.getDatabaseConnection();
+        Connection connection = super.getDatabaseConnection();
         String sql = "SELECT * FROM comments WHERE postId = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);

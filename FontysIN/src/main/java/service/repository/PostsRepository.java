@@ -8,12 +8,11 @@ import service.model.dto.ContactDTO;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class PostsRepository extends JDBCRepository {
 
-    public Collection < Posts > getPosts() throws DatabaseException, URISyntaxException {
+    public List < Posts > getPosts() throws DatabaseException, URISyntaxException {
         List < Posts > posts = new ArrayList < >();
 
         Connection connection = this.getDatabaseConnection();
@@ -39,7 +38,7 @@ public class PostsRepository extends JDBCRepository {
         return posts;
     }
 
-    public Collection < Posts > getPostsByDate() throws DatabaseException, URISyntaxException {
+    public List  < Posts > getPostsByDate() throws DatabaseException, URISyntaxException {
         List < Posts > posts = new ArrayList < >();
 
         Connection connection = this.getDatabaseConnection();
@@ -60,12 +59,12 @@ public class PostsRepository extends JDBCRepository {
             connection.close();
 
         } catch(SQLException throwable) {
-            throw new DatabaseException("Cannot read students from the database.", throwable);
+            throw new DatabaseException("Cannot read posts from the database.", throwable);
         }
         return posts;
     }
 
-    public Collection < Posts > getNewsfeed(int id) throws DatabaseException {
+    public List < Posts > getNewsfeed(int id) throws DatabaseException {
         List < Posts > posts = new ArrayList < >();
 
         List < Posts > allPosts = new ArrayList < >();
@@ -93,7 +92,7 @@ public class PostsRepository extends JDBCRepository {
         return posts;
     }
 
-    public Collection < Posts > getPostsByUserId(int uId) throws DatabaseException, URISyntaxException {
+    public List < Posts > getPostsByUserId(int uId) throws DatabaseException, URISyntaxException {
         List < Posts > posts = new ArrayList < >();
         Connection connection = this.getDatabaseConnection();
         String sql = "SELECT * FROM posts WHERE userId = ?";
