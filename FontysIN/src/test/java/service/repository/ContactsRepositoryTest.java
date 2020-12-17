@@ -43,7 +43,7 @@ public class ContactsRepositoryTest {
                 DriverManager.getConnection("jdbc:h2:mem:~/test") // test is the name of the folder inside db
         );
 
-        JDBCRepositoryTest.generateData();
+        RunScript.execute("jdbc:h2:mem:~/test", "", "", "classpath:data.sql", UTF8, false);
     }
 
     @AfterEach
