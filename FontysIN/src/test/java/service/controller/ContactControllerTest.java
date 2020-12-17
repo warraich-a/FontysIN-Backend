@@ -150,7 +150,7 @@ public class ContactControllerTest {
 
     @Test
     public void getUser() throws DatabaseException, URISyntaxException {
-        User expectedUser = new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan.student@fontys.nl", "1234", 1, 1, "123456", "rawan image");
+            User expectedUser = new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan.student@fontys.nl", "1234", 1, 1, "123456", "rawan image");
 
         when(contactsRepository.getUser(1)).thenReturn(expectedUser);
 
