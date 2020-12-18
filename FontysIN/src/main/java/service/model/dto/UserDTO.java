@@ -1,6 +1,9 @@
 package service.model.dto;
 
+import service.model.UserType;
+
 import java.util.Objects;
+import java.util.PrimitiveIterator;
 
 public class UserDTO {
 	private int id;
@@ -8,6 +11,7 @@ public class UserDTO {
 	private String firstName;
 	private String lastName;
 	private String image;
+	private UserType userType;
 
 	public UserDTO(int id, int profileId, String firstName, String lastName, String image) {
 		this.id = id;
@@ -15,6 +19,15 @@ public class UserDTO {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.image = image;
+	}
+
+	public UserDTO(int id, int profileId, String firstName, String lastName, String image, UserType userType) {
+		this.id = id;
+		this.profileId = profileId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.image = image;
+		this.userType = userType;
 	}
 
 	public UserDTO() {
