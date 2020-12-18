@@ -64,9 +64,10 @@ public class MessagesResources {
     public Response StartNewConversation(ConversationDTO conversationDTO) {
         MessageController messageController = new MessageController();
 
-        if (!messageController.startNewConversation(conversationDTO)){
-            System.out.println("in con resources");
-            String entity =  "Conversation with this id is "  + conversationDTO.getId() + " already exists.";
+//        !messageController.startNewConversation(conversationDTO)
+        int id = messageController.startNewConversation(conversationDTO);
+        if (id < 0){
+            String entity =  "Conversation with this id is "  + id + " already exists.";
             return Response.status(Response.Status.CONFLICT).entity(entity).build();
         }
         else {
