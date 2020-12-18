@@ -1,5 +1,7 @@
 package service.model;
 
+import java.util.Objects;
+
 public class Location {
 
     //fields
@@ -58,4 +60,21 @@ public class Location {
         this.zipcode = zipcode;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location location = (Location) o;
+        return id == location.id &&
+                Objects.equals(streetName, location.streetName) &&
+                Objects.equals(buildingNumber, location.buildingNumber) &&
+                Objects.equals(city, location.city) &&
+                Objects.equals(zipcode, location.zipcode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, streetName, buildingNumber, city, zipcode);
+    }
 }

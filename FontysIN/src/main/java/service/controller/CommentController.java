@@ -8,8 +8,9 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public class CommentController {
+    CommentsRepository commentsRepository = new CommentsRepository();
     public List<Comments> getCommets(){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
             List<Comments> comments = (List<Comments>) commentsRepository.getComments();
@@ -24,25 +25,24 @@ public class CommentController {
     }
 
     public List<Comments> getCommetsByPostId(int pId){
-        CommentsRepository commentsRepository = new CommentsRepository();
+        List<Comments> comments;
 
         try {
-            List<Comments> comments = (List<Comments>) commentsRepository.getCommentsByPostId(pId);
-
-
+            comments=  commentsRepository.getCommentsByPostId(pId);
 
             return comments;
         } catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
+
     }
 
     public Comments getCommet(int Id){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
-            Comments comm = (Comments) commentsRepository.getComment(Id);
+            Comments comm = commentsRepository.getComment(Id);
 
 
 
@@ -54,7 +54,7 @@ public class CommentController {
     }
 
     public boolean addComment(Comments comm){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
             return commentsRepository.addComm(comm);
@@ -65,7 +65,7 @@ public class CommentController {
     }
 
     public boolean updateComment(Comments comm){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
             return commentsRepository.updateComm(comm);
@@ -76,7 +76,7 @@ public class CommentController {
     }
 
     public boolean deleteComment(Comments comm){
-        CommentsRepository commentsRepository = new CommentsRepository();
+
 
         try {
             return commentsRepository.deleteComment(comm);

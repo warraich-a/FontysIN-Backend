@@ -106,7 +106,9 @@ public class UsersResources {
 	@PATCH //PATCH at http://localhost:XXXX/users/1/contacts/2
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
-	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, Contact contact, @HeaderParam("Authorization") String auth) {
+	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, ContactDTO contact, @HeaderParam("Authorization") String auth) {
+		System.out.println("CONTACT ISACEEPTED " + contact.getIsAccepted());
+
 		contactController.updateContact(contactId, contact);
 
 		return Response.noContent().build();

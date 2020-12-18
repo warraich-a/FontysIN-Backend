@@ -154,6 +154,7 @@ gradle-app.setting
 /src/main/resources/app.properties
 /src/test/resources/app.properties
 /src/test/resources/data.sql
+/src/test/resources/shutdown.sql
 /src/test/resources/
 /src/main/resources/
 .suo

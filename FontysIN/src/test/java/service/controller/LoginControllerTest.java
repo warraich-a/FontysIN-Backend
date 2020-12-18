@@ -5,18 +5,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import service.model.*;
-import service.model.dto.ContactDTO;
-import service.model.dto.UserDTO;
-import service.repository.*;
 import service.repository.DatabaseException;
+import service.repository.ProfileRepository;
 
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +27,7 @@ public class LoginControllerTest {
 
     @Test
     public void getUserByEmail() throws DatabaseException, URISyntaxException, SQLException {
-        User user5 = new User(1, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", 2, 2, "734695", "noImage");
+        User user5 = new User(1, "Beatrice", "Forslund", UserType.Student, "Bea@fontys.com", "1234", 2, 2, "734695", "noImage");
         when(repository.getUsers()).thenReturn(
                 Arrays.asList(
                         new User(1, "Beatrice", "Forslund", UserType.Student, "Bea@fontys.com", "1234", 2, 2, "734695", "noImage"),

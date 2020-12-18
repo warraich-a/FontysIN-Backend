@@ -1,10 +1,7 @@
 package service.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.sql.Blob;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.Date;
 
 @XmlRootElement
 public class Posts {
@@ -30,6 +27,14 @@ public class Posts {
 
     }
 
+    public Posts(int id, int userId, String content, String image) {
+        setId(id);
+        setUserId(userId);
+        setContent(content);
+
+        setImage(image);
+
+    }
 
     public int getId() {
         return id;
