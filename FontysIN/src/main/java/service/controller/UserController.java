@@ -9,7 +9,7 @@ import service.model.User;
 import service.model.UserType;
 import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
-import service.repository.JDBCProfileRepository;
+import service.repository.ProfileRepository;
 import service.repository.UserRepository;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -25,7 +25,7 @@ import java.util.List;
 import static java.lang.Integer.parseInt;
 
 public class UserController {
-    JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+    ProfileRepository profileRepository = new ProfileRepository();
     ProfileController controller = new ProfileController();
     public User getUserByEmail(String email) {
 
@@ -46,6 +46,9 @@ public class UserController {
     }
 
     public User getUser(int userId){
+
+//        ProfileRepository profileRepository = new ProfileRepository();
+
 
         try {
             User user = profileRepository.getUserById(userId);

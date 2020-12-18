@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.model.Contact;
 import service.model.User;
 import service.model.UserType;
 import service.model.dto.ContactDTO;
@@ -32,20 +31,20 @@ public class ContactControllerTest {
     @Test
     public void getAllContactsDTO() throws DatabaseException, URISyntaxException {
         List<ContactDTO> expectedContacts = Arrays.asList(
-                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "anas image"), true),
-                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "bea image"), true),
-                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(4, 4, "Ranim", "Alayoubi", "ranim image"), false),
-                new ContactDTO(5, new UserDTO(5, 0, "Denys", "Sytnyk", "denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), false),
-                new ContactDTO(6, new UserDTO(6, 0, "Kalina", "Petrova", "kalina image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), false)
+                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "assets/anas image"), true),
+                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "assets/bea image"), true),
+                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(4, 4, "Ranim", "Alayoubi", "assets/ranim image"), false),
+                new ContactDTO(5, new UserDTO(5, 0, "Denys", "Sytnyk", "assets/denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false),
+                new ContactDTO(6, new UserDTO(6, 0, "Kalina", "Petrova", "assets/kalina image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false)
         );
 
         when(contactsRepository.getAllContactsDTO(1)).thenReturn(
             Arrays.asList(
-                    new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "anas image"), true),
-                    new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "bea image"), true),
-                    new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(4, 4, "Ranim", "Alayoubi", "ranim image"), false),
-                    new ContactDTO(5, new UserDTO(5, 0, "Denys", "Sytnyk", "denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), false),
-                    new ContactDTO(6, new UserDTO(6, 0, "Kalina", "Petrova", "kalina image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), false)
+                    new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "assets/anas image"), true),
+                    new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "assets/bea image"), true),
+                    new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(4, 4, "Ranim", "Alayoubi", "assets/ranim image"), false),
+                    new ContactDTO(5, new UserDTO(5, 0, "Denys", "Sytnyk", "assets/denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false),
+                    new ContactDTO(6, new UserDTO(6, 0, "Kalina", "Petrova", "assets/kalina image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false)
             )
         );
 
@@ -58,14 +57,14 @@ public class ContactControllerTest {
     @Test
     public void getAcceptedContactsDTO() throws DatabaseException, URISyntaxException {
         List<ContactDTO> expectedContacts = Arrays.asList(
-                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "anas image"), true),
-                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "bea image"), true)
+                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "assets/anas image"), true),
+                new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "assets/bea image"), true)
         );
 
         when(contactsRepository.getAcceptedContactsDTO(1)).thenReturn(
                 Arrays.asList(
-                        new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "anas image"), true),
-                        new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "bea image"), true)
+                        new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "assets/anas image"), true),
+                        new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "assets/bea image"), true)
                 )
         );
 
@@ -78,14 +77,14 @@ public class ContactControllerTest {
     @Test
     public void getContactsRequestsDTO() throws DatabaseException, URISyntaxException {
         List<ContactDTO> expectedContacts = Arrays.asList(
-                new ContactDTO(5, new UserDTO(5, 0, "Denys", "Sytnyk", "denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), false),
-                new ContactDTO(6, new UserDTO(6, 0, "Kalina", "Petrova", "kalina image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), false)
+                new ContactDTO(5, new UserDTO(5, 0, "Denys", "Sytnyk", "assets/denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false),
+                new ContactDTO(6, new UserDTO(6, 0, "Kalina", "Petrova", "assets/a image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false)
         );
 
         when(contactsRepository.getContactsRequestsDTO(1)).thenReturn(
                 Arrays.asList(
-                        new ContactDTO(5, new UserDTO(5, 0, "Denys", "Sytnyk", "denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), false),
-                        new ContactDTO(6, new UserDTO(6, 0, "Kalina", "Petrova", "kalina image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), false)
+                        new ContactDTO(5, new UserDTO(5, 0, "Denys", "Sytnyk", "assets/denys image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false),
+                        new ContactDTO(6, new UserDTO(6, 0, "Kalina", "Petrova", "assets/a image"), new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), false)
                 )
         );
 
@@ -97,7 +96,7 @@ public class ContactControllerTest {
 
     @Test
     public void createContact() throws DatabaseException, URISyntaxException {
-        ContactDTO newContact = new ContactDTO(7, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(6, 0, "Kalina", "Petrova", "kalina image"), false);
+        ContactDTO newContact = new ContactDTO(7, new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"), new UserDTO(6, 0, "Kalina", "Petrova", "assets/kalina image"), false);
 
         when(contactsRepository.createContact(newContact)).thenReturn(7);
 
@@ -126,9 +125,11 @@ public class ContactControllerTest {
 
     @Test
     public void updateContact() throws DatabaseException, URISyntaxException {
-        Contact updatedContact = new Contact(
-                new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan@student.fontys.nl", "1234", 1, 1, "123456", "rawan image"),
-                new User(4, "Ranim", "Alayoubi", UserType.Student, "ranim@student.fontys.nl", "1234567", 2, 1, "123456", "ranim image"));
+        	//public UserDTO(int id, int profileId, String firstName, String lastName, String image) {
+
+            ContactDTO updatedContact = new ContactDTO(3,
+                new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image"),
+                new UserDTO(4, 4, "Ranim", "Alayoubi", "assets/ranim image"), true);
         when(contactsRepository.updateContact(1, updatedContact)).thenReturn(true);
 
         boolean result = contactController.updateContact(1, updatedContact);
@@ -138,7 +139,7 @@ public class ContactControllerTest {
 
     @Test
     public void getUserDTO() throws DatabaseException, URISyntaxException {
-        UserDTO expectedUser = new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image");
+        UserDTO expectedUser = new UserDTO(1, 1, "Rawan", "Abou Dehn", "assets/rawan image");
 
         when(contactsRepository.getUserDTO(1)).thenReturn(expectedUser);
 
@@ -150,7 +151,7 @@ public class ContactControllerTest {
 
     @Test
     public void getUser() throws DatabaseException, URISyntaxException {
-        User expectedUser = new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan.student@fontys.nl", "1234", 1, 1, "123456", "rawan image");
+        User expectedUser = new User(1, "Rawan", "Abou Dehn", UserType.Student, "rawan.student@fontys.nl", "1234", 1, 1, "123456", "assets/rawan image");
 
         when(contactsRepository.getUser(1)).thenReturn(expectedUser);
 

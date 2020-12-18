@@ -48,7 +48,7 @@ public class ContactDTO {
 		this.friend = friend;
 	}
 
-	public void setAccepted(boolean accepted) {
+	public void setIsAccepted(boolean accepted) {
 		isAccepted = accepted;
 	}
 
