@@ -27,21 +27,16 @@ public class PrivacyControllerTest {
 
     @InjectMocks
     PrivacyController controller;
-    @InjectMocks
+    @Mock
     ProfileController profileController;
 
     @Mock
     PrivacyRepository repository;
 
-    @InjectMocks
+    @Mock
     ContactController contactController;
 
-    @Mock
-    ContactsRepository contactsRepository;
-    @Mock
-    ProfileRepository profileRepository;
-
-
+  
     @Test
    public void GetEducationSettingOfUser() throws DatabaseException, URISyntaxException {
         User user5 = new User(5, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", 2, 2, "734695", "noImage");
@@ -86,29 +81,84 @@ public class PrivacyControllerTest {
 
     @Test
     public void AllowedToSeeEducation() throws DatabaseException, URISyntaxException, SQLException {
-        User user1 = new User(3, "Rawan", "Abou Dehn", UserType.Student, "sdfsdf", "1234", 2, 2, "734695", "noImage");
-        User user2 = new User(1, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", 2, 2, "734695", "noImage");
-        lenient().when(profileController.getUser(1)).thenReturn(user1);
-        lenient().when(profileController.getUser(3)).thenReturn(user2);
-        lenient().when(contactsRepository.getAcceptedContactsDTO(3)).thenReturn(
+        User user3 = new User(3, "Rawan", "Abou Dehn", UserType.Student, "sdfsdf", "1234", 2, 2, "734695", "noImage");
+        User user1 = new User(1, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", 2, 2, "734695", "noImage");
+        Privacy pForUser3 = new Privacy(3);
+        Privacy pForUser1 =  new Privacy(2,1, Privacy.Setting.CONNECTIONS, Privacy.Setting.CONNECTIONS, Privacy.Setting.CONNECTIONS, false);
+
+     lenient().when(profileController.getUser(1)).thenReturn(user1);
+        lenient().when(profileController.getUser(3)).thenReturn(user3);
+        lenient().when(contactController.getAcceptedContactsDTO(1)).thenReturn(
                 Arrays.asList(
                         new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "anas image"), true),
                         new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "bea image"), true)
                 )
         );
 
-        lenient().when(repository.getPrivacyList()).thenReturn(
+        when(repository.getPrivacyList()).thenReturn(
                 Arrays.asList(
-                        new Privacy(1),  new Privacy(1,3, Privacy.Setting.CONNECTIONS, Privacy.Setting.CONNECTIONS, Privacy.Setting.CONNECTIONS, false),new Privacy(2),new Privacy(1)
+                      pForUser3, pForUser1
                 )
         );
-//
-//        boolean expected =  controller.AllowedToSee(3,1, PrivacyController.ProfilePart.EDUCATION);
-//
-//        assertEquals(true, expected);
-        User actualUser = profileController.getUser(3);
 
-        assertEquals(user2, actualUser);
-        //K why is this not working
+        boolean expected =  controller.AllowedToSee(1,3, PrivacyController.ProfilePart.EDUCATION);
+
+        assertEquals(true, expected);
+
+
+    }
+    @Test
+    public void AllowedToSeeOnlyMe() throws DatabaseException, URISyntaxException, SQLException {
+        User user3 = new User(3, "Rawan", "Abou Dehn", UserType.Student, "sdfsdf", "1234", 2, 2, "734695", "noImage");
+        User user1 = new User(1, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", 2, 2, "734695", "noImage");
+        Privacy pForUser3 = new Privacy(3);
+        Privacy pForUser1 =  new Privacy(2,1, Privacy.Setting.ONLYME, Privacy.Setting.ONLYME, Privacy.Setting.ONLYME, false);
+
+
+        lenient().when(profileController.getUser(1)).thenReturn(user1);
+        lenient().when(profileController.getUser(3)).thenReturn(user3);
+        lenient().when(contactController.getAcceptedContactsDTO(1)).thenReturn(
+                Arrays.asList(
+                        new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "anas image"), true),
+                        new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "bea image"), true)
+                )
+        );
+        when(repository.getPrivacyList()).thenReturn(
+                Arrays.asList(
+                        pForUser3, pForUser1
+                )
+        );
+
+        boolean expected =  controller.AllowedToSee(1,3, PrivacyController.ProfilePart.EDUCATION);
+
+        assertEquals(false, expected);
+
+    }
+    @Test
+    public void AllowedToSeeEveryone() throws DatabaseException, URISyntaxException, SQLException {
+        User user3 = new User(3, "Rawan", "Abou Dehn", UserType.Student, "sdfsdf", "1234", 2, 2, "734695", "noImage");
+        User user1 = new User(1, "Beatrice", "Forslund", UserType.Student, "bea@fontys.com", "1234", 2, 2, "734695", "noImage");
+        Privacy pForUser3 = new Privacy(3);
+        Privacy pForUser1 =  new Privacy(1);
+
+
+        lenient().when(profileController.getUser(1)).thenReturn(user1);
+        lenient().when(profileController.getUser(3)).thenReturn(user3);
+        lenient().when(contactController.getAcceptedContactsDTO(1)).thenReturn(
+                Arrays.asList(
+                        new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(2, 2, "Anas", "Ahmad", "anas image"), true),
+                        new ContactDTO(1, new UserDTO(1, 1, "Rawan", "Abou Dehn", "rawan image"), new UserDTO(3, 3, "Beatrice", "Forslund", "bea image"), true)
+                )
+        );
+        when(repository.getPrivacyList()).thenReturn(
+                Arrays.asList(
+                        pForUser3, pForUser1
+                )
+        );
+
+        boolean expected =  controller.AllowedToSee(1,3, PrivacyController.ProfilePart.EDUCATION);
+
+        assertEquals(true, expected);
+
     }
 }
