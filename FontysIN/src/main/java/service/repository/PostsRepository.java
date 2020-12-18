@@ -1,7 +1,7 @@
 package service.repository;
 
-import service.controller.ContactController;
-import service.controller.PostController;
+
+import service.controller.*;
 import service.model.Posts;
 import service.model.dto.ContactDTO;
 

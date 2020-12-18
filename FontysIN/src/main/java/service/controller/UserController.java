@@ -124,6 +124,7 @@ public class UserController {
 
     public boolean addUser(User user) {
 
+//        ProfileRepository pRepository = new ProfileRepository();
         try {
             String encryptedPassword = doHashing(user.getPassword());
             user.setPassword(encryptedPassword);

@@ -483,7 +483,9 @@ public class ProfileRepository extends JDBCRepository {
 
             connection.commit();
             statement.close();
-          connection.close();
+
+            connection.close();
+
 
         } catch (SQLException throwable) {
             throw new DatabaseException("Cannot read data from the database.", throwable);
@@ -782,6 +784,7 @@ public class ProfileRepository extends JDBCRepository {
                 fontysDepartments.add(e);
             }
             connection.setAutoCommit(false);
+            statement.close();
             connection.commit();
             statement.close();
             connection.close();
@@ -907,10 +910,6 @@ public class ProfileRepository extends JDBCRepository {
 //                id = rs.getInt(1);
 //            }
 
-//                connection.setAutoCommit(false);
-//                connection.commit();
-//                preparedStatement.close();
-//                connection.close();
                 rs = preparedStatement.getGeneratedKeys();
                 if(rs != null && rs.next()){
                     System.out.println("Generated Emp Id: "+rs.getInt(1));
