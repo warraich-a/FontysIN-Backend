@@ -156,3 +156,8 @@ gradle-app.setting
 /src/test/resources/data.sql
 /src/test/resources/shutdown.sql
 /src/test/resources/
+/src/main/resources/
+.suo
+slnx.sqlite
+VSWorkspaceState.json
+

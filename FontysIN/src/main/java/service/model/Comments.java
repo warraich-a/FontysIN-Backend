@@ -1,10 +1,7 @@
 package service.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.sql.Blob;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.Date;
 
 
 @XmlRootElement
@@ -24,6 +21,16 @@ public class Comments {
         setUserId(userId);
         setContent(content);
         setDate(date);
+        setPostId(postId);
+
+
+
+    }
+
+    public Comments(int id, int userId, int postId, String content) {
+        setId(id);
+        setUserId(userId);
+        setContent(content);
         setPostId(postId);
 
 

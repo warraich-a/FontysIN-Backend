@@ -2,7 +2,7 @@ package service.controller;
 
 import service.model.*;
 import service.repository.DatabaseException;
-import service.repository.JDBCProfileRepository;
+import service.repository.ProfileRepository;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,9 +11,10 @@ import java.util.List;
 
 public class ProfileController {
 
+    ProfileRepository profileRepository = new ProfileRepository();
 
     public List<About> getAbout(int userId, int profileId){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<About> about = profileRepository.getAbout(userId, profileId);
@@ -28,10 +29,10 @@ public class ProfileController {
     }
 
     public List<Experience> getExperience(int userId, int profileId){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
+        List<Experience> experience;
         try {
-            List<Experience> experience = profileRepository.getExperiences(userId, profileId);
+            experience = profileRepository.getExperiences(userId, profileId);
 
             System.out.println("ok");
 
@@ -43,7 +44,7 @@ public class ProfileController {
     }
 
     public List<Education> getEducations(int userId, int profileId){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<Education> educations = profileRepository.getEducations(userId, profileId);
@@ -57,7 +58,7 @@ public class ProfileController {
         return null;
     }
     public List<Skill> getSkills(int userId, int profileId){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<Skill> skills = profileRepository.getSkills(userId, profileId);
@@ -71,7 +72,7 @@ public class ProfileController {
         return null;
     }
     public List<Profile> getProfile(int userId){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<Profile> profiles = profileRepository.getProfile(userId);
@@ -84,9 +85,9 @@ public class ProfileController {
         }
         return null;
     }
+//    JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
     public User getUser(int userId){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
         try {
             User user = profileRepository.getUserById(userId);
@@ -101,7 +102,7 @@ public class ProfileController {
     }
 
     public boolean addExperience(Experience experience) {
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createExperience(experience)) {
                 return true;
@@ -117,7 +118,7 @@ public class ProfileController {
     }
 
     public boolean addEducation(Education education) {
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createEducation(education)) {
                 return true;
@@ -134,7 +135,7 @@ public class ProfileController {
 
 
     public boolean addSkill(Skill skill, int userId) {
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createSkill(skill, userId)) {
                 return true;
@@ -150,7 +151,7 @@ public class ProfileController {
     }
 
     public int addProfile(Profile profile, int userId) throws DatabaseException, SQLException, URISyntaxException {
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
         int id = profileRepository.createProfile(profile, userId);
         if( id != 0) {
             return id;
@@ -161,7 +162,7 @@ public class ProfileController {
         }
     }
     public boolean addAbout(About about) {
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createAbout(about)) {
                 return true;
@@ -189,7 +190,7 @@ public class ProfileController {
      */
     public boolean DeleteEducation(int userId, int profileId, int educationId){
 
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        ProfileRepository profileRepository = new ProfileRepository();
 
         try{
             profileRepository.deleteEducation(userId, profileId, educationId);
@@ -212,7 +213,7 @@ public class ProfileController {
      */
     public boolean DeleteExperience(int userId, int profileId, int experienceId){
 
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        ProfileRepository profileRepository = new ProfileRepository();
 
         try{
             profileRepository.deleteExperience(userId, profileId, experienceId);
@@ -235,7 +236,7 @@ public class ProfileController {
      */
     public boolean DeleteSkill(int userId, int profileId, int skillId){
 
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        ProfileRepository profileRepository = new ProfileRepository();
 
         try{
             profileRepository.deleteSkill(userId, profileId, skillId);
@@ -249,7 +250,7 @@ public class ProfileController {
     }
 
     public Experience getExp(int Id){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             Experience exp = (Experience) profileRepository.getExperienceById(Id);
@@ -263,7 +264,7 @@ public class ProfileController {
         return null;
     }
     public Education getEdu(int Id){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        ProfileRepository profileRepository = new ProfileRepository();
         try {
             Education exp = (Education) profileRepository.getEducationById(Id);
 
@@ -276,7 +277,7 @@ public class ProfileController {
         return null;
     }
     public About getAbo(int Id){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+        ProfileRepository profileRepository = new ProfileRepository();
         try {
             About exp = (About) profileRepository.getAboutById(Id);
 
@@ -292,7 +293,8 @@ public class ProfileController {
 
     public boolean updateEdu(Education edu){
 
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
+
         try {
             return profileRepository.updateEducation(edu);
         } catch (DatabaseException | URISyntaxException e) {
@@ -301,7 +303,9 @@ public class ProfileController {
         return false;
     }
     public boolean updateExp(Experience edu){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+//        ProfileRepository profileRepository = new ProfileRepository();
+
         try {
             return profileRepository.updateExperience(edu);
         } catch (DatabaseException | URISyntaxException e) {
@@ -310,7 +314,9 @@ public class ProfileController {
         return false;
     }
     public boolean updateAbo(About edu){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+
+//        ProfileRepository profileRepository = new ProfileRepository();
+
         try {
             return profileRepository.updateAbout(edu);
         } catch (DatabaseException | URISyntaxException e) {
@@ -322,7 +328,7 @@ public class ProfileController {
 
 
     public boolean uploadPicture(int userId, String path){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.uploadImage(userId, path)) {
                 return true;
@@ -338,7 +344,7 @@ public class ProfileController {
     }
 
     public List<Location> getFontysLocations(){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             List<Location> locations = profileRepository.getFontysLocation();
 
@@ -352,7 +358,7 @@ public class ProfileController {
     }
 
     public List<Department> getFontysDepartments(){
-        JDBCProfileRepository profileRepository = new JDBCProfileRepository();
+//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             return  profileRepository.getFontysDepartments();
         } catch (DatabaseException | SQLException | URISyntaxException e) {
