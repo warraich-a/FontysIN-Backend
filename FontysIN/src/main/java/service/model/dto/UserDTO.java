@@ -22,27 +22,6 @@ public class UserDTO {
 		this.image = image;
 	}
 
-	//needed for unit testing
-	private UserType userType;
-	private int locationId;
-	private int departmentId;
-	private Education education;
-	private Experience experience;
-
-	public UserDTO(int id, int profileId, String firstName, String lastName, String image, UserType userType
-			, int locationId , int departmentId, Education education, Experience experience) {
-		this.id = id;
-		this.profileId = profileId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.image = image;
-		this.userType = userType;
-		this.departmentId = departmentId;
-		this.locationId = locationId;
-		this.education = education;
-		this.experience = experience;
-	}
-
 	public UserDTO() {
 	}
 
