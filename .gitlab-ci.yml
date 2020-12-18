@@ -4,10 +4,12 @@ stages:
 build:
   stage: build
   script:
+    - cd FontysIN
     - ./gradlew build
 test:
   stage: test
   script:
+    - cd FontysIN
     - ./gradlew test
   dependencies:
     - build
