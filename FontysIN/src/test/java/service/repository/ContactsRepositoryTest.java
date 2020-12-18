@@ -13,7 +13,6 @@ import service.model.UserType;
 import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
 
-import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -36,7 +35,7 @@ public class ContactsRepositoryTest {
     JDBCRepository jdbcRepository;
 
     @BeforeEach
-    public void setup() throws SQLException, ClassNotFoundException, FileNotFoundException, URISyntaxException, DatabaseException {
+    public void setup() throws SQLException, ClassNotFoundException, URISyntaxException {
         Class.forName ("org.h2.Driver");
 
         when(jdbcRepository.getDatabaseConnection()).thenReturn(
