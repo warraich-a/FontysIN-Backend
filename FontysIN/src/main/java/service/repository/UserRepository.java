@@ -36,8 +36,9 @@ public class UserRepository extends JDBCRepository {
                 String lastName = resultSet.getString("lastName");
                 String image = "assets/" + resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
+                UserType userType = UserType.valueOf(resultSet.getString("userType"));
 
-                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image);
+                UserDTO userDTO= new UserDTO(id, profileId, firstName, lastName, image, userType);
 
                 filtered.add(userDTO);
 

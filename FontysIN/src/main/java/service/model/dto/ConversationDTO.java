@@ -13,6 +13,12 @@ public class ConversationDTO {
         this.secondUserId = secondUserId;
     }
 
+    public ConversationDTO(int id, int firstUserId, int secondUserId) {
+        this.id = id;
+        this.firstUserId = firstUserId;
+        this.secondUserId = secondUserId;
+    }
+
     public ConversationDTO() {
     }
 
