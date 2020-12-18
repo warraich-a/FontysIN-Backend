@@ -67,7 +67,7 @@ class CommentsRepositoryTest {
 
     @Test
     void addComm() throws DatabaseException, URISyntaxException {
-        Comments comment = new Comments(1,2,1,"new add comment");
+        Comments comment = new Comments(1,2,1,"new add commentas asd");
 
         Boolean addComment = commentsRepository.addComm(comment);
 

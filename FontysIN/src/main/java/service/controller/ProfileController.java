@@ -337,7 +337,7 @@ public class ProfileController {
             {
                 return false;
             }
-        } catch (DatabaseException | SQLException | IOException | URISyntaxException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }

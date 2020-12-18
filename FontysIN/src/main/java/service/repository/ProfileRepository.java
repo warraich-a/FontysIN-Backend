@@ -9,16 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileRepository extends JDBCRepository {
+    JDBCRepository jdbcRepository;
 
+    public ProfileRepository() {
+        this.jdbcRepository = new JDBCRepository();
+    }
 
-    public List<Profile> getProfile(int givenUserId) throws DatabaseException, SQLException, URISyntaxException {
+    public List<Profile> getProfile(int givenUserId) throws DatabaseException, URISyntaxException, SQLException {
         List<Profile> foundProfiles = new ArrayList<>();
 
 
-        Connection connection = this.getDatabaseConnection();
+        Connection connection = jdbcRepository.getDatabaseConnection();
         String sql = "SELECT * FROM profiles where userId = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         try {
+
             statement.setInt(1, givenUserId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -47,14 +52,15 @@ public class ProfileRepository extends JDBCRepository {
         return foundProfiles;
     }
 
-    public List<Experience> getExperiences(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
+    public List<Experience> getExperiences(int userId, int givenProfileId) throws DatabaseException, URISyntaxException, SQLException {
         List<Experience> foundExperiences = new ArrayList<>();
         for (Profile p: getProfile(userId)) {
             if (p.getUserId() == userId && p.getId() == givenProfileId) {
-                Connection connection = this.getDatabaseConnection();
+                Connection connection = jdbcRepository.getDatabaseConnection();
                 String sql = "SELECT * FROM experiences where profileId = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 try {
+
                     statement.setInt(1, givenProfileId);
                     ResultSet resultSet = statement.executeQuery();
                     while (resultSet.next()) {
@@ -692,15 +698,16 @@ public class ProfileRepository extends JDBCRepository {
     }
 
 
-    public boolean uploadImage(int userId, String path) throws DatabaseException, SQLException, IOException, URISyntaxException {
+    public boolean uploadImage(int userId, String path) throws DatabaseException, URISyntaxException, SQLException {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "update users set image=? where id = ? ";
 //        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        System.out.println("Path " + path);
 
         try {
+            System.out.println("Path " + path);
+
             preparedStatement.setString(1, path);
             preparedStatement.setInt(2, userId);
 
