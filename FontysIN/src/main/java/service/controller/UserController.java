@@ -25,6 +25,7 @@ import java.util.List;
 import static java.lang.Integer.parseInt;
 
 public class UserController {
+    UserRepository userRepository = new UserRepository();
     ProfileRepository profileRepository = new ProfileRepository();
     ProfileController controller = new ProfileController();
     public User getUserByEmail(String email) {
@@ -175,7 +176,6 @@ public class UserController {
     //show users by user type
     public List<UserDTO> UserFilteredWithType(UserType type){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByType(type);
@@ -196,7 +196,6 @@ public class UserController {
     //show users by user location
     public List<UserDTO> UserFilteredWithLocation(int id){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByLocation(id);
@@ -216,7 +215,6 @@ public class UserController {
     //show usesr by user department
     public List<UserDTO> UserFilteredWithDepartment(int id){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByDepartment(id);
@@ -236,7 +234,6 @@ public class UserController {
     //show users by start study year
     public List<UserDTO> UserFilteredWithStartStudyYear(int year){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByStartStudyYear(year);
@@ -256,7 +253,6 @@ public class UserController {
     //show users by start work year
     public List<UserDTO> UserFilteredWithStartWorkYear(int year){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByStartWorkYear(year);
@@ -279,7 +275,6 @@ public class UserController {
     //show users by loc dep and type
     public List<UserDTO> UserFilterByTypeLocationAndDepartment(UserType type, int lId, int dId){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
@@ -303,7 +298,6 @@ public class UserController {
     //show users by location user type location  department and start study year
     public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartSudyYear(UserType type, int year, int lId, int dId){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(type, year, lId, dId);
@@ -327,7 +321,6 @@ public class UserController {
     //show users by location user type  location department and start work year
     public List<UserDTO> UserFilterByTypeLocationDepartmentAndStartWorkyearFontysStaff(UserType type, int year, int lId, int dId){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(type, year, lId, dId);
@@ -346,7 +339,6 @@ public class UserController {
      */
     public List<UserDTO> GetAllUsers(){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersDTO();
@@ -371,7 +363,6 @@ public class UserController {
     //show users by location user type department and start study year
     public List<UserDTO> UserFilteLocationDepartmentTypeAndName(String chars, int lId, int dId, UserType type ){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByUserTypeLocationDeoartmentAndName(chars, lId, dId, type);
@@ -392,7 +383,6 @@ public class UserController {
     //show users by location user type department and start study year
     public List<UserDTO> UserFilterByFirstNameChars(String chars){
 
-        UserRepository userRepository = new UserRepository();
 
         try {
             List<UserDTO> users = userRepository.getUsersByFirstNameChars(chars);
