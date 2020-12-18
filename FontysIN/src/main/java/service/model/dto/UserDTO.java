@@ -1,5 +1,7 @@
 package service.model.dto;
 
+import service.model.Education;
+import service.model.Experience;
 import service.model.UserType;
 
 import java.util.Objects;
@@ -11,7 +13,6 @@ public class UserDTO {
 	private String firstName;
 	private String lastName;
 	private String image;
-	private UserType userType;
 
 	public UserDTO(int id, int profileId, String firstName, String lastName, String image) {
 		this.id = id;
@@ -21,13 +22,25 @@ public class UserDTO {
 		this.image = image;
 	}
 
-	public UserDTO(int id, int profileId, String firstName, String lastName, String image, UserType userType) {
+	//needed for unit testing
+	private UserType userType;
+	private int locationId;
+	private int departmentId;
+	private Education education;
+	private Experience experience;
+
+	public UserDTO(int id, int profileId, String firstName, String lastName, String image, UserType userType
+			, int locationId , int departmentId, Education education, Experience experience) {
 		this.id = id;
 		this.profileId = profileId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.image = image;
 		this.userType = userType;
+		this.departmentId = departmentId;
+		this.locationId = locationId;
+		this.education = education;
+		this.experience = experience;
 	}
 
 	public UserDTO() {
