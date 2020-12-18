@@ -12,7 +12,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-class JDBCRepository {
+public class JDBCRepository {
 
     protected Connection getDatabaseConnection() throws DatabaseException, URISyntaxException {
         URL res = getClass().getClassLoader().getResource("app.properties");
