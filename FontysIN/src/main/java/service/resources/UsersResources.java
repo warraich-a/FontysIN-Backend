@@ -115,11 +115,10 @@ public class UsersResources {
 	}
 
 	@GET
+	@PermitAll
 	@Path("{userId}")
-	public Response getUser(@PathParam("userId") int userId, @HeaderParam("Authorization") String auth) {
-		User userInToken = userController.getUserFromToken(auth);
-
-		UserDTO user = contactController.getUserDTO(userInToken.getId());
+	public Response getUser(@PathParam("userId") int userId) {
+		UserDTO user = contactController.getUserDTO(userId);
 
 		System.out.println("Get user " + user);
 
