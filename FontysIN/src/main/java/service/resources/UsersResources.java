@@ -115,9 +115,12 @@ public class UsersResources {
 	}
 
 	@GET
+	@PermitAll
 	@Path("{userId}")
 	public Response getUser(@PathParam("userId") int userId) {
+
 //		User userInToken = userController.getUserFromToken(auth);
+
 
 		UserDTO user = contactController.getUserDTO(userId);
 
