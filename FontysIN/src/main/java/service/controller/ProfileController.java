@@ -1,6 +1,8 @@
 package service.controller;
 
 import service.model.*;
+import service.model.dto.UserDTO;
+import service.repository.ContactsRepository;
 import service.repository.DatabaseException;
 import service.repository.ProfileRepository;
 
@@ -101,6 +103,20 @@ public class ProfileController {
         return null;
     }
 
+
+    public User getCurrentUser(int userId){
+        ContactsRepository contactsRepository = new ContactsRepository();
+        try {
+            User user = contactsRepository.getUser(userId);
+
+            System.out.println("ok");
+
+            return user;
+        } catch (DatabaseException  | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public boolean addExperience(Experience experience) {
 //        ProfileRepository profileRepository = new ProfileRepository();
         try {

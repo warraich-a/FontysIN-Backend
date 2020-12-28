@@ -12,7 +12,6 @@ repositories {
 
 test {
     useJUnitPlatform()
-    ignoreFailures = true
 }
 
 dependencies {

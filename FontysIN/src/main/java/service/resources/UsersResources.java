@@ -116,10 +116,10 @@ public class UsersResources {
 
 	@GET
 	@Path("{userId}")
-	public Response getUser(@PathParam("userId") int userId, @HeaderParam("Authorization") String auth) {
-		User userInToken = userController.getUserFromToken(auth);
+	public Response getUser(@PathParam("userId") int userId) {
+//		User userInToken = userController.getUserFromToken(auth);
 
-		UserDTO user = contactController.getUserDTO(userInToken.getId());
+		UserDTO user = contactController.getUserDTO(userId);
 
 		System.out.println("Get user " + user);
 
@@ -138,9 +138,7 @@ public class UsersResources {
 	public Response GeUser(@PathParam("userId") int userId) {
 		ProfileController profileController = new ProfileController();
 
-
-
-		User u = profileController.getUser(userId);
+		User u = profileController.getCurrentUser(userId);
 		System.out.println("User id " + userId);
 		System.out.println("Got user by id " + u);
 		if (u == null) {
