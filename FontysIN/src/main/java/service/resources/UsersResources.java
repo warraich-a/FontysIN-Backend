@@ -299,7 +299,7 @@ public class UsersResources {
 				return Response.ok(entity).build();
 			}
 		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+			return Response.noContent().build();
 		}
 
 	}
@@ -324,7 +324,7 @@ public class UsersResources {
 			return Response.ok(entity).build();
 		}
 		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+			return Response.noContent().build();
 		}
 	}
 	@GET //GET at http://localhost:XXXX/profile/educations
@@ -364,7 +364,7 @@ public class UsersResources {
 				return Response.ok(entity).build();
 			}
 		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+			return Response.noContent().build();
 		}
 
 	}
