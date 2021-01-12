@@ -154,7 +154,7 @@ public class UsersResources {
 
 
 	@GET //GET at http://localhost:XXXX/profile/experiences
-	@Path("{userId}/profiles/")
+	@Path("{userId}/profiles")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetProfile(@PathParam("userId") int userId) {
 		ProfileController profileController = new ProfileController();
@@ -276,7 +276,29 @@ public class UsersResources {
 		}
 	}
 
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/data")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response  getData(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) throws SQLException, DatabaseException, URISyntaxException {
+		ProfileController profileController = new ProfileController();
 
+		UserController controller = new UserController();
+		User loggedInUser = controller.getUserFromToken(auth);
+		PrivacyController pController = new PrivacyController();
+		Data data = profileController.getData(userId, profileId);
+		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
+		if(AllowToSee){
+			if (data == null) {
+				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+			} else {
+//				GenericEntity<List<Data>> entity = new GenericEntity<>(data) {
+//				};
+				return Response.ok(data).build();
+			}
+		}else{
+			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+		}
+	}
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
