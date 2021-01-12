@@ -36,9 +36,7 @@ class Publisher {
             CustomApplicationConfig customApplicationConfig = new CustomApplicationConfig();
             // create and start a grizzly server
 
-            //modified by Rafayel
-//            HttpServer server1 = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, customApplicationConfig, true);
-//            HttpServer webSocketServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, resourceConfig, false);
+
             HttpServer webSocketServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, customApplicationConfig, false);
 
 
