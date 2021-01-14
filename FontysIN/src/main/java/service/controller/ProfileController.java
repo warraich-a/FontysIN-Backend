@@ -16,9 +16,9 @@ public class ProfileController {
 
     ProfileRepository profileRepository = new ProfileRepository();
 
-    public Data getData(int userId, int profileId) throws URISyntaxException, DatabaseException, SQLException {
+    public Data getData(int userId, int profileId, int loggedInUser) throws URISyntaxException, DatabaseException, SQLException {
 //        ProfileRepository profileRepository = new ProfileRepository();
-
+        PrivacyController pController = new PrivacyController();
 
         List<Data> dataList = new ArrayList<>();
 
@@ -28,6 +28,19 @@ public class ProfileController {
             List<Skill> skills = profileRepository.getSkills(userId, profileId);
 //            List<About> abouts = profileRepository.getAbout(userId, profileId);
 //            List<Profile> profiles = profileRepository.getProfile(userId);
+          boolean seeEducation =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.EDUCATION);
+          boolean seeExperience =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.EXPERIENCE);
+          boolean seeSkills =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.SKILLS);
+
+          if(!seeEducation){
+              educations.clear();
+          }
+          if(!seeExperience){
+              experiences.clear();
+          }
+          if(!seeSkills){
+              skills.clear();
+          }
 
             Data data = new Data(experiences, educations, skills);
 //            dataList.add(data);

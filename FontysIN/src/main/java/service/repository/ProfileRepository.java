@@ -738,7 +738,7 @@ public class ProfileRepository extends JDBCRepository {
         List<Location> fontysLocations = new ArrayList<>();
 
             Connection connection = this.getDatabaseConnection();
-            String sql = "SELECT * FROM fontysLocations";
+            String sql = "SELECT * FROM fontyslocations";
             PreparedStatement statement = connection.prepareStatement(sql);
             try {
                 ResultSet resultSet = statement.executeQuery();

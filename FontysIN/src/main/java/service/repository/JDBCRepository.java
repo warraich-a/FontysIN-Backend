@@ -44,7 +44,14 @@ public class JDBCRepository {
 
         Connection connection;
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://studmysql01.fhict.local:3306/dbi431685", "dbi431685", "password");
+            //connection = DriverManager.getConnection("jdbc:mysql://studmysql01.fhict.local:3306/dbi431685", "dbi431685", "password");
+
+//            Server: sql2.freemysqlhosting.net
+//            Name: sql2386626
+//            Username: sql2386626
+//            Password: rH4!rV5%
+//                    Port number: 3306
+            connection = DriverManager.getConnection("jdbc:mysql://sql2.freemysqlhosting.net:3306/sql2386626", "sql2386626", "rH4!rV5%");
             connection.setAutoCommit(false);
             System.out.println("Conn " + connection);
         } catch (SQLException e) {

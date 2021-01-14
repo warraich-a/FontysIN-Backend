@@ -22,13 +22,13 @@ import java.util.logging.Logger;
 class Publisher {
 
 
-   // private static final URI BASE_URI = URI.create("http://0.0.0.0:9090/");
-    private static final URI BASE_URI = URI.create("http://localhost:9090/");
+   private static final URI BASE_URI = URI.create("http://0.0.0.0:9090/");
+   // private static final URI BASE_URI = URI.create("http://localhost:9090/");
 
     public static void main(String[] args) {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-        URI baseUri = UriBuilder.fromUri("http://localhost/").port(9090).build();
+
         ResourceConfig resourceConfig = new ResourceConfig(UsersResources.class);
 
         resourceConfig.packages("service");
@@ -38,7 +38,7 @@ class Publisher {
             // create and start a grizzly server
 
 
-            HttpServer webSocketServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, customApplicationConfig, false);
+            HttpServer webSocketServer = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, customApplicationConfig, false);
 
 
 //            HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, resourceConfig,false);

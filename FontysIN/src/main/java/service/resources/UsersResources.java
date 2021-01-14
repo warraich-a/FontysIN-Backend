@@ -297,10 +297,10 @@ public class UsersResources {
 
 		UserController controller = new UserController();
 		User loggedInUser = controller.getUserFromToken(auth);
-		PrivacyController pController = new PrivacyController();
-		Data data = profileController.getData(userId, profileId);
-		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
-		if(AllowToSee){
+
+		Data data = profileController.getData(userId, profileId, loggedInUser.getId());
+		//boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
+
 			if (data == null) {
 				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
 			} else {
@@ -308,9 +308,7 @@ public class UsersResources {
 //				};
 				return Response.ok(data).build();
 			}
-		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
-		}
+
 	}
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
