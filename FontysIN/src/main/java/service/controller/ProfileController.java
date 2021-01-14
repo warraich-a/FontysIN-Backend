@@ -9,11 +9,35 @@ import service.repository.ProfileRepository;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileController {
 
     ProfileRepository profileRepository = new ProfileRepository();
+
+    public Data getData(int userId, int profileId) throws URISyntaxException, DatabaseException, SQLException {
+//        ProfileRepository profileRepository = new ProfileRepository();
+
+
+        List<Data> dataList = new ArrayList<>();
+
+        try {
+            List<Education> educations = profileRepository.getEducations(userId, profileId);
+            List<Experience> experiences = profileRepository.getExperiences(userId, profileId);
+            List<Skill> skills = profileRepository.getSkills(userId, profileId);
+//            List<About> abouts = profileRepository.getAbout(userId, profileId);
+//            List<Profile> profiles = profileRepository.getProfile(userId);
+
+            Data data = new Data(experiences, educations, skills);
+//            dataList.add(data);
+
+            return data;
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public List<About> getAbout(int userId, int profileId){
 //        ProfileRepository profileRepository = new ProfileRepository();
