@@ -895,8 +895,6 @@ public class ProfileRepository extends JDBCRepository {
                 preparedStatement.setString(3, String.valueOf(user.getUserType()));
                 preparedStatement.setString(4, user.getEmail());
                 preparedStatement.setString(5, user.getPassword());
-//                preparedStatement.setString(6, user.getPhoneNumber());
-//                preparedStatement.setInt(7, user.getAddressId());
                 preparedStatement.setString(6, user.getImg());
                 preparedStatement.setInt(7, user.getLocationId());
                 preparedStatement.setInt(8, user.getDepartmentId());
@@ -935,6 +933,46 @@ public class ProfileRepository extends JDBCRepository {
         }
         return false;
 
+    }
+
+
+
+    public User getUser() throws DatabaseException, SQLException, URISyntaxException {
+
+        User user = null;
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM users where id = 1";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        try {
+            ///statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+
+
+                user = new User(id, firstName, lastName,  email, password);
+
+            }//
+            // connection.setAutoCommit(false);
+
+            connection.commit();
+            statement.close();
+
+            connection.close();
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read data from the database.", throwable);
+        }
+        finally {
+            if  (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+        return user;
     }
 
 }

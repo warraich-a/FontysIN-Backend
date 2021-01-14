@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id'com.github.johnrengelman.shadow'version'6.1.0'
 }
 
 group 'org.example'
@@ -65,4 +66,13 @@ dependencies {
 
     compile 'mysql:mysql-connector-java:5.1.23'
     runtime 'mysql:mysql-connector-java:5.1.23'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+  compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.2.2.jre8'
+}
+shadowJar {
+    mergeServiceFiles()
+    manifest {
+        attributes 'Main-Class': 'service.Publisher'
+    }
 }

@@ -10,6 +10,7 @@ import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
 import service.repository.FakeDataProfile;
+import service.repository.ProfileRepository;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
@@ -34,6 +35,18 @@ public class UsersResources {
 	private UriInfo uriInfo;
 
 	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
+
+	@GET
+	@PermitAll
+	@Path("test")
+	public Response testing() throws URISyntaxException, DatabaseException, SQLException {
+		ProfileRepository repository = new ProfileRepository();
+		User u = repository.getUser();
+		return Response.ok(u).build();
+		//return Response.ok("ok").build();
+	}
+
+
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
@@ -500,6 +513,7 @@ public class UsersResources {
 	}
 	@GET
 	@Path("profile/experience/{id}")
+	@PermitAll
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getExperienceById(@PathParam("id") int id) {
 		Experience e = persistenceController.getExp(id);
@@ -574,6 +588,7 @@ public class UsersResources {
 
 
 	@GET
+	@PermitAll
 	@Path("privacy/me")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPrivacy(@HeaderParam("Authorization") String token) {
@@ -619,6 +634,7 @@ public class UsersResources {
 
 	//filter users by user type department, location, start study year and start work year (searching by filter)
 	@GET //GET at http://localhost:9090/users?type= Or ?department= Or ?location= Or ?studyYear= Or ?workingYear=
+	@PermitAll
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,
