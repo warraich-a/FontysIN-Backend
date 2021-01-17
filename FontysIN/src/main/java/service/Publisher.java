@@ -53,6 +53,7 @@ class Publisher {
             webSocketServer.getListeners().forEach(listener -> { listener.registerAddOn(webSocketAddOn);});
 
             // register my websocket app
+            
             MyWebSocketApp webSocketApp = new MyWebSocketApp();
             WebSocketEngine.getEngine().register("/wss", "/demo", webSocketApp);
 
