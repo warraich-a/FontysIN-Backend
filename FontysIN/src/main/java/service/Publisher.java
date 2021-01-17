@@ -54,7 +54,7 @@ class Publisher {
 
             // register my websocket app
             MyWebSocketApp webSocketApp = new MyWebSocketApp();
-            WebSocketEngine.getEngine().register("/ws", "/demo", webSocketApp);
+            WebSocketEngine.getEngine().register("/wss", "/demo", webSocketApp);
 
             // Now start the server
             webSocketServer.start();
