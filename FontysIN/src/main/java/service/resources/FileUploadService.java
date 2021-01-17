@@ -41,7 +41,7 @@ public class FileUploadService {
                                   @PathParam("userId") int id) throws Exception {
         ProfileController profileController = new ProfileController();
 
-        String UPLOAD_PATH = "src/images/";
+        String UPLOAD_PATH = "src/main/java/service/images/";
         String project_path =System.getProperty("user.dir");
 //        String UPLOAD_PATH = "C:/Users/anasw/fontysin-semester-3-client/FontyIN-Client/src/assets/";
         System.out.println("Present Project Directory : "+ System.getProperty("user.dir"));
