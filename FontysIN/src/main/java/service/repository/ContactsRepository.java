@@ -19,13 +19,16 @@ public class ContactsRepository {
     }
 
     public int createContact(ContactDTO createdContactDTO) throws DatabaseException, URISyntaxException {
-        System.out.println("Create contact");
-        System.out.println(createdContactDTO);
         Connection connection = jdbcRepository.getDatabaseConnection();
 
+//        String sql = "INSERT INTO contacts (userId, friendId) " +
+//                "SELECT ?, ? WHERE NOT EXISTS (SELECT userId, friendId FROM contacts " +
+//                "WHERE (userId = ? AND friendId = ?) OR (userId = ? AND friendId = ?))";
         String sql = "INSERT INTO contacts (userId, friendId) " +
-                "SELECT ?, ? WHERE NOT EXISTS (SELECT userId, friendId FROM contacts " +
-                "WHERE (userId = ? AND friendId = ?) OR (userId = ? AND friendId = ?))";
+                        "SELECT ?, ? FROM DUAL " +
+                        "WHERE NOT EXISTS ( " +
+                        "SELECT userId, friendId FROM contacts WHERE (userId = ? AND friendId = ?) OR (userId = ? AND friendId = ?) LIMIT 1)";
+
 
         try {
             int contactId = -1;
@@ -57,7 +60,7 @@ public class ContactsRepository {
             return contactId;
         }
         catch (SQLException throwable) {
-            throw new DatabaseException("Cannot create the contact");
+            throw new DatabaseException("Cannot create the contact hoho");
         }
     }
 
@@ -167,14 +170,14 @@ public class ContactsRepository {
         Connection connection = jdbcRepository.getDatabaseConnection();
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
-                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.* , " +
-                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.* " +
+                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.id AS userProfileId , " +
+                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.id AS friendProfileId " +
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
                 "LEFT JOIN profiles AS p1 ON p1.userId = user.id " +
                 "LEFT JOIN profiles AS p2 ON p2.userId = friend.id " +
-                "WHERE (user.id = 155 OR friend.id = 155) AND contacts.isAccepted = true " +
+                "WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true " +
                 "GROUP BY contacts.id";
 
         try {
@@ -224,8 +227,8 @@ public class ContactsRepository {
         Connection connection = jdbcRepository.getDatabaseConnection();
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
-                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.* , " +
-                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.* " +
+                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.id AS userProfileId , " +
+                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.id AS friendProfileId " +
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
@@ -382,29 +385,34 @@ public class ContactsRepository {
         }
     }
 
+    // UserDTO currentUser // user who send request
+    // UserDTO otherUser // other user
+    // boolean areConnected // 1 (connected), 0 (not connected)
+    // boolean isRequestSent (request sent)
     public ContactDTO getContactDTO(int firstUserId, int secondUserId) throws URISyntaxException, DatabaseException {
-//        List<ContactDTO> acceptedContacts = new ArrayList<>();
         ContactDTO contact = null;
         Connection connection = jdbcRepository.getDatabaseConnection();
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
-                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.* , " +
-                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.* " +
+                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.id AS userProfileId , " +
+                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.id AS friendProfileId " +
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId, id LIMIT 1) p1 ON p1.userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId, id LIMIT 1) p2 ON p2.userId = friend.id " +
-                "   WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true";
+                "LEFT JOIN profiles AS p1 ON p1.userId = user.id " +
+                "LEFT JOIN profiles AS p2 ON p2.userId = friend.id " +
+                "WHERE (user.id = ? AND friend.id = ?) OR (user.id = ? AND friend.id = ?)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, firstUserId);
             statement.setInt(2, secondUserId);
+            statement.setInt(3, secondUserId);
+            statement.setInt(4, firstUserId);
 
             ResultSet resultSet = statement.executeQuery();
 
-            while(resultSet.next()) {
+            if(resultSet.next()) {
                 int contactId = resultSet.getInt("id");
                 boolean isAccepted = resultSet.getBoolean("isAccepted");
                 int userId = resultSet.getInt("userId");
@@ -424,8 +432,6 @@ public class ContactsRepository {
                 UserDTO friend = new UserDTO(friendId, friendProfileId, friendFirstName, friendLastName, friendImage);
 
                 contact = new ContactDTO(contactId, user, friend, isAccepted);
-
-//                acceptedContacts.add(contact);
             }
             statement.close();
             connection.close();

@@ -98,23 +98,18 @@ public class UsersResources {
 	@Path("{id}/contacts/{secondUserId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContactsBetweenUsers(@PathParam("id") int id, @PathParam("secondUserId") int secondUserId, @HeaderParam("Authorization") String auth) {
-		System.out.println("******************************");
-
 		User user = userController.getUserFromToken(auth);
 		int currentUserId = user.getId();
 
-		// UserDTO currentUser
-		// UserDTO otherUser
-		// boolean areConnected
-		// boolean isRequestSent (who sent the request)
+		// UserDTO currentUser // user who send request
+		// UserDTO otherUser // other user
+		// boolean areConnected // 1 (connected), 0 (not connected)
+		// boolean isRequestSent (request sent)
 
-		List<ContactDTO> contacts = contactController.getAllContactsDTO(user.getId());
+//		List<ContactDTO> contacts = contactController.getAllContactsDTO(user.getId());
 		ContactDTO contactDTO = contactController.getContactDTO(currentUserId, secondUserId);
 
-		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
-		System.out.println("******************************");
-
-		return Response.ok(entity).build();
+		return Response.ok(contactDTO).build();
 
 	}
 
