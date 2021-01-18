@@ -2,7 +2,6 @@ package service.repository;
 
 import service.model.*;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -902,6 +901,8 @@ public class ProfileRepository extends JDBCRepository {
 
                 preparedStatement.executeUpdate();
 
+                System.out.println(preparedStatement);
+
 
 //            if(rs != null && rs.next()){
 //                System.out.println("Generated Emp Id: "+rs.getInt(1));
@@ -913,9 +914,9 @@ public class ProfileRepository extends JDBCRepository {
                     System.out.println("Generated Emp Id: "+rs.getInt(1));
                     userId = rs.getInt(1);
                 }
-                connection.setAutoCommit(false);
+                //connection.setAutoCommit(false);
                 connection.commit();
-                preparedStatement.close();
+//                preparedStatement.close();
                 connection.close();
 
                 Privacy p = new Privacy(userId);

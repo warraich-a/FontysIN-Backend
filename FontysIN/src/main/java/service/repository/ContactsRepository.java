@@ -98,21 +98,15 @@ public class ContactsRepository {
         Connection connection = jdbcRepository.getDatabaseConnection();
 
         String sql = "SELECT contacts.id, contacts.isAccepted, " +
-                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
-                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
+                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.id AS userProfileId, " +
+                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.id AS friendProfileId " +
                 "FROM contacts " +
-                "LEFT JOIN users user ON contacts.userId = user.id " +
-                "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN " +
-                "  (SELECT id AS userProfileId, userId " +
-                "FROM profiles " +
-                "GROUP BY userId, id LIMIT 1) p1 ON p1.userId = user.id " +
-                "LEFT JOIN " +
-                "  (SELECT id AS friendProfileId, userId " +
-                "   FROM profiles " +
-                "   GROUP BY userId, id LIMIT 1) p2 ON p2.userId = friend.id " +
-                "WHERE (user.id = ? " +
-                "       OR friend.id = ?)";
+                    "LEFT JOIN users AS user ON contacts.userId = user.id " +
+                    "LEFT JOIN users AS friend ON contacts.friendId = friend.id " +
+                    "LEFT JOIN profiles AS p1 ON p1.userId = user.id " +
+                    "LEFT JOIN profiles AS p2 ON p2.userId = friend.id " +
+                    "WHERE (user.id = ? OR friend.id = ?) " +
+                    "GROUP BY contacts.id";
 
         System.out.println("Post query");
 
@@ -178,18 +172,11 @@ public class ContactsRepository {
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId, id LIMIT 1) p1 ON p1.userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId, id LIMIT 1) p2 ON p2.userId = friend.id " +
-                "   WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true";
-//        String sql = "SELECT contacts.id, contacts.isAccepted, " +
-//                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.* , " +
-//                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.* " +
-//                "FROM contacts " +
-//                "LEFT JOIN users user ON contacts.userId = user.id " +
-//                "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-//                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId) p1 ON p1.userId = user.id " +
-//                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId) p2 ON p2.userId = friend.id " +
-//                "   WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true";
+                "LEFT JOIN profiles AS p1 ON p1.userId = user.id " +
+                "LEFT JOIN profiles AS p2 ON p2.userId = friend.id " +
+                "WHERE (user.id = 155 OR friend.id = 155) AND contacts.isAccepted = true " +
+                "GROUP BY contacts.id";
+
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
@@ -242,9 +229,10 @@ public class ContactsRepository {
                 "FROM contacts " +
                 "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
-                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId, id LIMIT 1) p1 ON p1.userId = user.id " +
-                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId, id LIMIT 1) p2 ON p2.userId = friend.id " +
-                "   WHERE (friend.id = ?) AND contacts.isAccepted = false";
+                "LEFT JOIN profiles AS p1 ON p1.userId = user.id " +
+                "LEFT JOIN profiles AS p2 ON p2.userId = friend.id " +
+                "WHERE (friend.id = ?) AND contacts.isAccepted = false " +
+                "GROUP BY contacts.id";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -392,5 +380,59 @@ public class ContactsRepository {
         catch (SQLException throwable) {
             throw new DatabaseException("Cannot read user from the database.", throwable);
         }
+    }
+
+    public ContactDTO getContactDTO(int firstUserId, int secondUserId) throws URISyntaxException, DatabaseException {
+//        List<ContactDTO> acceptedContacts = new ArrayList<>();
+        ContactDTO contact = null;
+        Connection connection = jdbcRepository.getDatabaseConnection();
+
+        String sql = "SELECT contacts.id, contacts.isAccepted, " +
+                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.* , " +
+                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.* " +
+                "FROM contacts " +
+                "LEFT JOIN users user ON contacts.userId = user.id " +
+                "LEFT JOIN users friend ON contacts.friendId = friend.id " +
+                "LEFT JOIN (SELECT id AS userProfileId, userId FROM profiles GROUP BY userId, id LIMIT 1) p1 ON p1.userId = user.id " +
+                "LEFT JOIN (SELECT id AS friendProfileId, userId FROM profiles GROUP BY userId, id LIMIT 1) p2 ON p2.userId = friend.id " +
+                "   WHERE (user.id = ? OR friend.id = ?) AND contacts.isAccepted = true";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, firstUserId);
+            statement.setInt(2, secondUserId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next()) {
+                int contactId = resultSet.getInt("id");
+                boolean isAccepted = resultSet.getBoolean("isAccepted");
+                int userId = resultSet.getInt("userId");
+                String firstName = resultSet.getString("userFirstName");
+                String lastName = resultSet.getString("userLastName");
+                String image = "assets/" + resultSet.getString("userImage");
+                int profileId = resultSet.getInt("userProfileId");
+
+                UserDTO user = new UserDTO(userId, profileId, firstName, lastName, image);
+
+                int friendId = resultSet.getInt("friendId");
+                String friendFirstName = resultSet.getString("friendFirstName");
+                String friendLastName = resultSet.getString("friendLastName");
+                String friendImage = "assets/" + resultSet.getString("friendImage");
+                int friendProfileId = resultSet.getInt("friendProfileId");
+
+                UserDTO friend = new UserDTO(friendId, friendProfileId, friendFirstName, friendLastName, friendImage);
+
+                contact = new ContactDTO(contactId, user, friend, isAccepted);
+
+//                acceptedContacts.add(contact);
+            }
+            statement.close();
+            connection.close();
+        }
+        catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read contacts from the database.", throwable);
+        }
+        return contact;
     }
 }
