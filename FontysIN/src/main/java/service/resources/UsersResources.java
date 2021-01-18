@@ -50,18 +50,24 @@ public class UsersResources {
 
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContacts(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
+		System.out.println("******************************");
+
 		User user = userController.getUserFromToken(auth);
 
 		List<ContactDTO> contacts = contactController.getAllContactsDTO(user.getId());
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
+		System.out.println("******************************");
 
 		return Response.ok(entity).build();
+
 	}
 
 	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
 	@Path("{id}/acceptedContacts")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAcceptedContacts(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
 		User user = userController.getUserFromToken(auth);
 

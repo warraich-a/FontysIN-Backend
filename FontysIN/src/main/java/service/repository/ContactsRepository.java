@@ -89,7 +89,9 @@ public class ContactsRepository {
     }
 
     public List<ContactDTO> getAllContactsDTO(int id) throws DatabaseException, URISyntaxException {
+        System.out.println("******************************");
         List<ContactDTO> allContactsDTO = new ArrayList<>();
+        System.out.println("All contacts dto");
 
         Connection connection = jdbcRepository.getDatabaseConnection();
 
@@ -97,7 +99,7 @@ public class ContactsRepository {
                 "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
                 "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
                 "FROM contacts " +
-                "LEFT JOIN users USER ON contacts.userId = user.id " +
+                "LEFT JOIN users user ON contacts.userId = user.id " +
                 "LEFT JOIN users friend ON contacts.friendId = friend.id " +
                 "LEFT JOIN " +
                 "  (SELECT id AS userProfileId, userId " +
@@ -110,13 +112,17 @@ public class ContactsRepository {
                 "WHERE (user.id = ? " +
                 "       OR friend.id = ?)";
 
+        System.out.println("Post query");
+
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
+            System.out.println("post prepare stmt");
             statement.setInt(1, id);
             statement.setInt(2, id);
-
+            System.out.println("post set");
+            System.out.println(statement);
             ResultSet resultSet = statement.executeQuery();
 
             while(resultSet.next()) {
@@ -142,11 +148,15 @@ public class ContactsRepository {
 
                 ContactDTO contact = new ContactDTO(contactId, user, friend, isAccepted);
 
+                System.out.println("Contact");
+                System.out.println(contact);
                 allContactsDTO.add(contact);
             }
 
             statement.close();
             connection.close();
+
+            System.out.println("******************************");
         }
         catch (SQLException throwable) {
             throw new DatabaseException("Cannot read contacts from the database.", throwable);
