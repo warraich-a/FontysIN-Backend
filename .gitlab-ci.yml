@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - sonarqube
 build:
   stage: build
   script:
@@ -13,3 +14,11 @@ test:
     - ./gradlew test
   dependencies:
     - build
+
+sonarqube:
+  stage: sonarqube
+  script:
+    - cd FontysIN
+    - ./gradlew sonarqube
+  dependencies:
+    - test

@@ -19,6 +19,8 @@ public class ContactsRepository {
     }
 
     public int createContact(ContactDTO createdContactDTO) throws DatabaseException, URISyntaxException {
+        System.out.println("Create contact");
+        System.out.println(createdContactDTO);
         Connection connection = jdbcRepository.getDatabaseConnection();
 
         String sql = "INSERT INTO contacts (userId, friendId) " +
