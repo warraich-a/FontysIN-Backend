@@ -94,9 +94,7 @@ public class ContactsRepository {
     }
 
     public List<ContactDTO> getAllContactsDTO(int id) throws DatabaseException, URISyntaxException {
-        System.out.println("******************************");
         List<ContactDTO> allContactsDTO = new ArrayList<>();
-        System.out.println("All contacts dto");
 
         Connection connection = jdbcRepository.getDatabaseConnection();
 
@@ -111,17 +109,11 @@ public class ContactsRepository {
                     "WHERE (user.id = ? OR friend.id = ?) " +
                     "GROUP BY contacts.id";
 
-        System.out.println("Post query");
-
-
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            System.out.println("post prepare stmt");
             statement.setInt(1, id);
             statement.setInt(2, id);
-            System.out.println("post set");
-            System.out.println(statement);
             ResultSet resultSet = statement.executeQuery();
 
             while(resultSet.next()) {
@@ -133,7 +125,6 @@ public class ContactsRepository {
                 String image = "assets/" + resultSet.getString("userImage");
                 int profileId = resultSet.getInt("userProfileId");
 
-
                 UserDTO user = new UserDTO(userId, profileId, firstName, lastName, image);
 
                 int friendId = resultSet.getInt("friendId");
@@ -142,20 +133,15 @@ public class ContactsRepository {
                 String friendImage = "assets/" + resultSet.getString("friendImage");
                 int friendProfileId = resultSet.getInt("friendProfileId");
 
-
                 UserDTO friend = new UserDTO(friendId, friendProfileId, friendFirstName, friendLastName, friendImage);
 
                 ContactDTO contact = new ContactDTO(contactId, user, friend, isAccepted);
 
-                System.out.println("Contact");
-                System.out.println(contact);
                 allContactsDTO.add(contact);
             }
 
             statement.close();
             connection.close();
-
-            System.out.println("******************************");
         }
         catch (SQLException throwable) {
             throw new DatabaseException("Cannot read contacts from the database.", throwable);
@@ -279,8 +265,6 @@ public class ContactsRepository {
     public boolean updateContact(int contactId, ContactDTO updatedContact) throws DatabaseException, URISyntaxException {
         Connection connection = jdbcRepository.getDatabaseConnection();
 
-        System.out.println("Update contact " + updatedContact);
-        System.out.println(updatedContact.getIsAccepted());
         String sql = "UPDATE contacts SET isAccepted = ? WHERE (userId = ? AND friendId = ?)";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -308,10 +292,8 @@ public class ContactsRepository {
 
 
     public UserDTO getUserDTO(int id) throws DatabaseException, URISyntaxException {
-//        String project_path =System.getProperty("user.dir");
         Connection connection = jdbcRepository.getDatabaseConnection();
 
-        // was INNER JOIN
         String sql = "SELECT u.id, u.firstName, u.lastName, p.id AS profileId, image FROM users AS u " +
                 "LEFT JOIN profiles p ON p.userId = u.id " +
                 "WHERE u.id = ? " +
@@ -385,10 +367,7 @@ public class ContactsRepository {
         }
     }
 
-    // UserDTO currentUser // user who send request
-    // UserDTO otherUser // other user
-    // boolean areConnected // 1 (connected), 0 (not connected)
-    // boolean isRequestSent (request sent)
+
     public ContactDTO getContactDTO(int firstUserId, int secondUserId) throws URISyntaxException, DatabaseException {
         ContactDTO contact = null;
         Connection connection = jdbcRepository.getDatabaseConnection();
@@ -431,6 +410,7 @@ public class ContactsRepository {
 
                 UserDTO friend = new UserDTO(friendId, friendProfileId, friendFirstName, friendLastName, friendImage);
 
+                // user who send request, other user, status of request 1 (connected), 0 (not connected)
                 contact = new ContactDTO(contactId, user, friend, isAccepted);
             }
             statement.close();
