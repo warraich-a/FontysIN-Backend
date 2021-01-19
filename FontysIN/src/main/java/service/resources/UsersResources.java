@@ -52,17 +52,13 @@ public class UsersResources {
 	@Path("{id}/contacts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContacts(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
-		System.out.println("******************************");
-
 		User user = userController.getUserFromToken(auth);
 
 		List<ContactDTO> contacts = contactController.getAllContactsDTO(user.getId());
 
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(contacts) { };
-		System.out.println("******************************");
 
 		return Response.ok(entity).build();
-
 	}
 
 	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
@@ -70,8 +66,6 @@ public class UsersResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAcceptedContacts(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
 		User user = userController.getUserFromToken(auth);
-
-		System.out.println("USER INT TOKEN " + user);
 
 		List<ContactDTO> contacts = contactController.getAcceptedContactsDTO(user.getId());
 
@@ -146,8 +140,6 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
 	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, ContactDTO contact, @HeaderParam("Authorization") String auth) {
-		System.out.println("CONTACT ISACEEPTED " + contact.getIsAccepted());
-
 		contactController.updateContact(contactId, contact);
 
 		return Response.noContent().build();
@@ -157,13 +149,9 @@ public class UsersResources {
 	@PermitAll
 	@Path("{userId}")
 	public Response getUser(@PathParam("userId") int userId) {
-
 //		User userInToken = userController.getUserFromToken(auth);
 
-
 		UserDTO user = contactController.getUserDTO(userId);
-
-		System.out.println("Get user " + user);
 
 		if(user != null){
 			return Response.ok(user).build(); // Status ok 200, return user
@@ -181,8 +169,7 @@ public class UsersResources {
 		ProfileController profileController = new ProfileController();
 
 		User u = profileController.getCurrentUser(userId);
-		System.out.println("User id " + userId);
-		System.out.println("Got user by id " + u);
+
 		if (u == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
