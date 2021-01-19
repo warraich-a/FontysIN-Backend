@@ -88,23 +88,16 @@ public class UsersResources {
 	}
 
 	// Get connection between logged in user and profile user
-	@GET //GET at http://localhost:XXXX/users/1/contacts
+	@GET //GET at http://localhost:XXXX/users/1/contacts/2
 	@Path("{id}/contacts/{secondUserId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContactsBetweenUsers(@PathParam("id") int id, @PathParam("secondUserId") int secondUserId, @HeaderParam("Authorization") String auth) {
 		User user = userController.getUserFromToken(auth);
 		int currentUserId = user.getId();
 
-		// UserDTO currentUser // user who send request
-		// UserDTO otherUser // other user
-		// boolean areConnected // 1 (connected), 0 (not connected)
-		// boolean isRequestSent (request sent)
-
-//		List<ContactDTO> contacts = contactController.getAllContactsDTO(user.getId());
 		ContactDTO contactDTO = contactController.getContactDTO(currentUserId, secondUserId);
 
 		return Response.ok(contactDTO).build();
-
 	}
 
 	@POST //POST at http://localhost:XXXX/users/1
