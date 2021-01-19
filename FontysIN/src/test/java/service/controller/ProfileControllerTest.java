@@ -168,15 +168,15 @@ public class ProfileControllerTest {
 
     }
 
-    @Test
-    public void UploadProfilePictureTest() throws URISyntaxException, DatabaseException, SQLException, IOException {
-        when(profileRepository.uploadImage(1, "IMG_20160827_163306.jpg")).thenReturn(true);
-
-        boolean isAdded = profileController.uploadPicture(1, "IMG_20160827_163306.jpg");
-
-        assertEquals(true, isAdded);
-
-    }
+//    @Test
+//    public void UploadProfilePictureTest() throws URISyntaxException, DatabaseException, SQLException, IOException {
+//        when(profileRepository.uploadImage(1, "IMG_20160827_163306.jpg")).thenReturn(true);
+//
+//        boolean isAdded = profileController.uploadPicture(1, "IMG_20160827_163306.jpg");
+//
+//        assertEquals(true, isAdded);
+//
+//    }
 
     @Test
     public void GetFontysLocationsTest() throws URISyntaxException, DatabaseException, SQLException, IOException {

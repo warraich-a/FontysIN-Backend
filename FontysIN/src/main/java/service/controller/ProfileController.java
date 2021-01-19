@@ -7,6 +7,7 @@ import service.repository.DatabaseException;
 import service.repository.ProfileRepository;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -380,10 +381,10 @@ public class ProfileController {
 
 
 
-    public boolean uploadPicture(int userId, String path){
+    public boolean uploadPicture(int userId, InputStream inputStream){
 //        ProfileRepository profileRepository = new ProfileRepository();
         try {
-            if(profileRepository.uploadImage(userId, path)) {
+            if(profileRepository.uploadImage(userId, inputStream)) {
                 return true;
             }
             else

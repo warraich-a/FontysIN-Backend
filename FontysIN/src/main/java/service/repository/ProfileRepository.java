@@ -3,6 +3,7 @@ package service.repository;
 import service.model.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -700,7 +701,7 @@ public class ProfileRepository extends JDBCRepository {
     }
 
 
-    public boolean uploadImage(int userId, String path) throws DatabaseException, URISyntaxException, SQLException {
+    public boolean uploadImage(int userId, InputStream inputStream) throws DatabaseException, URISyntaxException, SQLException {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "update users set image=? where id = ? ";
@@ -708,9 +709,9 @@ public class ProfileRepository extends JDBCRepository {
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         try {
-            System.out.println("Path " + path);
-
-            preparedStatement.setString(1, path);
+//            System.out.println("Path " + path);
+            preparedStatement.setBlob(1, inputStream);
+//            preparedStatement.setString(1, path);
             preparedStatement.setInt(2, userId);
 
             preparedStatement.executeUpdate();
