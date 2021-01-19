@@ -7,10 +7,8 @@ import org.glassfish.grizzly.websockets.WebSocketAddOn;
 import org.glassfish.grizzly.websockets.WebSocketEngine;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import service.resources.MessagesResources;
 import service.resources.UsersResources;
 
-import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.util.logging.Level;
@@ -22,8 +20,8 @@ import java.util.logging.Logger;
 class Publisher {
 
 
-   private static final URI BASE_URI = URI.create("http://0.0.0.0:9090/");
-   // private static final URI BASE_URI = URI.create("http://localhost:9090/");
+//   private static final URI BASE_URI = URI.create("http://0.0.0.0:9090/");
+    private static final URI BASE_URI = URI.create("http://localhost:9090/");
 
     public static void main(String[] args) {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));

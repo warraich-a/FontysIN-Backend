@@ -147,4 +147,19 @@ public class ContactController {
             return null;
         }
     }
+
+
+
+    public ContactDTO getContactDTO(int firstUserId, int secondUserId) {
+        ContactDTO contactDTO;
+        try {
+            contactDTO = contactsRepository.getContactDTO(firstUserId, secondUserId);
+
+            return contactDTO;
+        }
+        catch (DatabaseException | URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

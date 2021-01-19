@@ -3,12 +3,10 @@ package service.model.dto;
 import java.util.Objects;
 
 public class ContactDTO {
-	// ContactDTO
-
 	private int id;
-	private UserDTO user;
-	private UserDTO friend;
-	private boolean isAccepted;
+	private UserDTO user; // sender
+	private UserDTO friend; // receiver
+	private boolean isAccepted; // connected or not
 
 	public ContactDTO(int id, UserDTO user, UserDTO friend, boolean isAccepted) {
 		this.id = id;

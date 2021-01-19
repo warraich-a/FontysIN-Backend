@@ -75,17 +75,17 @@ public class ProfileRepository extends JDBCRepository {
                         int endDate = resultSet.getInt("endDate");
                         String description = resultSet.getString("description");
                         EmplymentType r = EmplymentType.FullTime;
-                        if (emplymentType == "FullTime")
+                        if (emplymentType.equals("FullTime"))
                         {
                             r = EmplymentType.FullTime;
                         }
-                        else if (emplymentType == "PartTime")
+                        else if (emplymentType.equals("PartTime"))
                         {
                             r = EmplymentType.PartTime;
                         }
-                        else  if (emplymentType == "FullTime")
+                        else  if (emplymentType.equals("FreeLancer"))
                         {
-                            r = EmplymentType.PartTime;
+                            r = EmplymentType.FreeLancer;
                         }
 
                         Experience e = new Experience(id, profileId, title, company, r, location,  startDate, endDate, description);
@@ -131,15 +131,15 @@ public class ProfileRepository extends JDBCRepository {
                 int endDate = resultSet.getInt("endDate");
                 String description = resultSet.getString("description");
                 EmplymentType r = EmplymentType.FullTime;
-                if (empType == "FullTime")
+                if (empType.equals("FullTime"))
                 {
                     r = EmplymentType.FullTime;
                 }
-                else if (empType == "PartTime")
+                else if (empType.equals("PartTime"))
                 {
                     r = EmplymentType.PartTime;
                 }
-                else  if (empType == "FreeLancer")
+                else  if (empType.equals("FreeLancer"))
                 {
                     r = EmplymentType.FreeLancer;
                 }
@@ -160,7 +160,7 @@ public class ProfileRepository extends JDBCRepository {
             statement.setString(1, ex.getTitle());
             statement.setString(2, ex.getCompany());
             statement.setString(3, ex.getLocation());
-            statement.setString(4, String.valueOf(ex.getEmploymentType()));
+            statement.setString(4, ex.getEmploymentType().toString());
             statement.setInt(5, ex.getStartDateExperience());
             statement.setInt(6, ex.getEndDateExperience());
             statement.setString(7, ex.getDescriptionExperience());
@@ -903,6 +903,8 @@ public class ProfileRepository extends JDBCRepository {
 
                 preparedStatement.executeUpdate();
 
+                System.out.println(preparedStatement);
+
 
 //            if(rs != null && rs.next()){
 //                System.out.println("Generated Emp Id: "+rs.getInt(1));
@@ -914,9 +916,9 @@ public class ProfileRepository extends JDBCRepository {
                     System.out.println("Generated Emp Id: "+rs.getInt(1));
                     userId = rs.getInt(1);
                 }
-                connection.setAutoCommit(false);
+                //connection.setAutoCommit(false);
                 connection.commit();
-                preparedStatement.close();
+//                preparedStatement.close();
                 connection.close();
 
                 Privacy p = new Privacy(userId);
