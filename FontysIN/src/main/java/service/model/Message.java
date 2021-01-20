@@ -3,6 +3,7 @@ package service.model;
 import service.model.dto.UserDTO;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Message {
     private int id;
@@ -82,5 +83,24 @@ public class Message {
                 ", content='" + content + '\'' +
                 ", dateTime=" + dateTime +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return id == message.id &&
+                conversationId == message.conversationId &&
+                Objects.equals(sender, message.sender) &&
+                Objects.equals(receiver, message.receiver) &&
+                Objects.equals(content, message.content) &&
+                Objects.equals(dateTime, message.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, conversationId, sender, receiver, content, dateTime);
     }
 }
