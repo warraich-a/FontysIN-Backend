@@ -701,7 +701,7 @@ public class ProfileRepository extends JDBCRepository {
     }
 
 
-    public boolean uploadImage(int userId, InputStream inputStream) throws DatabaseException, URISyntaxException, SQLException {
+    public boolean uploadImage(int userId, String path) throws DatabaseException, URISyntaxException, SQLException {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "update users set image=? where id = ? ";
@@ -710,8 +710,8 @@ public class ProfileRepository extends JDBCRepository {
 
         try {
 //            System.out.println("Path " + path);
-            preparedStatement.setBlob(1, inputStream);
-//            preparedStatement.setString(1, path);
+//            preparedStatement.setBlob(1, inputStream);
+            preparedStatement.setString(1, path);
             preparedStatement.setInt(2, userId);
 
             preparedStatement.executeUpdate();

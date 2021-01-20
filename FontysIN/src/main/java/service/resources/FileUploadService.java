@@ -37,49 +37,42 @@ public class FileUploadService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String uploadPdfFile(  @FormDataParam("file") InputStream fileInputStream,
-                                    @FormDataParam("file") FormDataContentDisposition fileMetaData,
+                                  @FormDataParam("file") FormDataContentDisposition fileMetaData,
                                   @PathParam("userId") int id) throws Exception {
         ProfileController profileController = new ProfileController();
 
-        String UPLOAD_PATH = "src/main/java/service/images/";
+        String UPLOAD_PATH = "src/images/";
         String project_path =System.getProperty("user.dir");
 //        String UPLOAD_PATH = "C:/Users/anasw/fontysin-semester-3-client/FontyIN-Client/src/assets/";
         System.out.println("Present Project Directory : "+ System.getProperty("user.dir"));
-        profileController.uploadPicture(id, fileInputStream);
-//        File file = getFileName(new File(UPLOAD_PATH + fileMetaData.getFileName()));
+
+        File file = getFileName(new File(UPLOAD_PATH + fileMetaData.getFileName()));
 //        try
 //        {
-//        if (fileInputStream != null) {
-//            // fetches input stream of the upload file for the blob column
-//            statement.setBlob(3, inputStream);
-//        }
+        int read = 0;
+        byte[] bytes = new byte[1024];
+        String completePath = file.toString(); //+id;
+        OutputStream out = new FileOutputStream(completePath);
 
-//            int read = 0;
-//            byte[] bytes = new byte[1024];
-//            String completePath = file.toString(); //+id;
-//            OutputStream out = new FileOutputStream(completePath);
-//
-//            while ((read = fileInputStream.read(bytes)) != -1)
-//            {
-//                out.write(bytes, 0, read);
-//            }
+        while ((read = fileInputStream.read(bytes)) != -1)
+        {
+            out.write(bytes, 0, read);
+        }
 //            if(persistenceController.uploadPicture(id, fileMetaData.getFileName()+id)){
-//                if(profileController.uploadPicture(id, fileInputStream)){
-//
-//                    out.flush();
-//                out.close();
-//
-//                return file.getName(); //+id;
-//            }
-//            else {
-//                return "Error";
-//            }
+        if(profileController.uploadPicture(id, file.getName())){
+
+            out.flush();
+            out.close();
+
+            return file.getName(); //+id;
+        }
+        else {
+            return "Error";
+        }
 //        } catch (IOException e)
 //        {
 //            throw new WebApplicationException("Error while uploading file. Please try again !!");
 //        }
-        return "added";
-
     }
 
     private File getFileName(File file) {
@@ -127,6 +120,4 @@ public class FileUploadService {
 //        response.header("Content-Disposition", "attachment; filename=DisplayName-IMG_20160827_163306.jpg");
 //        return response.build();
 //    }
-
-
 }

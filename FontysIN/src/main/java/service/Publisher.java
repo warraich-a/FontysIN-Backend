@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 class Publisher {
 
 
-//   private static final URI BASE_URI = URI.create("http://0.0.0.0:9090/");
+    //   private static final URI BASE_URI = URI.create("http://0.0.0.0:9090/");
     private static final URI BASE_URI = URI.create("http://localhost:9090/");
 
     public static void main(String[] args) {
@@ -51,9 +51,9 @@ class Publisher {
             webSocketServer.getListeners().forEach(listener -> { listener.registerAddOn(webSocketAddOn);});
 
             // register my websocket app
-            
+
             MyWebSocketApp webSocketApp = new MyWebSocketApp();
-            WebSocketEngine.getEngine().register("/wss", "/demo", webSocketApp);
+            WebSocketEngine.getEngine().register("/ws", "/demo", webSocketApp);
 
             // Now start the server
             webSocketServer.start();

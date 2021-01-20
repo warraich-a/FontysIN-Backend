@@ -381,10 +381,10 @@ public class ProfileController {
 
 
 
-    public boolean uploadPicture(int userId, InputStream inputStream){
+    public boolean uploadPicture(int userId, String path){
 //        ProfileRepository profileRepository = new ProfileRepository();
         try {
-            if(profileRepository.uploadImage(userId, inputStream)) {
+            if(profileRepository.uploadImage(userId, path)) {
                 return true;
             }
             else

@@ -312,7 +312,7 @@ public class ContactsRepository {
             else {
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
-                String image = resultSet.getString("image");
+                String image = "assets/"+resultSet.getString("image");
                 int profileId = resultSet.getInt("profileId");
                 statement.close();
                 connection.close();
