@@ -219,26 +219,44 @@ public class MessagesRepository extends JDBCRepository {
 //                " OR (c.secondUserId = ? AND c.isDeletedSecondUser = 0) " +
 //                "ORDER BY conversationId";
 
-        String sql = "SELECT c.id AS conversationId, c.firstUserId, c.secondUserId, " +
-                "m.id AS messageId, m.conversationId AS mConversationId, m.senderId, m.receiverId, m.content, m.date, " +
-                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
-                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
-                "FROM conversations AS c " +
-                " LEFT JOIN messages AS m ON (m.conversationId = c.id) " +
-                " LEFT JOIN users user ON m.senderId = user.id OR c.firstUserId = user.id " +
-                " LEFT JOIN users friend ON m.receiverId = friend.id OR c.secondUserId = friend.id " +
-                " LEFT JOIN " +
-                " (SELECT id AS userProfileId, userId " +
-                " FROM profiles " +
-                " GROUP BY userId) p1 ON p1.userId = user.id " +
-                " LEFT JOIN " +
-                " (SELECT id AS friendProfileId, userId " +
-                " FROM profiles " +
-                " GROUP BY userId) p2 ON p2.userId = friend.id " +
-                "WHERE (c.firstUserId = ? AND c.isDeletedFirstUser = 0) " +
-                " OR (c.secondUserId = ? AND c.isDeletedSecondUser = 0) " +
-                "ORDER BY conversationId";
+//        String sql = "SELECT c.id AS conversationId, c.firstUserId, c.secondUserId, " +
+//                "m.id AS messageId, m.conversationId AS mConversationId, m.senderId, m.receiverId, m.content, m.date, " +
+//                "user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId, " +
+//                "friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId " +
+//                "FROM conversations AS c " +
+//                " LEFT JOIN messages AS m ON (m.conversationId = c.id) " +
+//                " LEFT JOIN users user ON m.senderId = user.id OR c.firstUserId = user.id " +
+//                " LEFT JOIN users friend ON m.receiverId = friend.id OR c.secondUserId = friend.id " +
+//                " LEFT JOIN " +
+//                " (SELECT id AS userProfileId, userId " +
+//                " FROM profiles " +
+//                " GROUP BY userId) p1 ON p1.userId = user.id " +
+//                " LEFT JOIN " +
+//                " (SELECT id AS friendProfileId, userId " +
+//                " FROM profiles " +
+//                " GROUP BY userId) p2 ON p2.userId = friend.id " +
+//                "WHERE (c.firstUserId = ? AND c.isDeletedFirstUser = 0) " +
+//                " OR (c.secondUserId = ? AND c.isDeletedSecondUser = 0) " +
+//                "ORDER BY conversationId";
 
+
+        String sql = "SELECT c.id AS conversationId, c.firstUserId, c.secondUserId,\n" +
+                "       user.id AS userId, user.firstName AS userFirstName, user.lastName AS userLastName, user.image AS userImage, p1.userProfileId,\n" +
+                "       friend.id AS friendId, friend.firstName AS friendFirstName, friend.lastName AS friendLastName, friend.image AS friendImage, p2.friendProfileId\n" +
+                "FROM conversations AS c\n" +
+                "         LEFT JOIN users user ON c.firstUserId = user.id\n" +
+                "         LEFT JOIN users friend ON c.secondUserId = friend.id\n" +
+                "         LEFT JOIN\n" +
+                "     (SELECT id AS userProfileId, userId\n" +
+                "      FROM profiles\n" +
+                "      GROUP BY userId) p1 ON p1.userId = user.id\n" +
+                "         LEFT JOIN\n" +
+                "     (SELECT id AS friendProfileId, userId\n" +
+                "      FROM profiles\n" +
+                "      GROUP BY userId) p2 ON p2.userId = friend.id\n" +
+                "WHERE (c.firstUserId = ? AND c.isDeletedFirstUser = 0)\n" +
+                "   OR (c.secondUserId = ? AND c.isDeletedSecondUser = 0)\n" +
+                "GROUP BY conversationId";
 
 
         try {
@@ -254,13 +272,13 @@ public class MessagesRepository extends JDBCRepository {
             int lastConversationId = -1;
             while(resultSet.next()) {
                 // Message
-                int messageId = resultSet.getInt("messageId");
+//                int messageId = resultSet.getInt("messageId");
                 int conversationId = resultSet.getInt("conversationId");
 
 //                int senderId = resultSet.getInt("senderId");
 //                int receiverId = resultSet.getInt("receiverId");
-                String content = resultSet.getString("content");
-                Timestamp dateTime = resultSet.getTimestamp("date");
+//                String content = resultSet.getString("content");
+//                Timestamp dateTime = resultSet.getTimestamp("date");
 
                 // Sender
                 int userId = resultSet.getInt("userId");
@@ -293,12 +311,12 @@ public class MessagesRepository extends JDBCRepository {
 
                 // Create message
 
-                Message message = new Message(messageId, conversationId, sender, receiver, content, dateTime);
-                if(message.getContent() != null) {
-                    conversation.addMessage(message);
-
-//                    System.out.println("Message " + message);
-                }
+//                Message message = new Message(messageId, conversationId, sender, receiver, content, dateTime);
+//                if(message.getContent() != null) {
+//                    conversation.addMessage(message);
+//
+////                    System.out.println("Message " + message);
+//                }
             }
 
             System.out.println("Conversations");
