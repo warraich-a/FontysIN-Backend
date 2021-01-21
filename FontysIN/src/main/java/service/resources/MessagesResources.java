@@ -64,7 +64,6 @@ public class MessagesResources {
     public Response StartNewConversation(ConversationDTO conversationDTO) {
         MessageController messageController = new MessageController();
 
-//        !messageController.startNewConversation(conversationDTO)
         int id = messageController.startNewConversation(conversationDTO);
         if (id < 0){
             String entity =  "Conversation with this id is "  + id + " already exists.";
