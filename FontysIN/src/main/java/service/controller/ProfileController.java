@@ -18,17 +18,13 @@ public class ProfileController {
     ProfileRepository profileRepository = new ProfileRepository();
 
     public Data getData(int userId, int profileId, int loggedInUser) throws URISyntaxException, DatabaseException, SQLException {
-//        ProfileRepository profileRepository = new ProfileRepository();
         PrivacyController pController = new PrivacyController();
-
-        List<Data> dataList = new ArrayList<>();
 
         try {
             List<Education> educations = profileRepository.getEducations(userId, profileId);
             List<Experience> experiences = profileRepository.getExperiences(userId, profileId);
             List<Skill> skills = profileRepository.getSkills(userId, profileId);
-//            List<About> abouts = profileRepository.getAbout(userId, profileId);
-//            List<Profile> profiles = profileRepository.getProfile(userId);
+
           boolean seeEducation =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.EDUCATION);
           boolean seeExperience =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.EXPERIENCE);
           boolean seeSkills =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.SKILLS);
@@ -44,7 +40,6 @@ public class ProfileController {
           }
 
             Data data = new Data(experiences, educations, skills);
-//            dataList.add(data);
 
             return data;
         } catch (DatabaseException | SQLException | URISyntaxException e) {
@@ -54,7 +49,6 @@ public class ProfileController {
     }
 
     public List<About> getAbout(int userId, int profileId){
-//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<About> about = profileRepository.getAbout(userId, profileId);
@@ -84,7 +78,6 @@ public class ProfileController {
     }
 
     public List<Education> getEducations(int userId, int profileId){
-//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<Education> educations = profileRepository.getEducations(userId, profileId);
@@ -98,7 +91,6 @@ public class ProfileController {
         return null;
     }
     public List<Skill> getSkills(int userId, int profileId){
-//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<Skill> skills = profileRepository.getSkills(userId, profileId);
@@ -112,8 +104,6 @@ public class ProfileController {
         return null;
     }
     public List<Profile> getProfile(int userId){
-//        ProfileRepository profileRepository = new ProfileRepository();
-
         try {
             List<Profile> profiles = profileRepository.getProfile(userId);
 
@@ -125,7 +115,6 @@ public class ProfileController {
         }
         return null;
     }
-//    JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
     public User getUser(int userId){
 
@@ -156,7 +145,6 @@ public class ProfileController {
         return null;
     }
     public boolean addExperience(Experience experience) {
-//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createExperience(experience)) {
                 return true;
@@ -172,7 +160,6 @@ public class ProfileController {
     }
 
     public boolean addEducation(Education education) {
-//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createEducation(education)) {
                 return true;
@@ -189,7 +176,6 @@ public class ProfileController {
 
 
     public boolean addSkill(Skill skill, int userId) {
-//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createSkill(skill, userId)) {
                 return true;
@@ -205,7 +191,6 @@ public class ProfileController {
     }
 
     public int addProfile(Profile profile, int userId) throws DatabaseException, SQLException, URISyntaxException {
-//        ProfileRepository profileRepository = new ProfileRepository();
         int id = profileRepository.createProfile(profile, userId);
         if( id != 0) {
             return id;
@@ -216,7 +201,6 @@ public class ProfileController {
         }
     }
     public boolean addAbout(About about) {
-//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createAbout(about)) {
                 return true;
