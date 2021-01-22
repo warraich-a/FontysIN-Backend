@@ -18,7 +18,6 @@ public class MessageController {
      * @return the id of the created message
      */
     public int createMessage(Message message) {
-//        MessagesRepository messagesRepository = new MessagesRepository();
 
         int messageId = -1;
         try {
@@ -26,7 +25,6 @@ public class MessageController {
         }
         catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
         return messageId;
     }
@@ -37,7 +35,6 @@ public class MessageController {
      * @return list of conversations of a specific user
      */
     public List<Conversation> getConversations(int id) {
-//        MessagesRepository messagesRepository = new MessagesRepository();
 
         List<Conversation> conversations = null;
         try {
@@ -45,7 +42,6 @@ public class MessageController {
         }
         catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
         return conversations;
     }
@@ -56,7 +52,6 @@ public class MessageController {
      * @return conversation with specified id
      */
     public Conversation getConversation(int id) {
-//        MessagesRepository messagesRepository = new MessagesRepository();
 
         Conversation conversation = null;
         try {
@@ -64,7 +59,6 @@ public class MessageController {
         }
         catch (DatabaseException | URISyntaxException e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
         return conversation;
     }
@@ -76,8 +70,6 @@ public class MessageController {
      * @return true when the raw in db is updated
      */
     public boolean DeleteConversation(int userId, int conversationId){
-
-//        MessagesRepository messagesRepository = new MessagesRepository();
 
         try {
             return messagesRepository.deleteConversation(userId, conversationId);
@@ -94,8 +86,6 @@ public class MessageController {
      * @return the id of the created conversation
      */
     public int startNewConversation(ConversationDTO conversationDTO) {
-
-//        MessagesRepository messagesRepository = new MessagesRepository();
 
         int conversationId = -1;
         try {

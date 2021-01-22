@@ -180,7 +180,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByType(type);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -200,7 +199,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByLocation(id);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -219,7 +217,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByDepartment(id);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -238,7 +235,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByStartStudyYear(year);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -257,7 +253,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByStartWorkYear(year);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -279,7 +274,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByUserTypeAndLocationAndDepartment(type, lId, dId);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -302,7 +296,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByUserTypeAndStartStudyYearAndDepartmentAndLocation(type, year, lId, dId);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -325,7 +318,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByUserTypeAndStartWorkYearAndDepartmentAndLocationFontysStaff(type, year, lId, dId);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -343,7 +335,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersDTO();
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -367,7 +358,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByUserTypeLocationDeoartmentAndName(chars, lId, dId, type);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
@@ -387,7 +377,6 @@ public class UserController {
 
         try {
             List<UserDTO> users = userRepository.getUsersByFirstNameChars(chars);
-            System.out.println(users);
             return users;
         }
         catch (DatabaseException | URISyntaxException e) {
