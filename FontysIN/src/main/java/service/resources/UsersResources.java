@@ -305,15 +305,67 @@ public class UsersResources {
 		User loggedInUser = controller.getUserFromToken(auth);
 
 		Data data = profileController.getData(userId, profileId, loggedInUser.getId());
+		//boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
 
 			if (data == null) {
 				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
 			} else {
+//				GenericEntity<List<Data>> entity = new GenericEntity<>(data) {
+//				};
 				return Response.ok(data).build();
 			}
 
 	}
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/experiences")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetExperiences(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
+		UserController controller = new UserController();
+		ProfileController profileController = new ProfileController();
+		PrivacyController pController = new PrivacyController();
+		User loggedInUser = controller.getUserFromToken(auth);
 
+		List<Experience> experienceByProfileId = profileController.getExperience(userId, profileId);
+
+		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EXPERIENCE);
+
+		if(AllowToSee){
+			if (experienceByProfileId == null) {
+				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+			} else {
+				GenericEntity<List<Experience>> entity = new GenericEntity<>(experienceByProfileId) {
+				};
+				return Response.ok(entity).build();
+			}
+		}else{
+			return Response.noContent().build();
+		}
+
+	}
+//
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/educations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response  GetEducations(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
+		ProfileController profileController = new ProfileController();
+
+		UserController controller = new UserController();
+		User loggedInUser = controller.getUserFromToken(auth);
+		PrivacyController pController = new PrivacyController();
+		List<Education> educations = profileController.getEducations(userId, profileId);
+		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
+		if(AllowToSee){
+		if (educations == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+		} else {
+			GenericEntity<List<Education>> entity = new GenericEntity<>(educations) {
+			};
+			return Response.ok(entity).build();
+		}
+		}else{
+			return Response.noContent().build();
+		}
+	}
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/abouts")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -330,6 +382,30 @@ public class UsersResources {
 			};
 			return Response.ok(entity).build();
 		}
+	}
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/skills")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetSkills(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) {
+		ProfileController profileController = new ProfileController();
+
+		UserController controller = new UserController();
+		User loggedInUser = controller.getUserFromToken(auth);
+		PrivacyController pController = new PrivacyController();
+		List<Skill> skills = profileController.getSkills(userId, profileId);
+		boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.SKILLS);
+		if(AllowToSee){
+			if (skills == null) {
+				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+			} else {
+				GenericEntity<List<Skill>> entity = new GenericEntity<>(skills) {
+				};
+				return Response.ok(entity).build();
+			}
+		}else{
+			return Response.noContent().build();
+		}
+
 	}
 
 	// to add a new experience
