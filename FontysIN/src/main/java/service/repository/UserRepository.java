@@ -354,8 +354,6 @@ public class UserRepository extends JDBCRepository {
                 String email = resultSet.getString("email");
                 UserType userType = UserType.valueOf(resultSet.getString("userType"));
                 String password = resultSet.getString("password");
-//                String phoneNumber = resultSet.getString("phoneNr");
-//                int addressId = resultSet.getInt("addressId");
                 String image = "assets/" + resultSet.getString("image");
                 int locationId = resultSet.getInt("locationId");
                 int departmentId = resultSet.getInt("departmentId");
@@ -490,4 +488,7 @@ public class UserRepository extends JDBCRepository {
         }
         return filtered;
     }
+
+
+
 }

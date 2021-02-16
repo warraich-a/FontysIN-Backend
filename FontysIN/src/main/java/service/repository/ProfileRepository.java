@@ -3,22 +3,28 @@ package service.repository;
 import service.model.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileRepository extends JDBCRepository {
+    JDBCRepository jdbcRepository;
 
+    public ProfileRepository() {
+        this.jdbcRepository = new JDBCRepository();
+    }
 
-    public List<Profile> getProfile(int givenUserId) throws DatabaseException, SQLException, URISyntaxException {
+    public List<Profile> getProfile(int givenUserId) throws DatabaseException, URISyntaxException, SQLException {
         List<Profile> foundProfiles = new ArrayList<>();
 
 
-        Connection connection = this.getDatabaseConnection();
+        Connection connection = jdbcRepository.getDatabaseConnection();
         String sql = "SELECT * FROM profiles where userId = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         try {
+
             statement.setInt(1, givenUserId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -47,14 +53,15 @@ public class ProfileRepository extends JDBCRepository {
         return foundProfiles;
     }
 
-    public List<Experience> getExperiences(int userId, int givenProfileId) throws DatabaseException, SQLException, URISyntaxException {
+    public List<Experience> getExperiences(int userId, int givenProfileId) throws DatabaseException, URISyntaxException, SQLException {
         List<Experience> foundExperiences = new ArrayList<>();
         for (Profile p: getProfile(userId)) {
             if (p.getUserId() == userId && p.getId() == givenProfileId) {
-                Connection connection = this.getDatabaseConnection();
+                Connection connection = jdbcRepository.getDatabaseConnection();
                 String sql = "SELECT * FROM experiences where profileId = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 try {
+
                     statement.setInt(1, givenProfileId);
                     ResultSet resultSet = statement.executeQuery();
                     while (resultSet.next()) {
@@ -68,17 +75,17 @@ public class ProfileRepository extends JDBCRepository {
                         int endDate = resultSet.getInt("endDate");
                         String description = resultSet.getString("description");
                         EmplymentType r = EmplymentType.FullTime;
-                        if (emplymentType == "FullTime")
+                        if (emplymentType.equals("FullTime"))
                         {
                             r = EmplymentType.FullTime;
                         }
-                        else if (emplymentType == "PartTime")
+                        else if (emplymentType.equals("PartTime"))
                         {
                             r = EmplymentType.PartTime;
                         }
-                        else  if (emplymentType == "FullTime")
+                        else  if (emplymentType.equals("FreeLancer"))
                         {
-                            r = EmplymentType.PartTime;
+                            r = EmplymentType.FreeLancer;
                         }
 
                         Experience e = new Experience(id, profileId, title, company, r, location,  startDate, endDate, description);
@@ -124,15 +131,15 @@ public class ProfileRepository extends JDBCRepository {
                 int endDate = resultSet.getInt("endDate");
                 String description = resultSet.getString("description");
                 EmplymentType r = EmplymentType.FullTime;
-                if (empType == "FullTime")
+                if (empType.equals("FullTime"))
                 {
                     r = EmplymentType.FullTime;
                 }
-                else if (empType == "PartTime")
+                else if (empType.equals("PartTime"))
                 {
                     r = EmplymentType.PartTime;
                 }
-                else  if (empType == "FreeLancer")
+                else  if (empType.equals("FreeLancer"))
                 {
                     r = EmplymentType.FreeLancer;
                 }
@@ -153,7 +160,7 @@ public class ProfileRepository extends JDBCRepository {
             statement.setString(1, ex.getTitle());
             statement.setString(2, ex.getCompany());
             statement.setString(3, ex.getLocation());
-            statement.setString(4, String.valueOf(ex.getEmploymentType()));
+            statement.setString(4, ex.getEmploymentType().toString());
             statement.setInt(5, ex.getStartDateExperience());
             statement.setInt(6, ex.getEndDateExperience());
             statement.setString(7, ex.getDescriptionExperience());
@@ -694,15 +701,16 @@ public class ProfileRepository extends JDBCRepository {
     }
 
 
-    public boolean uploadImage(int userId, String path) throws DatabaseException, SQLException, IOException, URISyntaxException {
+    public boolean uploadImage(int userId, String path) throws DatabaseException, URISyntaxException, SQLException {
         Connection connection = this.getDatabaseConnection();
 
         String sql = "update users set image=? where id = ? ";
 //        PreparedStatement preparedStatement = connection.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        System.out.println("Path " + path);
 
         try {
+//            System.out.println("Path " + path);
+//            preparedStatement.setBlob(1, inputStream);
             preparedStatement.setString(1, path);
             preparedStatement.setInt(2, userId);
 
@@ -731,7 +739,7 @@ public class ProfileRepository extends JDBCRepository {
         List<Location> fontysLocations = new ArrayList<>();
 
             Connection connection = this.getDatabaseConnection();
-            String sql = "SELECT * FROM fontysLocations";
+            String sql = "SELECT * FROM fontyslocations";
             PreparedStatement statement = connection.prepareStatement(sql);
             try {
                 ResultSet resultSet = statement.executeQuery();
@@ -888,14 +896,14 @@ public class ProfileRepository extends JDBCRepository {
                 preparedStatement.setString(3, String.valueOf(user.getUserType()));
                 preparedStatement.setString(4, user.getEmail());
                 preparedStatement.setString(5, user.getPassword());
-//                preparedStatement.setString(6, user.getPhoneNumber());
-//                preparedStatement.setInt(7, user.getAddressId());
                 preparedStatement.setString(6, user.getImg());
                 preparedStatement.setInt(7, user.getLocationId());
                 preparedStatement.setInt(8, user.getDepartmentId());
                 preparedStatement.setString(9, user.getUserNumber());
 
                 preparedStatement.executeUpdate();
+
+                System.out.println(preparedStatement);
 
 
 //            if(rs != null && rs.next()){
@@ -908,9 +916,9 @@ public class ProfileRepository extends JDBCRepository {
                     System.out.println("Generated Emp Id: "+rs.getInt(1));
                     userId = rs.getInt(1);
                 }
-                connection.setAutoCommit(false);
+                //connection.setAutoCommit(false);
                 connection.commit();
-                preparedStatement.close();
+//                preparedStatement.close();
                 connection.close();
 
                 Privacy p = new Privacy(userId);
@@ -928,6 +936,46 @@ public class ProfileRepository extends JDBCRepository {
         }
         return false;
 
+    }
+
+
+
+    public User getUser() throws DatabaseException, SQLException, URISyntaxException {
+
+        User user = null;
+        Connection connection = this.getDatabaseConnection();
+        String sql = "SELECT * FROM users where id = 1";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        try {
+            ///statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("password");
+
+
+                user = new User(id, firstName, lastName,  email, password);
+
+            }//
+            // connection.setAutoCommit(false);
+
+            connection.commit();
+            statement.close();
+
+            connection.close();
+
+
+        } catch (SQLException throwable) {
+            throw new DatabaseException("Cannot read data from the database.", throwable);
+        }
+        finally {
+            if  (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+        return user;
     }
 
 }

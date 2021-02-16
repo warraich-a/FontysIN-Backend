@@ -10,6 +10,7 @@ import service.model.dto.ContactDTO;
 import service.model.dto.UserDTO;
 import service.repository.DatabaseException;
 import service.repository.FakeDataProfile;
+import service.repository.ProfileRepository;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
@@ -35,8 +36,21 @@ public class UsersResources {
 
 	/*------------------------------------------------------------------------------- Contacts ----------------------------------------------------------------------------- */
 
+	@GET
+	@PermitAll
+	@Path("test")
+	public Response testing() throws URISyntaxException, DatabaseException, SQLException {
+		ProfileRepository repository = new ProfileRepository();
+		User u = repository.getUser();
+		return Response.ok(u).build();
+		//return Response.ok("ok").build();
+	}
+
+
+
 	@GET //GET at http://localhost:XXXX/users/1/contacts
 	@Path("{id}/contacts")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getContacts(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
 		User user = userController.getUserFromToken(auth);
 
@@ -49,10 +63,9 @@ public class UsersResources {
 
 	@GET //GET at http://localhost:XXXX/users/1/acceptedContacts
 	@Path("{id}/acceptedContacts")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAcceptedContacts(@PathParam("id") int id, @HeaderParam("Authorization") String auth) {
 		User user = userController.getUserFromToken(auth);
-
-		System.out.println("USER INT TOKEN " + user);
 
 		List<ContactDTO> contacts = contactController.getAcceptedContactsDTO(user.getId());
 
@@ -72,6 +85,19 @@ public class UsersResources {
 		GenericEntity<List<ContactDTO>> entity = new GenericEntity<>(requests) { };
 
 		return Response.ok(entity).build();
+	}
+
+	// Get connection between logged in user and profile user
+	@GET //GET at http://localhost:XXXX/users/1/contacts/2
+	@Path("{id}/contacts/{secondUserId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getContactsBetweenUsers(@PathParam("id") int id, @PathParam("secondUserId") int secondUserId, @HeaderParam("Authorization") String auth) {
+		User user = userController.getUserFromToken(auth);
+		int currentUserId = user.getId();
+
+		ContactDTO contactDTO = contactController.getContactDTO(currentUserId, secondUserId);
+
+		return Response.ok(contactDTO).build();
 	}
 
 	@POST //POST at http://localhost:XXXX/users/1
@@ -107,21 +133,18 @@ public class UsersResources {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{userId}/contacts/{contactId}")
 	public Response updateContact(@PathParam("userId") int userId, @PathParam("contactId") int contactId, ContactDTO contact, @HeaderParam("Authorization") String auth) {
-		System.out.println("CONTACT ISACEEPTED " + contact.getIsAccepted());
-
 		contactController.updateContact(contactId, contact);
 
 		return Response.noContent().build();
 	}
 
 	@GET
+	@PermitAll
 	@Path("{userId}")
-	public Response getUser(@PathParam("userId") int userId, @HeaderParam("Authorization") String auth) {
-		User userInToken = userController.getUserFromToken(auth);
+	public Response getUser(@PathParam("userId") int userId) {
+//		User userInToken = userController.getUserFromToken(auth);
 
-		UserDTO user = contactController.getUserDTO(userInToken.getId());
-
-		System.out.println("Get user " + user);
+		UserDTO user = contactController.getUserDTO(userId);
 
 		if(user != null){
 			return Response.ok(user).build(); // Status ok 200, return user
@@ -138,11 +161,8 @@ public class UsersResources {
 	public Response GeUser(@PathParam("userId") int userId) {
 		ProfileController profileController = new ProfileController();
 
+		User u = profileController.getCurrentUser(userId);
 
-
-		User u = profileController.getUser(userId);
-		System.out.println("User id " + userId);
-		System.out.println("Got user by id " + u);
 		if (u == null) {
 			return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid about id.").build();
 		} else {
@@ -153,7 +173,7 @@ public class UsersResources {
 
 
 	@GET //GET at http://localhost:XXXX/profile/experiences
-	@Path("{userId}/profiles/")
+	@Path("{userId}/profiles")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response GetProfile(@PathParam("userId") int userId) {
 		ProfileController profileController = new ProfileController();
@@ -275,7 +295,27 @@ public class UsersResources {
 		}
 	}
 
+	@GET //GET at http://localhost:XXXX/profile/educations
+	@Path("{userId}/profiles/{profileId}/data")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response  getData(@PathParam("userId") int userId, @PathParam("profileId") int profileId, @HeaderParam("Authorization") String auth) throws SQLException, DatabaseException, URISyntaxException {
+		ProfileController profileController = new ProfileController();
 
+		UserController controller = new UserController();
+		User loggedInUser = controller.getUserFromToken(auth);
+
+		Data data = profileController.getData(userId, profileId, loggedInUser.getId());
+		//boolean AllowToSee = pController.AllowedToSee(userId, loggedInUser.getId(), PrivacyController.ProfilePart.EDUCATION);
+
+			if (data == null) {
+				return Response.status(Response.Status.NOT_FOUND).entity("Please provide a valid student number.").build();
+			} else {
+//				GenericEntity<List<Data>> entity = new GenericEntity<>(data) {
+//				};
+				return Response.ok(data).build();
+			}
+
+	}
 	@GET //GET at http://localhost:XXXX/profile/educations
 	@Path("{userId}/profiles/{profileId}/experiences")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -298,7 +338,7 @@ public class UsersResources {
 				return Response.ok(entity).build();
 			}
 		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+			return Response.noContent().build();
 		}
 
 	}
@@ -323,7 +363,7 @@ public class UsersResources {
 			return Response.ok(entity).build();
 		}
 		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+			return Response.noContent().build();
 		}
 	}
 	@GET //GET at http://localhost:XXXX/profile/educations
@@ -363,7 +403,7 @@ public class UsersResources {
 				return Response.ok(entity).build();
 			}
 		}else{
-			return Response.status(Response.Status.UNAUTHORIZED).entity("SOrry not sorry").build();
+			return Response.noContent().build();
 		}
 
 	}
@@ -499,6 +539,7 @@ public class UsersResources {
 	}
 	@GET
 	@Path("profile/experience/{id}")
+	@PermitAll
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getExperienceById(@PathParam("id") int id) {
 		Experience e = persistenceController.getExp(id);
@@ -573,6 +614,7 @@ public class UsersResources {
 
 
 	@GET
+	@PermitAll
 	@Path("privacy/me")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPrivacy(@HeaderParam("Authorization") String token) {
@@ -618,6 +660,7 @@ public class UsersResources {
 
 	//filter users by user type department, location, start study year and start work year (searching by filter)
 	@GET //GET at http://localhost:9090/users?type= Or ?department= Or ?location= Or ?studyYear= Or ?workingYear=
+	@PermitAll
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredUsers(@QueryParam("type") UserType type, @QueryParam("department") int depId,
 									 @QueryParam("location") int locId, @QueryParam("studyYear") int year,

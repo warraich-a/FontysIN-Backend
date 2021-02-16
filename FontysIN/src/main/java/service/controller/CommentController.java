@@ -9,11 +9,16 @@ import java.util.List;
 
 public class CommentController {
     CommentsRepository commentsRepository = new CommentsRepository();
+
+    public void test(){
+
+    }
+
     public List<Comments> getCommets(){
 
 
         try {
-            List<Comments> comments = (List<Comments>) commentsRepository.getComments();
+            List<Comments> comments = commentsRepository.getComments();
 
 
 

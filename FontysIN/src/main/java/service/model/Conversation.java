@@ -4,6 +4,7 @@ import service.model.dto.UserDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Conversation {
     private int id;
@@ -70,5 +71,22 @@ public class Conversation {
                 ", secondUser=" + secondUser +
                 ", messages=" + messages +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Conversation that = (Conversation) o;
+        return id == that.id &&
+                Objects.equals(firstUser, that.firstUser) &&
+                Objects.equals(secondUser, that.secondUser) &&
+                Objects.equals(messages, that.messages);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstUser, secondUser, messages);
     }
 }

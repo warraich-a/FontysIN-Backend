@@ -54,14 +54,14 @@ public class ProfileRepositoryTest {
     }
 
 
-    @Test
-    public void uploadImageTest() throws DatabaseException, URISyntaxException, SQLException, IOException {
-
-
-        boolean isUploaded = profileRepository.uploadImage(1, "ERE");
-
-        assertEquals(true, isUploaded);
-    }
+//    @Test
+//    public void uploadImageTest() throws DatabaseException, URISyntaxException, SQLException {
+//
+//
+//       boolean isUploaded = profileRepository.uploadImage(1, "ERE");
+//
+//        assertEquals(true, isUploaded);
+//    }
 
 
     @Test

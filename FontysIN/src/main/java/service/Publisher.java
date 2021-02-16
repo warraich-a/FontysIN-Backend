@@ -1,28 +1,66 @@
 package service;
 
+
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.StaticHttpHandler;
+import org.glassfish.grizzly.websockets.WebSocketAddOn;
+import org.glassfish.grizzly.websockets.WebSocketEngine;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
+import service.resources.UsersResources;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class deploys CustomApplicationConfig on a Grizzly server
+ */
 class Publisher {
 
 
-    private static final URI BASE_URI = URI.create("http://localhost:9090");
-
+    //   private static final URI BASE_URI = URI.create("http://0.0.0.0:9090/");
+    private static final URI BASE_URI = URI.create("http://localhost:9090/");
 
     public static void main(String[] args) {
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
 
+        ResourceConfig resourceConfig = new ResourceConfig(UsersResources.class);
 
+        resourceConfig.packages("service");
 
         try {
             CustomApplicationConfig customApplicationConfig = new CustomApplicationConfig();
             // create and start a grizzly server
-            HttpServer server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, customApplicationConfig, true);
+
+
+            HttpServer webSocketServer = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, customApplicationConfig, false);
+
+
+//            HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, resourceConfig,false);
+
+            // setup static file handler so that we can also serve html pages.
+            StaticHttpHandler staticHandler = new StaticHttpHandler("static");
+            staticHandler.setFileCacheEnabled(false);
+            webSocketServer.getServerConfiguration().addHttpHandler(staticHandler,"/static/");
+
+            // Create websocket addon
+            WebSocketAddOn webSocketAddOn = new WebSocketAddOn();
+            webSocketServer.getListeners().forEach(listener -> { listener.registerAddOn(webSocketAddOn);});
+
+            // register my websocket app
+
+            MyWebSocketApp webSocketApp = new MyWebSocketApp();
+            WebSocketEngine.getEngine().register("/ws", "/demo", webSocketApp);
+
+            // Now start the server
+            webSocketServer.start();
+
+            // prevent the app from closing
+            System.out.println("Press enter to stop the server...");
+            System.in.read();
 
             System.out.println("Hosting resources at " + BASE_URI.toURL());
 

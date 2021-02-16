@@ -1,20 +1,54 @@
 package service.controller;
 
 import service.model.*;
+import service.model.dto.UserDTO;
+import service.repository.ContactsRepository;
 import service.repository.DatabaseException;
 import service.repository.ProfileRepository;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileController {
 
     ProfileRepository profileRepository = new ProfileRepository();
 
+    public Data getData(int userId, int profileId, int loggedInUser) throws URISyntaxException, DatabaseException, SQLException {
+        PrivacyController pController = new PrivacyController();
+
+        try {
+            List<Education> educations = profileRepository.getEducations(userId, profileId);
+            List<Experience> experiences = profileRepository.getExperiences(userId, profileId);
+            List<Skill> skills = profileRepository.getSkills(userId, profileId);
+
+          boolean seeEducation =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.EDUCATION);
+          boolean seeExperience =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.EXPERIENCE);
+          boolean seeSkills =  pController.AllowedToSee(userId, loggedInUser, PrivacyController.ProfilePart.SKILLS);
+
+          if(!seeEducation){
+              educations.clear();
+          }
+          if(!seeExperience){
+              experiences.clear();
+          }
+          if(!seeSkills){
+              skills.clear();
+          }
+
+            Data data = new Data(experiences, educations, skills);
+
+            return data;
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<About> getAbout(int userId, int profileId){
-//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<About> about = profileRepository.getAbout(userId, profileId);
@@ -44,7 +78,6 @@ public class ProfileController {
     }
 
     public List<Education> getEducations(int userId, int profileId){
-//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<Education> educations = profileRepository.getEducations(userId, profileId);
@@ -58,7 +91,6 @@ public class ProfileController {
         return null;
     }
     public List<Skill> getSkills(int userId, int profileId){
-//        ProfileRepository profileRepository = new ProfileRepository();
 
         try {
             List<Skill> skills = profileRepository.getSkills(userId, profileId);
@@ -72,8 +104,6 @@ public class ProfileController {
         return null;
     }
     public List<Profile> getProfile(int userId){
-//        ProfileRepository profileRepository = new ProfileRepository();
-
         try {
             List<Profile> profiles = profileRepository.getProfile(userId);
 
@@ -85,7 +115,6 @@ public class ProfileController {
         }
         return null;
     }
-//    JDBCProfileRepository profileRepository = new JDBCProfileRepository();
 
     public User getUser(int userId){
 
@@ -101,8 +130,21 @@ public class ProfileController {
         return null;
     }
 
+
+    public User getCurrentUser(int userId){
+        ContactsRepository contactsRepository = new ContactsRepository();
+        try {
+            User user = contactsRepository.getUser(userId);
+
+            System.out.println("ok");
+
+            return user;
+        } catch (DatabaseException  | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public boolean addExperience(Experience experience) {
-//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createExperience(experience)) {
                 return true;
@@ -118,7 +160,6 @@ public class ProfileController {
     }
 
     public boolean addEducation(Education education) {
-//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createEducation(education)) {
                 return true;
@@ -135,7 +176,6 @@ public class ProfileController {
 
 
     public boolean addSkill(Skill skill, int userId) {
-//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createSkill(skill, userId)) {
                 return true;
@@ -151,7 +191,6 @@ public class ProfileController {
     }
 
     public int addProfile(Profile profile, int userId) throws DatabaseException, SQLException, URISyntaxException {
-//        ProfileRepository profileRepository = new ProfileRepository();
         int id = profileRepository.createProfile(profile, userId);
         if( id != 0) {
             return id;
@@ -162,7 +201,6 @@ public class ProfileController {
         }
     }
     public boolean addAbout(About about) {
-//        ProfileRepository profileRepository = new ProfileRepository();
         try {
             if(profileRepository.createAbout(about)) {
                 return true;
@@ -337,7 +375,7 @@ public class ProfileController {
             {
                 return false;
             }
-        } catch (DatabaseException | SQLException | IOException | URISyntaxException e) {
+        } catch (DatabaseException | SQLException | URISyntaxException e) {
             e.printStackTrace();
             return false;
         }

@@ -1,6 +1,11 @@
 package service.model.dto;
 
+import service.model.Education;
+import service.model.Experience;
+import service.model.UserType;
+
 import java.util.Objects;
+import java.util.PrimitiveIterator;
 
 public class UserDTO {
 	private int id;

@@ -37,7 +37,7 @@ public class FileUploadService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String uploadPdfFile(  @FormDataParam("file") InputStream fileInputStream,
-                                    @FormDataParam("file") FormDataContentDisposition fileMetaData,
+                                  @FormDataParam("file") FormDataContentDisposition fileMetaData,
                                   @PathParam("userId") int id) throws Exception {
         ProfileController profileController = new ProfileController();
 
@@ -49,26 +49,26 @@ public class FileUploadService {
         File file = getFileName(new File(UPLOAD_PATH + fileMetaData.getFileName()));
 //        try
 //        {
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            String completePath = file.toString(); //+id;
-            OutputStream out = new FileOutputStream(completePath);
+        int read = 0;
+        byte[] bytes = new byte[1024];
+        String completePath = file.toString(); //+id;
+        OutputStream out = new FileOutputStream(completePath);
 
-            while ((read = fileInputStream.read(bytes)) != -1)
-            {
-                out.write(bytes, 0, read);
-            }
+        while ((read = fileInputStream.read(bytes)) != -1)
+        {
+            out.write(bytes, 0, read);
+        }
 //            if(persistenceController.uploadPicture(id, fileMetaData.getFileName()+id)){
-                if(profileController.uploadPicture(id, file.getName())){
+        if(profileController.uploadPicture(id, file.getName())){
 
-                    out.flush();
-                out.close();
+            out.flush();
+            out.close();
 
-                return file.getName(); //+id;
-            }
-            else {
-                return "Error";
-            }
+            return file.getName(); //+id;
+        }
+        else {
+            return "Error";
+        }
 //        } catch (IOException e)
 //        {
 //            throw new WebApplicationException("Error while uploading file. Please try again !!");
